@@ -3,7 +3,7 @@ import sqlite3
 from datetime import datetime
 from env import *
 
-class inventory:
+class InventoryManager:
     def __init__(self, base_name) -> None:
         self.items = {}
         self.base_name = base_name
