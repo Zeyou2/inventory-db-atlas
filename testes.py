@@ -1,48 +1,76 @@
 from components.Files_Handler.module.file_handler import Files_Handling
 import sqlite3
 from datetime import datetime
+from env import *
 
 class inventory:
     def __init__(self, base_name) -> None:
         self.items = {}
         self.base_name = base_name
         self.file_handling = Files_Handling()
+        self.path = PATTERN_FOLDER
 
     def inventory_create(self):
-        data = self.file_handling.read_file('inver.json', pattern_folder= 'D:/@work/inventory/data/')
-        for key in data:
-            if 'data_de_entrada' == key:
-                while True:
-                    choose_date = input(f"""
-                    A data de entrada foi gerada, ({datetime.strftime(datetime.now(), "%d/%m/%Y")}) confirma essa data como data de entrada?
+        data = self.file_handling.read_file('inver.json', self.path)
+        for key, value in data.items():
+            if '1' == key:
+                self.get_date(data[key])
+                self.get_id(data[key])
+                self.get_description(data[key])
+                self.get_focal_point(data[key])
+                self.product_status(data[key])
+                self.serial_number(data[key])
+        self.file_handling.write_file(data, 'inver.json', self.path)
 
-                    APERTE 'ENTER' SE SIM | ou digite 'N' e aperte ENTER se NÃO """)
-                    if choose_date == '':
-                        data[key].append(datetime.strftime(datetime.now(), "%y%m%d"))
-                        break
-                    elif choose_date.lower() == 'n':
-                        day_in = input("\nDigite o dia desejado: ")
-                        month_in = input("\nDigite o mês desejado: ")
-                        year_in = input("\nDigite o ano desejado: ")
-                        data[key]  = datetime(int(year_in), int(month_in), int(day_in)).strftime("%y%m%d")
-                        break
-            if 'id' == key:
-                data[key].append(int(input('Digite o id do produto que deseja cadastrar. (Apenas numeros!)  \n')))
-            if 'descrição' == key:
-                data[key].append(input('Descrição do produto. \n'))
-            if 'ponto_focal' == key:
-                data[key] = {}
-            if 'status' == key:
-                data[key] = ('disponivel', 'indisponivel')[0]
-            if 'serial_number' == key:
-                data[key].append(input('Digite o Id do produto que deseja cadastrar. \n'))
+
+    def get_date(self, entry):
+            while True:
+                choose_date = input(f"""
+                A data de entrada foi gerada, ({datetime.strftime(datetime.now(), "%d/%m/%Y")}) confirma essa data como data de entrada?
+
+                APERTE 'ENTER' SE SIM | ou digite 'N' e aperte ENTER se NÃO """)
+                if choose_date == '':
+                    entry['entry_date'] = datetime.strftime(datetime.now(), "%y%m%d")
+                    break
+                elif choose_date.lower() == 'n':
+                    day_in = input("\nDigite o dia desejado: ")
+                    month_in = input("\nDigite o mês desejado: ")
+                    year_in = input("\nDigite o ano desejado: ")
+                    entry['entry_date']  = datetime(int(year_in), int(month_in), int(day_in)).strftime("%y%m%d")
+                    break
+
+    def get_id(self, entry):
+            entry['id'] = int(input('Digite o id do produto que deseja cadastrar. (Apenas numeros!)  \n'))
+
+    def get_description(self, entry):
+            entry['description'] = input('Descrição do produto. \n')
+
+    def get_focal_point(self, entry):
+        data = self.file_handling.read_file('local.json', self.path)
+        for key, value in data.items():
+            entry['focal_point'] = 
+            selected = f'''
+            LOCAIS: 
+            * {key} - {value}
+
+APERTE 'ENTER' SE SIM | ou digite 'N' e aperte ENTER se NÃO 
+'''
+
+    def product_status(self, entry):
+            entry['status'] = ('disponivel', 'indisponivel')
+
+    def serial_number(self, entry):
+            entry['serial_number'] = input('Digite o numero de serie do produto que deseja cadastrar. \n')
         
-        self.file_handling.write_file(data, 'inver.json', pattern_folder= 'D:/@work/inventory/data/')
+    
+
+        
+                    
+                   
+           
         
             
-            # key.append(input('teste'))
-       
-        # 
+        # key.append(input('teste'))
 
         # self.items
         # self.items['descrição'] = input('Descrição do produto. ')
