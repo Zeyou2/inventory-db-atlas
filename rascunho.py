@@ -1,24 +1,26 @@
 
 
-# def menu():
-#         print("\033[1;30m|+++++++++++++++++++++++++++++++++++++++++++|")
-#         print("|                    MENU                   |")
-#         print("|+++++++++++++++++++++++++++++++++++++++++++|\033[0m")
-       
-#     #     dict_itens['name'].append(input('Digite o nome do produto. \n'))
-#     #     dict_itens['serial'].append(input('Digite o número de serie do produto. \n'))
-#     #     dict_itens['quantity'].append(input('Digite a quantidade, \n'))
-#     #     return dict_itens
-# menu()
+class Solution(object):
+    def addBinary(self, a, b):
+        r = []
+        res = int(a, 2) + int(b, 2)
+        if res == 0:
+            return '0'
+        while res > 0:
+            d = res % 2
+            r.append(str(d))
+            res = res //2
+        return str(''.join(r[::-1]))
+    
+
+    
+    # def inventory_read(self):
+    #     pass
 
 
-''
-    # def menu(self):
-    #     print("\033[1;30m|===========================================|")
-    #     print("|             \033[1;33 MENU  \033[1;30m           |")
-    #     print("|===========================================|\033[0m")
-       
-    #     dict_itens['name'].append(input('Digite o nome do produto. \n'))
-    #     dict_itens['serial'].append(input('Digite o número de serie do produto. \n'))
-    #     dict_itens['quantity'].append(input('Digite a quantidade, \n'))
-    #     return dict_itens
+    # def inventory_update(self):
+    #     pass
+
+
+    # def inventory_delete(self):
+    #     pass

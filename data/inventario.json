@@ -1,0 +1,28 @@
+{
+    "1": {
+        "entry_date": "240723",
+        "id": 35656565,
+        "description": "tesds23",
+        "focal_point": "Agencia | parado",
+        "status": "disponivel",
+        "serial_number": "sdasd3a"
+    },
+    "2": {
+        "users": [
+            {
+                "user_name": "ale",
+                "contact": "22113355",
+                "email": "aslex_dasdasd",
+                "permisssions": "ativas"
+            },
+            {
+                "user_name": "asd",
+                "contact": "232322",
+                "email": "adasd",
+                "permisssions": "asd"
+            }
+        ]
+    },
+    "3": {},
+    "4": {}
+}

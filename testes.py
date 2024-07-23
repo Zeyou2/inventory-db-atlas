@@ -1,17 +1,15 @@
 from components.Files_Handler.module.file_handler import Files_Handling
-import sqlite3
 from datetime import datetime
 from env import *
 
 class InventoryManager:
     def __init__(self, base_name) -> None:
-        self.items = {}
         self.base_name = base_name
         self.file_handling = Files_Handling()
         self.path = PATTERN_FOLDER
 
     def inventory_create(self):
-        data = self.file_handling.read_file('inver.json', self.path)
+        data = self.file_handling.read_file(self.base_name + '.json', self.path)
         for key, value in data.items():
             if '1' == key:
                 self.get_date(data[key])
@@ -20,7 +18,9 @@ class InventoryManager:
                 self.get_focal_point(data[key])
                 self.product_status(data[key])
                 self.serial_number(data[key])
-        self.file_handling.write_file(data, 'inver.json', self.path)
+            if '2' == key:
+                self.create_user(data[key])
+        self.file_handling.write_file(data, self.base_name + '.json', self.path)
 
 
     def get_date(self, entry):
@@ -40,62 +40,51 @@ class InventoryManager:
                     break
 
     def get_id(self, entry):
-            entry['id'] = int(input('Digite o id do produto que deseja cadastrar. (Apenas numeros!)  \n'))
+        while True:
+            try:
+                entry['id'] = int(input('Digite o id do produto que deseja cadastrar. (Apenas números!)\n'))
+                break
+            except ValueError:
+                print("\nEntrada inválida. Digite apenas números.")
 
     def get_description(self, entry):
             entry['description'] = input('Descrição do produto. \n')
+    
+    def product_status(self, entry):
+        tuple_status = ('disponivel', 'indisponivel')
+        entry['status'] = tuple_status[0]  
+
+        if "operando" in entry['focal_point']:
+            entry['status'] = tuple_status[1]
+       
 
     def get_focal_point(self, entry):
         data = self.file_handling.read_file('local.json', self.path)
+        print('LOCAIS: \n')
         for key, value in data.items():
-            entry['focal_point'] = 
-            selected = f'''
-            LOCAIS: 
-            * {key} - {value}
-
-APERTE 'ENTER' SE SIM | ou digite 'N' e aperte ENTER se NÃO 
-'''
-
-    def product_status(self, entry):
-            entry['status'] = ('disponivel', 'indisponivel')
+            print(f'* {key} - {value}')
+            # selected = input('')
+            entry['focal_point'] = key + ' | ' + value
+        entry['status'] = self.product_status(entry)
 
     def serial_number(self, entry):
-            entry['serial_number'] = input('Digite o numero de serie do produto que deseja cadastrar. \n')
-        
-    
-
-        
-                    
-                   
-           
-        
-            
-        # key.append(input('teste'))
-
-        # self.items
-        # self.items['descrição'] = input('Descrição do produto. ')
-        # self.items
-        # self.items['status'] = 'disponivel' #tuple('disponivel', 'indisponivel')
-        # self.items['serial_number'] = input('Digite o Id do produto que deseja cadastrar')
-        # self.file_handling.write_file(self.items, 'inver.json', pattern_folder= 'D:/@work/inventory/data/')
-        # self.file_handling.append_file(data, 'inver.json', pattern_folder= 'C:/Users/Alex_/Work/Área de Trabalho/Repo/inventory/')
-        # self.items.update('id', )
+        entry['serial_number'] = input('Digite o numero de serie do produto. \n')
 
        
-        
-        # idd = input('Digite o Id do produto que deseja cadastrar')
-        # data = self.items[idd] = '2'
-        # pass
+    def create_user(self, entry):
+        user = {
+        'user_name': input('Digite o nome do usuario a ser cadastrado: \n'),
+        'contact': input('Número de contato:  \n'),
+        'email': input('E-mail: \n'),
+        'permisssions': input('Permissões \n')
+        }
+        entry['users'].append(user)
     
-    # def inventory_read(self):
-    #     pass
+    def transference_request(self, entry):
+        pass
+        
+      
 
-    # def inventory_update(self):
-    #     pass
+        
 
-    # def inventory_delete(self):
-    #     pass
-
-
-
-inventory('').inventory_create()
+InventoryManager('inventario').inventory_create()
