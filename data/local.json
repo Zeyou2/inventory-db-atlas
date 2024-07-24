@@ -1,1 +1,10 @@
-{"Agencia": "parado"}
+{
+    "1": {
+        "nome": "Agência",
+        "tipo": "armazenamento"
+    },
+    "2": {
+        "nome": "",
+        "tipo": ""
+    }
+}

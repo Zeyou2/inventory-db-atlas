@@ -1,25 +1,22 @@
 {
     "1": {
-        "entry_date": "240723",
-        "id": 35656565,
-        "description": "tesds23",
-        "focal_point": "Agencia | parado",
-        "status": "disponivel",
-        "serial_number": "sdasd3a"
+        "product_name": "22",
+        "entry_date": "240724",
+        "description": "33",
+        "focal_point": {
+            "nome": "Ag\u00eancia",
+            "tipo": "armazenamento"
+        },
+        "status": "dispon\u00edvel",
+        "serial_number": "22"
     },
     "2": {
         "users": [
             {
-                "user_name": "ale",
-                "contact": "22113355",
-                "email": "aslex_dasdasd",
-                "permisssions": "ativas"
-            },
-            {
-                "user_name": "asd",
-                "contact": "232322",
-                "email": "adasd",
-                "permisssions": "asd"
+                "user_name": "sda",
+                "contact": "sdasd",
+                "email": "22d",
+                "permisssions": "ssda"
             }
         ]
     },
