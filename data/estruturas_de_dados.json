@@ -34,18 +34,26 @@
             "em_branco": "False"
         },
         "focal_point": {
-            "name": {
-                "pergunta": "Digite o local: ",
-                "resp_type": "str",
-                "em_branco": "False"
-            },
-            "tipo": {
-                "pergunta": "Digite o tipo: ",
-                "resp_type": "str",
-                "em_branco": "False"
-            }
+            "pergunta": "Digite o nome do local: ",
+            "resp_type": "str",
+            "em_branco": "False"
         },
-        "status": "internal",
-        "date": "internal"
+        "date": "function_get_date",
+        "status": "internal"
+
+    },
+    "focal_point": {
+        "name": {
+            "pergunta": "Digite o local: ",
+            "resp_type": "str",
+            "em_branco": "False"
+        },
+        "tipo": {
+            "pergunta": "Digite o tipo: ",
+            "resp_type": "str",
+            "em_branco": "False"
         }
     }
+    
+    
+}
