@@ -1,12 +1,12 @@
 {
     "users": {
         "user_name": {
-            "pergunta": "Qual o nome do usuário a ser cadastrado.",
+            "pergunta": "Qual o nome do usuário a ser cadastrado: ",
             "resp_type": "str",
             "em_branco": "False"
         },
         "contact": {
-            "pergunta": "Qual o número de telefone.",
+            "pergunta": "Qual o número de telefone: ",
             "resp_type": "str",
             "em_branco": "False"
         },
@@ -19,33 +19,33 @@
     },
     "products": {
         "product_name": {
-            "pergunta": "Nome do produto:",
+            "pergunta": "Nome do produto: ",
             "resp_type": "str",
             "em_branco": "False"
         },
         "description": {
-            "pergunta": "Descrição:",
+            "pergunta": "Descrição: ",
             "resp_type": "str",
             "em_branco": "False"
         },
         "serial_number": {
-            "pergunta": "Digite o numero de serie:",
+            "pergunta": "Digite o numero de serie: ",
             "resp_type": "str",
             "em_branco": "False"
         },
         "focal_point": {
             "name": {
-                "pergunta": "Digite o local",
+                "pergunta": "Digite o local: ",
                 "resp_type": "str",
                 "em_branco": "False"
             },
             "tipo": {
-                "pergunta": "Dgite o tipo: ",
+                "pergunta": "Digite o tipo: ",
                 "resp_type": "str",
                 "em_branco": "False"
             }
         },
-        "status": "internal"
+        "status": "internal",
+        "date": "internal"
+        }
     }
-        
-}
