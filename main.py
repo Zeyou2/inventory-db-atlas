@@ -7,7 +7,8 @@ class InventoryManager(Files_Handling):
     def __init__(self, base_name) -> None:
         self.base_name = base_name
         self.path = PATTERN_FOLDER
-    
+
+    @staticmethod
     def get_date():
         while True:
             choose_date = input(f"""
@@ -24,25 +25,21 @@ class InventoryManager(Files_Handling):
                 return date
             
     def input_process(self, register):
-        if os.path.exists(self.path + "/" + self.base_name):
-            base = self.read_file(self.base_name, self.path)
-        else:
-            base = {}
+        base = {}
         result = {}
         structure = self.read_file("estruturas_de_dados.json", self.path)
         get_fields = structure[register] 
         for key, value in get_fields.items():
                 if "function" in value:
-                     m = globals()["InventoryManager"]
-                     func = getattr(m, value[9:])
+                     func = getattr(self, value[9:])
                      result[key] = func()
                      continue
-
+                
                 if value == "internal":
                     continue
                 else:
                     result[key] = input(value['pergunta'])
-        
+                    
         if base.get(register) != None:
             base.get(register).append(result)
         else:
@@ -59,6 +56,10 @@ class InventoryManager(Files_Handling):
                 else:
                     print('Esse ponto ainda não foi criado, deseja criá-lo?')
 
-inv_man = InventoryManager("central.json")
+
+
+        
+
+inv_man = InventoryManager.get_date()
 inv_man.input_process("products")
 
