@@ -58,8 +58,6 @@ class InventoryManager(Files_Handling):
 
 
 
-        
-
 inv_man = InventoryManager.get_date()
 inv_man.input_process("products")
 
