@@ -2,63 +2,62 @@
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 from env import*
-
 from components.Files_Handler.module.file_handler import Files_Handling
 
+class Mongo_Manager(Files_Handling):
+    def __init__(self, db_name):
+        self.client = MongoClient(URI, server_api=ServerApi('1'))
+        self.invenctory = self.client[db_name]
 
+    def insert_data(self):
+        data = self.read_file('central.json', PATTERN_FOLDER)
+        for key, value in data.items():
+                docs = self.invenctory[key].insert_many(value)
+                print(len(docs.inserted_ids))
 
-def connect(URI):
-    client = MongoClient(URI, server_api=ServerApi('1'))
+    def update(self, collection : str, filter_db : dict, new_values : dict):
+         result = self.invenctory[collection].update_many(filter_db, {'$set': new_values})
+         return result
 
-    try:
-        client.admin.command('ping')
-        print("Pinged your deployment. You successfully connected to MongoDB!")
-    except Exception as e:
-        print(e)
-    return client
-
-
-def create_connect(client, db_name):
-    db = client[db_name]
-    return db
-
-def create_connection_collection(db, col_name):
-    return db[col_name]
-
-def insert_data(col, data):
-    result = col.insert_many(data)
-    n_docs_inserts = len(result.inserted_ids)
-    return n_docs_inserts
-
-
-def remove_item(col):
-    item = col.find_one()
-    if item is None:
-        print("Nenhum documento encontrado.")
-        return 0
+    # def remove_item(col):
+    #     item = col.find_one()
+    #     if item is None:
+    #         print("Nenhum documento encontrado.")
+    #         return 0
+        
+    #     id_remover = item['_id']
+    #     print(f'ID do item a ser removido: {id_remover}')
+        
     
-    id_remover = item['_id']
-    print(f'ID do item a ser removido: {id_remover}')
-    
- 
-    result = col.delete_one({'_id': id_remover})
-    return result.deleted_count
-    
+    #     result = col.delete_one({'_id': id_remover})
+    #     return result.deleted_count
+        
+
+mongo = Mongo_Manager('db_invenctory')
+dict_y = {'product_name': 'camera2'}
+
+mongo.update('products', {'product_name' : '2'}, dict_y)
+
+# client = connect(URI)
+# read_docs(client, 'products')
+# data = get_data()
+# first_insert_data(data)
+
+
+
+
+
+
 #############################client.drop_database('db_inventory') 
 # db = client['db_inventory']
 # collection = db['products']
-
 # client.list_database_names()
 # fl = Files_Handling()
 # json_data = fl.read_file('central.json', PATTERN_FOLDER)
-
 # # docs = collection.insert_many(json_data['products'])
-
 # id_remover = collection.find_one()['_id']
 # print(id_remover)
 # print(collection.delete_one({'_id': id_remover}))
-
-
 # print(collection.find_one())
 
 

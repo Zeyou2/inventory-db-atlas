@@ -2,8 +2,9 @@ from components.Files_Handler.module.file_handler import Files_Handling
 from datetime import datetime
 from env import *
 import os
+from connect import Mongo_Manager
 
-class InventoryManager(Files_Handling):
+class InventoryManager(Files_Handling, Mongo_Manager):
     def __init__(self, base_name) -> None:
         self.base_name = base_name
         self.path = PATTERN_FOLDER
@@ -55,9 +56,8 @@ class InventoryManager(Files_Handling):
                     return rest
                 else:
                     print('Esse ponto ainda não foi criado, deseja criá-lo?')
+    
 
-
-
-inv_man = InventoryManager.get_date()
+inv_man = InventoryManager('central.json')
 inv_man.input_process("products")
 
