@@ -1,11 +1,12 @@
 from components.Files_Handler.module.file_handler import Files_Handling
 from datetime import datetime
-from env import *
+from env_p import *
 import os
 from connect import Mongo_Manager
 
-class InventoryManager(Files_Handling, Mongo_Manager):
-    def __init__(self, base_name) -> None:
+class InventoryManager(Mongo_Manager, Files_Handling):
+    def __init__(self, base_name):
+        Mongo_Manager.__init__(self, 'db_invenctory')
         self.base_name = base_name
         self.path = PATTERN_FOLDER
 
@@ -26,10 +27,9 @@ class InventoryManager(Files_Handling, Mongo_Manager):
                 return date
             
     def input_process(self, register):
-        base = {}
         result = {}
         structure = self.read_file("estruturas_de_dados.json", self.path)
-        get_fields = structure[register] 
+        get_fields = structure.get(register) 
         for key, value in get_fields.items():
                 if "function" in value:
                      func = getattr(self, value[9:])
@@ -40,24 +40,15 @@ class InventoryManager(Files_Handling, Mongo_Manager):
                     continue
                 else:
                     result[key] = input(value['pergunta'])
-                    
-        if base.get(register) != None:
-            base.get(register).append(result)
-        else:
-            base[register] = [result]
+
+        base = self.read_file(self.base_name, self.path)          
+        base[register]['create'].append(result)
         self.write_file(base, self.base_name ,self.path)
 
-    def check_focal_point(self, focal_point_name):
-        data = self.read_file(self.path + "/" + self.base_name)
-        if 'focal_point' in data:
-            for entry in data['focal_point']:
-                rest = entry.get("name")
-                if rest == focal_point_name:
-                    return rest
-                else:
-                    print('Esse ponto ainda não foi criado, deseja criá-lo?')
-    
+    def delete_data(self):
+        data = self.read_file(self.base_name, self.path)
+        data = {"products": {"create": [], "update":[]},"users": {"create": [],"update":[]}}
+        self.write_file(data, self.base_name, self.path)
 
-inv_man = InventoryManager('central.json')
-inv_man.input_process("products")
-
+inv_man = InventoryManager("central.json")
+inv_man.input_process('products')

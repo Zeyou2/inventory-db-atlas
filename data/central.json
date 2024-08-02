@@ -1,39 +1,18 @@
 {
-    "users": [
-        {
-            "user_name": "teste",
-            "contact": "21981114605",
-            "email": "aeasdasda"
-        }
-    ],
-    "products": [
-        {
-            "product_name": "teste",
-            "description": "teste",
-            "serial_number": "teste",
-            "focal_point": "teste",
-            "date": "240729"
-        },
-        {
-            "product_name": "2",
-            "description": "2",
-            "serial_number": "2",
-            "focal_point": "2",
-            "date": "240730"
-        },
-        {
-            "product_name": "2",
-            "description": "2",
-            "serial_number": "2",
-            "focal_point": "2",
-            "date": "240730"
-        },
-        {
-            "product_name": "2",
-            "description": "2",
-            "serial_number": "2",
-            "focal_point": "2",
-            "date": "240730"
-        }
-    ]
+    "products": {
+        "create": [
+            {
+                "product_name": "2",
+                "description": "2",
+                "serial_number": "2",
+                "focal_point": "22",
+                "date": "240802"
+            }
+        ],
+        "edit": []
+    },
+    "users": {
+        "create": [],
+        "edit": []
+    }
 }
