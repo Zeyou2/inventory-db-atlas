@@ -1,7 +1,6 @@
 from components.Files_Handler.module.file_handler import Files_Handling
 from datetime import datetime
 from env_p import *
-import os
 from connect import Mongo_Manager
 
 class InventoryManager(Mongo_Manager, Files_Handling):
@@ -45,10 +44,16 @@ class InventoryManager(Mongo_Manager, Files_Handling):
         base[register]['create'].append(result)
         self.write_file(base, self.base_name ,self.path)
 
+    # def edit_data(self):
+    #     base = self.read_file(self.base_name, self.path)
+    #     for data in base.items():
+            
+
     def delete_data(self):
         data = self.read_file(self.base_name, self.path)
         data = {"products": {"create": [], "update":[]},"users": {"create": [],"update":[]}}
         self.write_file(data, self.base_name, self.path)
 
 inv_man = InventoryManager("central.json")
-inv_man.input_process('products')
+print(inv_man.read_docs('users')[1])
+

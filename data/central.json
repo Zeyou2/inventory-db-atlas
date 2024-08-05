@@ -7,12 +7,25 @@
                 "serial_number": "2",
                 "focal_point": "22",
                 "date": "240802"
+            },
+            {
+                "product_name": "3423",
+                "description": "2=31",
+                "serial_number": "sdsa3d",
+                "focal_point": "d2sd",
+                "date": "240802"
             }
         ],
         "edit": []
     },
     "users": {
-        "create": [],
+        "create": [
+            {
+                "user_name": "teste",
+                "contact": "21981114605",
+                "email": "aeasdasda"
+            }
+        ],
         "edit": []
     }
 }
