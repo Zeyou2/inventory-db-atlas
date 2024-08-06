@@ -28,7 +28,7 @@ class Mongo_Manager(Files_Handling):
         docs = collection.find()
         for doc in docs:
             all_docs.append(doc)
-        dataframe = pd.DataFrame(all_docs).
+        dataframe = pd.DataFrame(all_docs)
         return (all_docs, dataframe)
     
     def close_connection(self):
@@ -38,7 +38,18 @@ class Mongo_Manager(Files_Handling):
         except Exception as e:
             print(f'Error closing the connection: {e}')
 
-mongo = Mongo_Manager('db_invenctory')
+
+    def connection_teste(self):
+        try:
+            self.client.admin.command('ping')
+            print("Conectado ao MongoDB Atlas com sucesso!")
+        except Exception as e:
+            print(f"Erro na conexão: {e}")
+
+
+
+
+# mongo = Mongo_Manager('db_invenctory')
 # print(mongo.read_docs())
 # def create_data_frame(collection, t):
 # data = mongo.read_docs('products')[0]

@@ -2,30 +2,33 @@
     "products": {
         "create": [
             {
+                "product_name": "1",
+                "description": "1",
+                "serial_number": "1",
+                "focal_point": "1",
+                "date": "240806"
+            },
+            {
+                "product_name": "1",
+                "description": "1",
+                "serial_number": "1",
+                "focal_point": "1",
+                "date": "240806"
+            },
+            {
                 "product_name": "2",
                 "description": "2",
                 "serial_number": "2",
-                "focal_point": "22",
-                "date": "240802"
+                "focal_point": "2",
+                "date": "240806"
             },
             {
-                "product_name": "3423",
-                "description": "2=31",
-                "serial_number": "sdsa3d",
-                "focal_point": "d2sd",
-                "date": "240802"
+                "product_name": "2",
+                "description": "2",
+                "serial_number": "2",
+                "focal_point": "2",
+                "date": "240806"
             }
-        ],
-        "edit": []
-    },
-    "users": {
-        "create": [
-            {
-                "user_name": "teste",
-                "contact": "21981114605",
-                "email": "aeasdasda"
-            }
-        ],
-        "edit": []
+        ]
     }
 }

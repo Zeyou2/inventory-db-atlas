@@ -25,35 +25,99 @@ class InventoryManager(Mongo_Manager, Files_Handling):
                 date  = datetime(int(year_in), int(month_in), int(day_in)).strftime("%y%m%d")
                 return date
             
-    def input_process(self, register):
+    def input_process(self, register, entry):
         result = {}
         structure = self.read_file("estruturas_de_dados.json", self.path)
-        get_fields = structure.get(register) 
-        for key, value in get_fields.items():
-                if "function" in value:
-                     func = getattr(self, value[9:])
-                     result[key] = func()
-                     continue
-                
-                if value == "internal":
-                    continue
-                else:
-                    result[key] = input(value['pergunta'])
-
-        base = self.read_file(self.base_name, self.path)          
-        base[register]['create'].append(result)
-        self.write_file(base, self.base_name ,self.path)
-
-    # def edit_data(self):
-    #     base = self.read_file(self.base_name, self.path)
-    #     for data in base.items():
+        get_fields = structure.get(register)
+        while True:
+            try:
+                for key, value in get_fields.items():
+                        if "function" in value:
+                            func = getattr(self, value[9:])
+                            result[key] = func()
+                            continue
+                        
+                        if value == "internal":
+                            continue
+                        else:
+                            result[key] = input(value['pergunta'])
+                self.append_file(result, self.base_name, register, entry)
+            except KeyboardInterrupt:
+                print("\nInterrupção de teclado. Encerrando o programa.")
             
+            continue_input = input("Deseja fazer mais inserções? (s/n): ").strip().lower()
+            if continue_input == 'n':
+                print("Continuando processo...")
+                break
+            elif continue_input != 's':
+                print("Opção inválida. Por favor, digite 's' para continuar ou 'n' para sair.")
 
+
+        
+
+    def update_data(self, register):
+        base = self.read_file(self.base_name, self.path)
+        for entry in base.get(register):
+            if entry == 'update':
+                self.input_process(register, entry)
+        print('Executado')
+            
+# "products": {"create": [], "update":[]},"users": {"create": [],"update":[]}           
     def delete_data(self):
         data = self.read_file(self.base_name, self.path)
-        data = {"products": {"create": [], "update":[]},"users": {"create": [],"update":[]}}
+        data = {}
         self.write_file(data, self.base_name, self.path)
 
-inv_man = InventoryManager("central.json")
-print(inv_man.read_docs('users')[1])
 
+    def append_file(self, data, base_name, register, entry):
+        try:
+            base = self.read_file(self.base_name, self.path)
+            base[register][entry].append(data)
+        except:
+            base[register] = {}
+            base[register][entry] = [data]
+        self.write_file(base, base_name, self.path)
+
+
+    def menu(self):
+        while True:
+            print("\nInventory Manager Menu")
+            print("1. Adicionar produtos. ")
+            print("2. Cadastrar usuario.")
+            print("3. Visualizar Dados")
+            print("4. Deletar Dados")
+            print("5. Editar Dados")
+            print("6. Sair")
+
+            choice = input("Escolha uma opção: ")
+
+            if choice == '1':
+                self.input_process('products', 'create')
+                self.insert_data('create')
+                self.delete_data()
+                break
+            elif choice == '2':
+                self.input_process('users', 'create')
+                self.insert_data('create')
+                self.delete_data()
+            elif choice == '3':
+                self.delete_data()
+            elif choice == '4':
+                self.update_data('products')
+                self.edit_data()
+            elif choice == '5':
+                self.connection_teste()
+            elif choice == '6':
+                print("Saindo...")
+                break
+            else:
+                print("Opção inválida, tente novamente.")
+
+inv_man = InventoryManager("central.json")
+inv_man.input_process('products', "create")
+
+# inv_man = InventoryManager("central.json")
+# inv_man.insert_data('products')
+# print(inv_man.delete_data())
+
+# def me
