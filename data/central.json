@@ -28,6 +28,27 @@
                 "serial_number": "2",
                 "focal_point": "2",
                 "date": "240806"
+            },
+            {
+                "product_name": "Canon",
+                "description": "teste",
+                "serial_number": "asteccas",
+                "focal_point": "sartstt",
+                "date": "240807"
+            }
+        ]
+    },
+    "Usu\u00e1rios": {
+        "Editar": [
+            {
+                "user_name": "89",
+                "contact": "89",
+                "email": "89"
+            },
+            {
+                "user_name": "12",
+                "contact": "222",
+                "email": "222"
             }
         ]
     }

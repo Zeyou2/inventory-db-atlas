@@ -28,7 +28,7 @@ class Mongo_Manager(Files_Handling):
         docs = collection.find()
         for doc in docs:
             all_docs.append(doc)
-        dataframe = pd.DataFrame(all_docs)
+        dataframe = pd.DataFrame(all_docs).drop(columns=["_id"])
         return (all_docs, dataframe)
     
     def close_connection(self):
@@ -37,7 +37,6 @@ class Mongo_Manager(Files_Handling):
             print("MongoDB connection closed successfully.")
         except Exception as e:
             print(f'Error closing the connection: {e}')
-
 
     def connection_teste(self):
         try:
@@ -48,8 +47,8 @@ class Mongo_Manager(Files_Handling):
 
 
 
-
-# mongo = Mongo_Manager('db_invenctory')
+mongo = Mongo_Manager('db_invenctory')
+print(mongo.read_docs("products")[1])
 # print(mongo.read_docs())
 # def create_data_frame(collection, t):
 # data = mongo.read_docs('products')[0]

@@ -1,5 +1,5 @@
 {
-    "users": {
+    "Usuários": {
         "user_name": {
             "pergunta": "Qual o nome do usuário a ser cadastrado: ",
             "resp_type": "str",
@@ -17,7 +17,7 @@
         },
         "permissions": "internal"
     },
-    "products": {
+    "Produtos": {
         "product_name": {
             "pergunta": "Nome do produto: ",
             "resp_type": "str",
@@ -42,7 +42,7 @@
         "status": "internal"
 
     },
-    "focal_point": {
+    "Pontos": {
         "name": {
             "pergunta": "Digite o local: ",
             "resp_type": "str",
