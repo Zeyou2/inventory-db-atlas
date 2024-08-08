@@ -7,11 +7,84 @@
 
 
 
+# print(mongo.read_docs())
+# def create_data_frame(collection, t):
+# data = mongo.read_docs("products")[0]
+# # print(data)
+# for x in data:
+# # x["_id"] = str(x["_id"])
+#     # if x["user_name"]:
+#     dataframe = pd.DataFrame(data)
+
+#         dataframe = pd.DataFrame(data)
 
 
 
 
 
+
+# data = inv_man.read_file("central.json", PATTERN_FOLDER)
+# for key, value in data.items():
+#     docs = value.get("update")
+# print(docs[0])
+
+
+
+
+
+ #     for x in range(len(self.management)):
+        #         print(f" {x+1}. {self.management[x]}")
+        #     i = len(keys)+1
+        #     print(f"{i}: Sair")
+        #     print("="*30)
+        #     result = input("Escolha a opção desejada: ")
+        #     if int(result) == i:
+        #         return "Saindo do Menu"
+        #     elif result == "1":
+        #         self.input_process(t, self.management[x-1])
+
+        #     return result
+        # return "fim."
+
+   # self.input_process(t, self.management.get(self.method[selected]))
+        # print("arg1 :", t)
+        # print("arg2 :", self.management.get(self.method[selected]))
+        # print(selected)
+
+#     def menu(self):
+#         while True:
+#             print("Menu")
+#             print("1. Adicionar dados. ")
+#             print("2. Visualizar dados.")
+#             print("4. Atualizar/Remover dados")
+#             print("6. Sair")
+
+#             choice = input("Escolha uma opção: ")
+#             if choice == "1":
+#                 self.input_process(self.menu2(), self.management[])
+#             elif choice == "2":
+#                 self.input_process("users", "create")
+#                 self.insert_data("create")
+#                 self.delete_data()
+#             elif choice == "3":
+#                 self.delete_data()
+#             elif choice == "4":
+#                 self.update_data("products")
+#                 self.edit_data()
+#             elif choice == "5":
+#                 self.connection_teste()
+#             elif choice == "6":
+#                 print("Saindo...")
+#                 break
+#             else:
+#                 print("Opção inválida, tente novamente.")
+# # print(list(dict(inv_man.select.get(1)).items())[0][0])
+
+# inv_man = InventoryManager("central.json")
+# inv_man.insert_data("products")
+# print(inv_man.delete_data())
+
+# def me
 
 # from datetime import datetime
 # 'C:/Users/Alex_/Work/Área de Trabalho/Repo/inventory/data/'

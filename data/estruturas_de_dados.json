@@ -1,17 +1,17 @@
 {
     "Usuários": {
         "user_name": {
-            "pergunta": "Qual o nome do usuário a ser cadastrado: ",
+            "pergunta": "\nQual o nome do usuário a ser cadastrado: ",
             "resp_type": "str",
             "em_branco": "False"
         },
         "contact": {
-            "pergunta": "Qual o número de telefone: ",
+            "pergunta": "\nQual o número de telefone: ",
             "resp_type": "str",
             "em_branco": "False"
         },
         "email": {
-            "pergunta": "Qual o seu e-mail: ",
+            "pergunta": "\nQual o seu e-mail: ",
             "resp_type": "str",
             "em_branco": "True"
         },
@@ -53,5 +53,5 @@
             "resp_type": "str",
             "em_branco": "False"
         }
-    }    
+    }   
 }
