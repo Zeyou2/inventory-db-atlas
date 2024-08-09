@@ -11,6 +11,7 @@ class InventoryManager(Mongo_Manager, Files_Handling):
         self.select = self.read_file("estruturas_de_dados.json", self.path)
         self.management = {"Criar":"create", "Editar":"update", "Deletar":"delete"}
         self.method = ["Criar", "Editar", "Deletar"]
+        
 
     @staticmethod
     def get_date():
@@ -61,6 +62,13 @@ class InventoryManager(Mongo_Manager, Files_Handling):
         data = {}
         self.write_file(data, self.base_name, self.path)
 
+    def print_data(self, data, register):
+        print("="*78)
+        print("-"*30, "[BANCO DE DADOS]", "-"*30)
+        print("="*78)
+        data = self.read_docs(register)
+        print(data[1])
+        print("="*78)
 
     def append_file(self, data, base_name, register, entry):
         try:
@@ -85,36 +93,41 @@ class InventoryManager(Mongo_Manager, Files_Handling):
         if int(result) == i:
             return "Saindo do Menu"
         register = keys[int(result)-1]
-        data = self.read_docs(register)
-        print(f"O que deseja fazer em {register}? ")
-        print("="*40)
-        print("---------------[database]---------------")
-        print("="*40)
-        print(data[1])
-        print("="*40)
+        try:
+            data = self.read_docs(register)
+        except Exception:  
+            print(f"Ocorreu um erro ao acessar o banco de dados: {register} ")
+            r = input(f'"{register}" não existe na base de dados, deseja criá-lo? (s/n) ')
+            if r.lower() == 's':
+                self.input_process(register, self.management.get(self.method[0]))
+                self.insert_data(self.management.get(self.method[0]))
+                print("\nA base de dados foi atualizada!")
+                self.delete_json()
+                print("O cache foi limpo!")
+            else:
+                print("Registro não foi criado.")
+        self.print_data(data, register)
         [print(f"Opção {i + 1}: {self.method[i]}") for i in range(len(self.method))]
         entry = int(input("selecione a opção desejada: "))-1
         if entry == 2:
-            print(data[1])
-            print(data[0][0])
+            self.print_data(data, register)
             rest = data[0][int(input('Selecione o numero do elemento que deseja excluir:  '))]
-            print(rest)
             result = self.invenctory[register].delete_many(rest)
-            print(f"{result.deleted_count} elemento foi removido da database de usuários")
+            print(f"Documentos excluídos: {result.deleted_count}")
             print(self.read_docs(register)[1])
         else:
             if entry == 0:
                 self.input_process(register, self.management.get(self.method[entry]))
                 self.insert_data(self.management.get(self.method[entry]))
-                print("\n A database foi atualizada, limpando cache...")
-                self.insert_data()
             if entry == 1:
-                self.input_process(register, self.management.get(self.method[entry]))
-                print(data[1])
+                self.print_data(data, register)
                 result = data[0][int(input('Selecione o numero do elemento que deseja mudar:  '))]
+                self.input_process(register, self.management.get(self.method[entry]))
                 self.update(result, self.management.get(self.method[entry]))
+                self.print_data(data, register)
             self.delete_json()
             print("O cache foi limpo!")
+        return "Operação concluída! "
        
 
 inv_man = InventoryManager("central.json")

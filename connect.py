@@ -14,12 +14,14 @@ class Mongo_Manager(Files_Handling):
         data = self.read_file("central.json", PATTERN_FOLDER)
         for key, value in data.items():
                 docs = self.invenctory[key].insert_many(value.get(entry))
-                print(len(docs.inserted_ids))
+                print(f'O item foi adicionado!')
+        print(f'\nNumero de elementos inseridos no Banco de dados: [{len(docs.inserted_ids)}].')
 
     def update(self, filter_db : dict, entry):
         data = self.read_file("central.json", PATTERN_FOLDER)
         for key, value in data.items():
             result = self.invenctory[key].update_many(filter_db, {"$set": value.get(entry)[0]})
+            print(f'O elemento foi atualizado!')
         return result
     
     def read_docs(self, collection_name):
@@ -47,5 +49,5 @@ class Mongo_Manager(Files_Handling):
             print(f"Erro na conexão: {e}")
 
 
-mongo = Mongo_Manager("db_invenctory")
-print(mongo.read_docs("Usuários")[0])
+# mongo = Mongo_Manager("db_invenctory")
+# print(mongo.read_docs("Usuários")[0])
