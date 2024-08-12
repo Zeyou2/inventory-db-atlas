@@ -4,7 +4,14 @@
 
 
 
-
+ #     if r.lower() == 's':
+        #         self.input_process(register, self.management.get(self.method[0]))
+        #         self.insert_data(self.management.get(self.method[0]))
+        #         print("\nA base de dados foi atualizada!")
+        #         self.delete_json()
+        #         print("...")
+        #     else:
+        #         print(f"Registro não foi criado. {e}")
 
 
 # print(mongo.read_docs())
