@@ -19,22 +19,22 @@
     },
     "Produtos": {
         "product_name": {
-            "pergunta": "Nome do produto: ",
+            "pergunta": "\nNome do produto: ",
             "resp_type": "str",
             "em_branco": "False"
         },
         "description": {
-            "pergunta": "Descrição: ",
+            "pergunta": "\nDescrição: ",
             "resp_type": "str",
             "em_branco": "False"
         },
         "serial_number": {
-            "pergunta": "Digite o numero de serie: ",
+            "pergunta": "\nDigite o numero de serie: ",
             "resp_type": "str",
             "em_branco": "False"
         },
         "focal_point": {
-            "pergunta": "Digite o nome do local: ",
+            "pergunta": "\nDigite o nome do local: ",
             "resp_type": "str",
             "em_branco": "False"
         },
@@ -44,12 +44,12 @@
     },
     "Pontos": {
         "name": {
-            "pergunta": "Digite o local: ",
+            "pergunta": "\nDigite o local: ",
             "resp_type": "str",
             "em_branco": "False"
         },
         "tipo": {
-            "pergunta": "Digite o tipo: ",
+            "pergunta": "\nDigite o tipo: ",
             "resp_type": "str",
             "em_branco": "False"
         }

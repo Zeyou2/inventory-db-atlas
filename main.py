@@ -83,7 +83,7 @@ class InventoryManager(Mongo_Manager, Files_Handling):
             base[register][entry] = [data]
         self.write_file(base, base_name, self.path)
 
-    def delete_in_db(self, data, register):
+    def remove_from_database(self, data, register):
         self.print_db(data, register)
         while True:
                 deleted = int(input('Selecione o numero do elemento que deseja excluir: '))
@@ -134,7 +134,7 @@ class InventoryManager(Mongo_Manager, Files_Handling):
             try:
                 entry = int(input("\nSelecione a opção desejada (Apenas Números): "))-1
                 if entry == 2:
-                    self.delete_in_db(data, register)
+                    self.remove_from_database(data, register)
                 elif entry == 0:
                     self.input_process(register, self.management.get(self.method[entry]))
                     self.insert_data(self.management.get(self.method[entry]))

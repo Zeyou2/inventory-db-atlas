@@ -47,7 +47,3 @@ class Mongo_Manager(Files_Handling):
             print("Conectado ao MongoDB Atlas com sucesso!")
         except Exception as e:
             print(f"Erro na conexão: {e}")
-
-
-# mongo = Mongo_Manager("db_invenctory")
-# print(mongo.read_docs("Usuários")[0])
