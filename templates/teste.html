@@ -3,20 +3,24 @@
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
-    <title>Teste</title>
+    <title>Inventário</title>
 </head>
 
-
 <body>
+    <h1>{{ titulo['nome']}}</h1>
     <table>
-        {%  %}
+        {% for item in item_list %}
         <tr>
-            <td>{{menu}}</td>
+            <td>{{item['product_name']}}</td>
+            <td>{{item['description']}}</td>
+            <td>{{item['serial_number']}}</td>
+            <td>{{item['focal_point']}}</td>
+            <td>{{item['date']}}</td>
         </tr>
-       
+        {% endfor %}
     </table>
-    
-
-
+    <div>
+        <a class="btn" href="/form">criar</a>
+    </div>
 </body>
 </html>

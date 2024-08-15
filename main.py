@@ -156,7 +156,3 @@ class InventoryManager(Mongo_Manager, Files_Handling):
                 print("\nInterrupção do teclado.")
                 return "Saindo..." 
             return "Operação concluída! Retonando ao menu inicial." 
-
-       
-inv_man = InventoryManager("central.json")
-print(inv_man.menu())
