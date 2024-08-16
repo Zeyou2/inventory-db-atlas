@@ -1,57 +1,59 @@
 {
     "Usuários": {
-        "user_name": {
-            "visivel": 1,
+        "Nome": {
+            "form_visible":1,
             "pergunta": "\nQual o nome do usuário a ser cadastrado: ",
             "resp_type": "str",
             "em_branco": "False"
         },
-        "contact": {
+        "Contato": {
+            "form_visible":1,
             "pergunta": "\nQual o número de telefone: ",
             "resp_type": "str",
             "em_branco": "False"
         },
-        "email": {
+        "Email": {
+            "form_visible":1,
             "pergunta": "\nQual o seu e-mail: ",
             "resp_type": "str",
             "em_branco": "True"
-        },
-        "permissions": "internal"
+        }
     },
     "Produtos": {
-        "product_name": {
+        "Nome": {
             "table_visible":1,
             "form_visible":1,
             "pergunta": "\nNome do produto: ",
             "resp_type": "str",
             "em_branco": "False"
         },
-        "description": {
+        "Descrição": {
             "table_visible":1,
             "form_visible":1,
             "pergunta": "\nDescrição: ",
             "resp_type": "str",
             "em_branco": "False"
         },
-        "serial_number": {
+        "Número de serie": {
             "table_visible":1,
             "form_visible":1,
             "pergunta": "\nDigite o numero de serie: ",
             "resp_type": "str",
             "em_branco": "False"
         },
-        "focal_point": {
+        "Ponto focal": {
             "table_visible":1,
             "form_visible":1,
             "pergunta": "\nDigite o nome do local: ",
             "resp_type": "str",
             "em_branco": "False"
         },
-        "date": {
+        "Data": {
             "form_visible":1,
-            "pergunta":"function_get_date"},
+            "pergunta":"function_get_date"
+        },
 
-        "status":{ 
+        "Status":{ 
             "form_visible": 0,
             "table_visible": 1,
             "pergunta":"internal"}

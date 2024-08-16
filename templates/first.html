@@ -7,14 +7,12 @@
 </head>
 
 <body>
-    <!-- <h1>{{ titulo['nome']}}</h1> -->
+    <h1>{{ titulo['nome']}}</h1>
     <table>
-        {% for item in item_list %}
+        {% for item in select %}
         <tr>
-            <td>{{item['Nome']}}</td>
-            <td>{{item['Contato']}}</td>
-            <td>{{item['Email']}}</td>
-            
+            <td>{{item}}</td>
+           
         </tr>
         {% endfor %}
     </table>
