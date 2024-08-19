@@ -60,11 +60,15 @@
     },
     "Pontos": {
         "name": {
+            "table_visible":1,
+            "form_visible":1,
             "pergunta": "\nDigite o local: ",
             "resp_type": "str",
             "em_branco": "False"
         },
         "tipo": {
+            "table_visible":1,
+            "form_visible":1,
             "pergunta": "\nDigite o tipo: ",
             "resp_type": "str",
             "em_branco": "False"

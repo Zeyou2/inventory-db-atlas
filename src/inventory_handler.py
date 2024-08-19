@@ -1,6 +1,6 @@
 from components.Files_Handler.module.file_handler import Files_Handling
 from datetime import datetime
-from env_p import *
+from utils.env_p import *
 from connect import Mongo_Manager
 
 class InventoryManager(Mongo_Manager, Files_Handling):
@@ -160,6 +160,16 @@ class InventoryManager(Mongo_Manager, Files_Handling):
                 return "Saindo..." 
             return "Operação concluída! Retonando ao menu inicial." 
         
+    def create_form(self, register):
+        data = self.read_file('estruturas_de_dados.json', PATTERN_FOLDER) 
+        dados = data[register]
+        field = []
+        for key, value in dados.items():
+            if value['form_visible'] == 1:
+                field.append(key)
+        return  field
+        
+    
 
 # inv = InventoryManager('central.json')
 # inv.menu()

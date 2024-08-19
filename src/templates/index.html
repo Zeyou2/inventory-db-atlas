@@ -11,15 +11,13 @@
     <table>
         {% for item in item_list %}
         <tr>
-            <td>{{item['Nome']}}</td>
-            <td>{{item['Contato']}}</td>
-            <td>{{item['Email']}}</td>
+            <td>{{item}}</td>
             
         </tr>
         {% endfor %}
     </table>
     <div>
-        <a class="btn" href="/form">Criar</a>
+        <a class="btn" href="/">Criar</a>
     </div>
 </body>
 </html>

@@ -1,7 +1,7 @@
 
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
-from env_p import*
+from utils.env_p import*
 import pandas as pd
 from components.Files_Handler.module.file_handler import Files_Handling
 
@@ -47,3 +47,13 @@ class Mongo_Manager(Files_Handling):
             print("Conectado ao MongoDB Atlas com sucesso!")
         except Exception as e:
             print(f"Erro na conexão: {e}")
+
+    def collection(self):
+        collec = self.invenctory.list_collection_names()
+        # collections = []
+        # for c in collec:
+        #     collections.append(c)
+        return collec
+
+db = Mongo_Manager("db_invenctory") 
+print(db.collection())
