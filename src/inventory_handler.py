@@ -1,6 +1,6 @@
 from components.Files_Handler.module.file_handler import Files_Handling
 from datetime import datetime
-from env_p import *
+from utils.env_p import *
 from connect import Mongo_Manager
 
 class InventoryManager(Mongo_Manager, Files_Handling):
@@ -28,34 +28,37 @@ class InventoryManager(Mongo_Manager, Files_Handling):
                 date  = datetime(int(year_in), int(month_in), int(day_in)).strftime("%y%m%d")
                 return date
             
-    def input_process(self, register, entry):
-        result = {}
-        structure = self.read_file("estruturas_de_dados.json", self.path)
-        get_fields = structure.get(register)
-        while True:
-            try:
-                for key, value in get_fields.items():
-                        if "function" in value:
-                            func = getattr(self, value[9:])
-                            result[key] = func()
-                            continue
-                        
-                        if value == "internal":
-                            continue
-                        else:
-                            result[key] = input(value["pergunta"])
-                self.append_file(result, self.base_name, register, entry)
-            except KeyboardInterrupt:
-                print("\nEncerrando o programa.")
-            if entry == "update":
-                break
-            continue_input = input("\nDeseja fazer mais inserções? (s/n): ").strip().lower()
-            if continue_input == "n":
-                print("Processando...")
-                break
-            elif continue_input != "s":
-                print("\nOpção inválida. Por favor, digite 's' para continuar ou 'n' para sair.")
-        print(f'O Bloco {register} foi atualizado no banco de dados!!')
+    def input_process(self, register, entry,  v_value = None):
+        if v_value == None:
+            result = {}
+            structure = self.read_file("estruturas_de_dados.json", self.path)
+            get_fields = structure.get(register)
+            while True:
+                try:
+                    for key, value in get_fields.items():
+                            if "function" in value:
+                                func = getattr(self, value[9:])
+                                result[key] = func()
+                                continue
+                            
+                            if value == "internal":
+                                continue
+                            else:
+                                result[key] = input(value["pergunta"])
+                    self.append_file(result, self.base_name, register, entry)
+                except KeyboardInterrupt:
+                    print("\nEncerrando o programa.")
+                if entry == "update":
+                    break
+                continue_input = input("\nDeseja fazer mais inserções? (s/n): ").strip().lower()
+                if continue_input == "n":
+                    print("Processando...")
+                    break
+                elif continue_input != "s":
+                    print("\nOpção inválida. Por favor, digite 's' para continuar ou 'n' para sair.")
+            print(f'O Bloco {register} foi atualizado no banco de dados!!')
+        else:
+                self.append_file(v_value, self.base_name, register, entry)
                 
         
     def delete_json(self):
@@ -94,7 +97,7 @@ class InventoryManager(Mongo_Manager, Files_Handling):
                     print(self.read_docs(register)[1])
                     break
                 else:
-                    print('"O número selecionado está fora do intervalo disponível. Tente novamente."')
+                    print("O número selecionado está fora do intervalo disponível. Tente novamente.")
        
     def menu(self):
         keys = list(dict(self.select).keys())
@@ -137,14 +140,14 @@ class InventoryManager(Mongo_Manager, Files_Handling):
                     self.remove_from_database(data, register)
                 elif entry == 0:
                     self.input_process(register, self.management.get(self.method[entry]))
-                    self.insert_data(self.management.get(self.method[entry]))
+                    # self.insert_data(self.management.get(self.method[entry]))
                 elif entry == 1:
                     self.print_db(data, register)
                     result = data[0][int(input('Selecione o numero do elemento que deseja mudar:  '))]
                     self.input_process(register, self.management.get(self.method[entry]))
                     self.update(result, self.management.get(self.method[entry]))
                     self.print_db(data, register)
-                self.delete_json()
+                # self.delete_json()
                 print("...")
             except ValueError:
                 print("O valor digitado não é valido!")
@@ -156,7 +159,17 @@ class InventoryManager(Mongo_Manager, Files_Handling):
                 print("\nInterrupção do teclado.")
                 return "Saindo..." 
             return "Operação concluída! Retonando ao menu inicial." 
+        
+    def create_form(self, register):
+        data = self.read_file('estruturas_de_dados.json', PATTERN_FOLDER) 
+        dados = data[register]
+        field = []
+        for key, value in dados.items():
+            if value['form_visible'] == 1:
+                field.append(key)
+        return  field
+        
+    
 
-       
-inv_man = InventoryManager("central.json")
-print(inv_man.menu())
+# inv = InventoryManager('central.json')
+# inv.menu()
