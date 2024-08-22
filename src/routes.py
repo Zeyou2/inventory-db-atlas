@@ -10,6 +10,8 @@ app = Flask(__name__)
 @app.route('/', methods=["GET", "POST"])
 def index():
     colec = db_atlas.invenctory.list_collection_names()
+    # sample = db_sample.read_docs(register)[0]
+
     if request.method == "POST":
         print()
     return render_template('index.html', titulo = "Inicio", item_list=colec, redirect = redirect("/form"))
@@ -17,9 +19,9 @@ def index():
 @app.route('/cadastro/<register>', methods=['POST', 'GET'])
 def cadastro(register):
     sample = db_sample.read_docs(register)[0]
-    print(sample)
+    
     field = db_sample.create_form(register)  
-    return render_template('pages/form.html', title = register, field=field, sample = sample, )
+    return render_template('pages/form.html', title = register, field=field, sample = sample, view = sample )
 
 @app.route('/send_data/<register>', methods= ['POST'])
 def send(register):
@@ -29,7 +31,14 @@ def send(register):
     db_sample.delete_json()
     return redirect("/")
 
+@app.route('/view/<register>', methods=['POST', 'GET'])
+def view(register):
+    sample = db_sample.read_docs(register)[0]
+    return render_template('pages/view.html', title = register, sample = sample )
 
+
+# @app.route('/view/<register>', methods = ["GET"])
+# def view_data():
 
 
 

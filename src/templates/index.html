@@ -3,40 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <title>{{ titulo }}</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        .container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Adapte o tamanho dos itens conforme necessário */
-            gap: 10px; /* Espaçamento entre os itens */
-        }
-        .item {
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 15px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        .item a {
-            text-decoration: none;
-            color: #007BFF;
-            font-weight: bold;
-        }
-        .item a:hover {
-            text-decoration: underline;
-        }
-    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 <body>
-    <h1>{{ titulo }}</h1>
-    <div class="container">
-        {% for item in item_list %}
-        <div class="item">
-            <a href="{{ url_for('cadastro', register=item) }}">Cadastro de {{ item }}</a>
+    <div class="d-flex">
+        <div class="bg-light border-end" id="sidebar-wrapper" style="min-height: 100vh; width: 250px;">
+            <div class="sidebar-heading border-bottom p-3" style="background-color: #000000; color: #ffffff;">
+                <h1>{{ titulo }}</h1>
+            </div>
+            <div class="accordion accordion-flush" id="accordionFlushExample">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                            <h4>Produtos</h4>
+                        </button>
+                    </h2>
+                    <div id="flush-collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                        <div class="accordion-body">
+                            <a href="{{ url_for('cadastro', register='Produtos') }}" class="list-group-item list-group-item-action list-group-item-light p-3" style="color: #000000;">
+                                Cadastrar
+                            </a>
+                            <a href="{{ url_for('view', register='Produtos') }}" class="list-group-item list-group-item-action list-group-item-light p-3" style="color: #000000;">
+                                Visualizar 
+                            </a>
+                            
+                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <a href="#" class="list-group-item list-group-item-action list-group-item-light p-3" style="background-color: rgb(178, 32, 32);">
+                <h4>Movimentações</h4>
+            </a>
+            <a href="#" class="list-group-item list-group-item-action list-group-item-light p-3" style="background-color: rgb(178, 32, 32);">
+                <h4>Locais</h4>
+            </a>
         </div>
-        {% endfor %}
     </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.6/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
 </body>
 </html>
+
+
+
+ <!-- Uncomment and modify as needed -->
+                            <!-- {% for item in item_list %}
+                            <a href="{{ url_for('cadastro', register=item) }}" class="list-group-item list-group-item-action list-group-item-light p-3">
+                                Cadastro de {{ item }}
+                            </a>
+                            {% endfor %} -->

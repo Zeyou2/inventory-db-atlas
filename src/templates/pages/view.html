@@ -7,29 +7,34 @@
 <body>
     <div class="container">
         <div class="page-header">
-            <h1>Cadastro de {{ title }}</h1>
-            
+            <h1>Conectado ao MongoDB</h1>
+            {% if sample %}
+                <table>
+                    <thead>
+                        <tr>
+                            {% if sample|length > 0 %}
+                                {% for key in sample[0].keys() %}
+                                    <th>{{ key }}</th>
+                                {% endfor %}
+                            {% endif %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for doc in sample %}
+                            <tr>
+                                {% for value in doc.values() %}
+                                    <td>{{ value }}</td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <h2>A Base de dados {{ title }} está vazia.</h2>
+            {% endif %}
         </div>
 
-        <form action="{{ url_for('send', register=title) }}" method="POST">
-            <fieldset>
-                {% for x in field %}
-                    <div class="form-group">
-                        {% if x == "Data" %}
-                            <label for="{{ x }}">Data</label>
-                            <input type="date" id="{{ x }}" name="{{ x }}" class="form-control" required>
-                        {% elif x == "email" %}
-                            <label for="{{ x }}">{{ x }}</label>
-                            <input type="email" id="{{ x }}" name="{{ x }}" class="form-control" required>
-                        {% else %}
-                            <label for="{{ x }}">{{ x }}</label>
-                            <input type="{{ x }}" id="{{ x }}" name="{{ x }}" class="form-control" required>
-                        {% endif %}
-                    </div>
-                {% endfor %}
-                <button type="submit" class="btn btn-primary">Salvar</button>
-            </fieldset>
-        </form>
+        
     </div>
 </body>
 </html>

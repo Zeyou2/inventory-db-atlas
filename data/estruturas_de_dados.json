@@ -15,7 +15,7 @@
         "Email": {
             "form_visible":1,
             "pergunta": "Email",
-            "resp_type": "str",
+            "resp_type": "emal",
             "em_branco": "True"
         }
     },
