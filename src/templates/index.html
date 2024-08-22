@@ -1,23 +1,42 @@
-
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Inventário</title>
+    <title>{{ titulo }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Adapte o tamanho dos itens conforme necessário */
+            gap: 10px; /* Espaçamento entre os itens */
+        }
+        .item {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .item a {
+            text-decoration: none;
+            color: #007BFF;
+            font-weight: bold;
+        }
+        .item a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
-
 <body>
-    <!-- <h1>{{ titulo['nome']}}</h1> -->
-    <table>
+    <h1>{{ titulo }}</h1>
+    <div class="container">
         {% for item in item_list %}
-        <tr>
-            <td>{{item}}</td>
-            
-        </tr>
+        <div class="item">
+            <a href="{{ url_for('cadastro', register=item) }}">Cadastro de {{ item }}</a>
+        </div>
         {% endfor %}
-    </table>
-    <div>
-        <a class="btn" href="/">Criar</a>
     </div>
 </body>
 </html>

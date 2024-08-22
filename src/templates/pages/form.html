@@ -2,20 +2,212 @@
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
+    <title>{{ title }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .page-header {
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 24px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f8f8f8;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        input.form-control {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button.btn-primary {
+            background-color: #007bff;
+            border: none;
+            color: #fff;
+            padding: 10px 15px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        button.btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        h2 {
+            color: #e74c3c;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="page-header">
+            <h1>Cadastro de {{ title }}</h1>
+            {% if sample %}
+                <table>
+                    <thead>
+                        <tr>
+                            {% if sample|length > 0 %}
+                                {% for key in sample[0].keys() %}
+                                    <th>{{ key }}</th>
+                                {% endfor %}
+                            {% endif %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for doc in sample %}
+                            <tr>
+                                {% for value in doc.values() %}
+                                    <td>{{ value }}</td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <h2>A Base de dados {{ title }} está vazia.</h2>
+            {% endif %}
+        </div>
+
+        <form action="{{ url_for('send', register=title) }}" method="POST">
+            <fieldset>
+                {% for x in field %}
+                    <div class="form-group">
+                        {% if x == "Data" %}
+                            <label for="{{ x }}">Data</label>
+                            <input type="date" id="{{ x }}" name="{{ x }}" class="form-control" required>
+                        {% elif x == "email" %}
+                            <label for="{{ x }}">{{ x }}</label>
+                            <input type="email" id="{{ x }}" name="{{ x }}" class="form-control" required>
+                        {% else %}
+                            <label for="{{ x }}">{{ x }}</label>
+                            <input type="{{ x }}" id="{{ x }}" name="{{ x }}" class="form-control" required>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+                <button type="submit" class="btn btn-primary">Salvar</button>
+            </fieldset>
+        </form>
+    </div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
     <title>{{title}}</title>
 </head>
 
 <body>
+      
     <div class="container">
       <div class="page-header">
           <h1>Cadastro de {{title}}</h1>
+          {% if sample %}
+
+          <table>
+            <thead>
+                <tr>
+                    {% if sample|length > 0 %}
+                        {% for key in sample[0].keys() %}
+                            <th>{{ key }}</th>
+                        {% endfor %}
+                    {% endif %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for doc in sample %}
+                    <tr>
+                        {% for value in doc.values() %}
+                            <td>{{ value }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <h2> A Base de dados {{title}} está vazia.</h2>
+        {% endif %}
       </div>
-      <form action="/send_data" method="Post">
+      <form action="{{ url_for('send', register = title) }}" method="POST" >
         <fieldset>
             {% for x in field %}
           <div class="form-group">
-            <label for= '{{x}}'>{{x}}</label>
-            <input type='{{x}}' id='{{x}}' name='{{x}}' class="form-control">
+            
+              {% if x == "data" %}
+              <label for= "{{ x }}">Data</label>
+              <input type= "date" id="{{ x }}" name="{{ x }}" class="form-control" required>
+              {% elif x == "email" %}
+              <label for= "{{ x }}">Email</label>
+              <input type="email" id="{{ x }}" name="{{ x }}" class="form-control" required>
+              {% else %}
+              <label for= "{{ x }}">{{ x }}</label>
+              <input type="{{ x }}" id="{{ x }}" name="{{ x }}" class="form-control" required>  
+              {% endif %}
+              
+            
           </div>
             {% endfor %}
           <button type="submit"  class="btn btn-primary btn-salvar">Salvar</button>
@@ -23,4 +215,4 @@
       </form>
     </div>
 </body>
-</html>
+</html> -->
