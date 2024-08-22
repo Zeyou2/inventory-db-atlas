@@ -166,8 +166,8 @@ class InventoryManager(Mongo_Manager, Files_Handling):
         field = []
         for key, value in dados.items():
             if value['form_visible'] == 1:
-                field.append(key)
-        return  field
+                field.append(value["pergunta"])
+        return field
         
     
 

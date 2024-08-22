@@ -28,10 +28,11 @@ class Mongo_Manager(Files_Handling):
         db = self.invenctory
         all_docs = []
         collection = db[collection_name]
-        docs = collection.find()
+        docs = collection.find({}, {'_id': 0})
         for doc in docs: 
             all_docs.append(doc)
-        dataframe = pd.DataFrame(all_docs).drop(columns=["_id"])
+        dataframe = pd.DataFrame(all_docs)
+        # .drop(columns=["_id"])
         return (all_docs, dataframe)
     
     def close_connection(self):
@@ -55,5 +56,10 @@ class Mongo_Manager(Files_Handling):
         #     collections.append(c)
         return collec
 
-db = Mongo_Manager("db_invenctory") 
-print(db.collection())
+# db = Mongo_Manager("db_invenctory") 
+# teste =  db.read_docs("Pontos")
+# t = []
+# for x, y in teste[0].items():
+  
+    
+ 
