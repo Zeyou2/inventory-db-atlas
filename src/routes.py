@@ -21,7 +21,7 @@ def cadastro(register):
     sample = db_sample.read_docs(register)[0]
     
     field = db_sample.create_form(register)  
-    return render_template('pages/form.html', title = register, field=field, sample = sample, view = sample )
+    return render_template('pages/form.html', titulo = "Inicio" ,title = register, register = register, field=field, sample = sample, view = sample )
 
 @app.route('/send_data/<register>', methods= ['POST'])
 def send(register):
@@ -29,12 +29,12 @@ def send(register):
     db_sample.input_process(register, 'create', values)
     db_sample.insert_data('create')
     db_sample.delete_json()
-    return redirect("/")
+    return redirect('/view/' + register)
 
 @app.route('/view/<register>', methods=['POST', 'GET'])
 def view(register):
     sample = db_sample.read_docs(register)[0]
-    return render_template('pages/view.html', title = register, sample = sample )
+    return render_template('pages/view.html', titulo = "Inicio", title = register, sample = sample )
 
 
 # @app.route('/view/<register>', methods = ["GET"])
