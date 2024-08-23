@@ -49,13 +49,6 @@ class Mongo_Manager(Files_Handling):
         except Exception as e:
             print(f"Erro na conexão: {e}")
 
-    def collection(self):
-        collec = self.invenctory.list_collection_names()
-        # collections = []
-        # for c in collec:
-        #     collections.append(c)
-        return collec
-
 # db = Mongo_Manager("db_invenctory") 
 # teste =  db.read_docs("Pontos")
 # t = []
