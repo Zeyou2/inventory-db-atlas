@@ -9,13 +9,15 @@
     <div class="d-flex">
         <div class="bg-light border-end" id="sidebar-wrapper" style="min-height: 100vh; width: 250px;">
             <div class="sidebar-heading border-bottom p-3" style="background-color: #000000; color: #ffffff;">
-                <h1>{{ titulo }}</h1>
+                <a href="{{ url_for('index') }}" style="color: #ffffff; text-decoration: none;">
+                    <h1>{{ titulo }}</h1>
+                </a>
             </div>
             <div class="accordion accordion-flush" id="accordionFlushExample">
                 <div class="accordion-item">
                     <h2 class="accordion-header">
                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse1" aria-expanded="false" aria-controls="flush-collapse1">
-                            <h4>Produtos</h4>
+                            Produtos
                         </button>
                     </h2>
                     <div id="flush-collapse1" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
@@ -30,17 +32,34 @@
                     </div>
                 </div>
             </div>
-            <a href="#" class="list-group-item list-group-item-action list-group-item-light p-3" style="background-color: white; color: #000000;">
-                <h4>Movimentações</h4>
-            </a>
             <div class="accordion accordion-flush" id="accordionFlushExample">
                 <div class="accordion-item">
                     <h2 class="accordion-header">
                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse2" aria-expanded="false" aria-controls="flush-collapse2">
-                            <h4>Locais</h4>
+                            Usuarios
                         </button>
                     </h2>
                     <div id="flush-collapse2" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                        <div class="accordion-body">
+                            <a href="{{ url_for('cadastro', register='Usuários') }}" class="list-group-item list-group-item-action list-group-item-light p-3" style="color: #000000;">
+                                Cadastrar
+                            </a>
+                            <a href="{{ url_for('view', register='Usuários') }}" class="list-group-item list-group-item-action list-group-item-light p-3" style="color: #000000;">
+                                Visualizar 
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            
+        </div>
+            <div class="accordion accordion-flush" id="accordionFlushExample">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse3" aria-expanded="false" aria-controls="flush-collapse3">
+                           Locais
+                        </button>
+                    </h2>
+                    <div id="flush-collapse3" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
                         <div class="accordion-body">
                             <a href="{{ url_for('cadastro', register='Pontos') }}" class="list-group-item list-group-item-action list-group-item-light p-3" style="color: #000000;">
                                 Cadastrar
@@ -55,8 +74,35 @@
         </div>
        
     </div>
-    <div id= "main-content" class="flex-grow-1 p-3" style="background-color: #ffffff;">
-        {% block content %}
+    <!-- <div id="main-content" class="flex-grow-1 p-3" style="background-color: #167ee6;">
+        <div class="container">
+            <div class="row">
+                {% for user in sample %}
+                    <div class="col-md-4 mb-3">
+                        <div class="card h-100 shadow-sm" style="border-radius: 15px;">
+                            <div class="card-body d-flex flex-column align-items-center text-center">
+                                <img src="{{ url_for('static', filename='images/image.png') }}" alt="image" 
+                                     style="width: 100px; height: 100px; object-fit: cover; margin-bottom: 15px; border-radius: 50%; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);">
+                                <h5 class="card-title mb-2" style="font-weight: bold; color: #333;">{{ user["Nome do usuário"] }}</h5>
+                                {% for key, value in user.items() %}
+                                {% if "Nome" not in key  %}
+                                    <p style="margin: 0; font-size: 14px;"><strong>{{ key }}</strong> </p>
+                                    {{ value }}
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div> -->
+    
+    
+    
+      
+     {% block content %}
+
         {% endblock %}
     </div>
     
@@ -70,9 +116,8 @@
 
 
 
- <!-- Uncomment and modify as needed -->
                             <!-- {% for item in item_list %}
                             <a href="{{ url_for('cadastro', register=item) }}" class="list-group-item list-group-item-action list-group-item-light p-3">
                                 Cadastro de {{ item }}
                             </a>
-                            {% endfor %} -->
+                            {% endfor %}

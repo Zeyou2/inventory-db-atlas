@@ -9,13 +9,16 @@
             
             <fieldset>
                 {% for x in field %}
-                    <div class="form-group">
-                        {% if x == "Data" %}
-                            <label for="{{ x }}">Data</label>
+                    <div class="form-group" style="font-weight: bold;">
+                        {% if x == "Registro de Entrada" %}
+                            <label for="{{ x }}">Registro de Entrada</label>
                             <input type="date" id="{{ x }}" name="{{ x }}" class="form-control" required>
                         {% elif x == "email" %}
                             <label for="{{ x }}">{{ x }}</label>
                             <input type="email" id="{{ x }}" name="{{ x }}" class="form-control" required>
+                        {% elif x == "Data de registro" %}
+                            <label for="{{ x }}">{{ x }}</label>
+                            <p>{{date}}</p>
                         {% else %}
                             <label for="{{ x }}">{{ x }}</label>
                             <input type="{{ x }}" id="{{ x }}" name="{{ x }}" class="form-control" required>

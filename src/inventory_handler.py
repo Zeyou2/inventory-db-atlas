@@ -2,7 +2,8 @@ from components.Files_Handler.module.file_handler import Files_Handling
 from datetime import datetime
 from utils.env_p import *
 from connect import Mongo_Manager
-
+import os
+import sys
 class InventoryManager(Mongo_Manager, Files_Handling):
     def __init__(self, base_name):
         Mongo_Manager.__init__(self, "db_invenctory")
@@ -167,9 +168,11 @@ class InventoryManager(Mongo_Manager, Files_Handling):
         for key, value in dados.items():
             if value['form_visible'] == 1:
                 field.append(value["pergunta"])
+            if key == 'Data de registro':
+                field.append(key)
         return field
         
     
 
-# inv = InventoryManager('central.json')
-# inv.menu()
+inv = InventoryManager('central.json')
+print(inv.create_form('Usuários'))
