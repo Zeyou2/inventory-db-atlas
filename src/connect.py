@@ -24,6 +24,16 @@ class Mongo_Manager(Files_Handling):
             print(f'O elemento foi atualizado!')
         return result
     
+    def remove(self, register):
+        db = self.invenctory
+        all_docs = []
+        collection = db[register]
+        docs = collection.find()
+        for doc in docs: 
+            all_docs.append(doc)
+        
+      
+
     def read_docs(self, collection_name):
         db = self.invenctory
         all_docs = []
@@ -31,9 +41,9 @@ class Mongo_Manager(Files_Handling):
         docs = collection.find({}, {'_id': 0})
         for doc in docs: 
             all_docs.append(doc)
-        dataframe = pd.DataFrame(all_docs)
+        # dataframe = pd.DataFrame(all_docs)
         # .drop(columns=["_id"])
-        return (all_docs, dataframe)
+        return all_docs
     
     def close_connection(self):
         try:
@@ -49,10 +59,10 @@ class Mongo_Manager(Files_Handling):
         except Exception as e:
             print(f"Erro na conexão: {e}")
 
-# db = Mongo_Manager("db_invenctory") 
-# teste =  db.read_docs("Pontos")
-# t = []
-# for x, y in teste[0].items():
+db = Mongo_Manager("db_invenctory") 
+teste =  db.read_docs("Usuários")
+print(teste)
+
   
     
  

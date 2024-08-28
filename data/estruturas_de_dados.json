@@ -1,78 +1,83 @@
 {
     "Usuários": {
         "Nome": {
-            "form_visible":1,
-            "pergunta": "Nome do usuário ",
+            "form_visible": 1,
+            "pergunta": "Nome do usuário",
             "resp_type": "str",
             "em_branco": "False"
         },
         "Contato": {
-            "form_visible":1,
-            "pergunta": "Número de telefone ",
+            "form_visible": 1,
+            "pergunta": "Contato",
             "resp_type": "str",
             "em_branco": "False"
         },
         "Email": {
-            "form_visible":1,
+            "form_visible": 1,
             "pergunta": "Email",
             "resp_type": "emal",
             "em_branco": "True"
+        },
+        "Data de registro": {
+            "table_visible": 1,
+            "form_visible": 0,
+            "pergunta": "Data"
         }
     },
     "Produtos": {
         "Nome": {
-            "table_visible":1,
-            "form_visible":1,
-            "pergunta": "Nome do produto ",
+            "table_visible": 1,
+            "form_visible": 1,
+            "pergunta": "Nome do produto",
             "resp_type": "str",
             "em_branco": "False"
         },
         "Descrição": {
-            "table_visible":1,
-            "form_visible":1,
-            "pergunta": "Descrição ",
+            "table_visible": 1,
+            "form_visible": 1,
+            "pergunta": "Descrição",
             "resp_type": "str",
             "em_branco": "False"
         },
-        "Número de serie": {
-            "table_visible":1,
-            "form_visible":1,
-            "pergunta": "Número de serie ",
+        "serie": {
+            "table_visible": 1,
+            "form_visible": 1,
+            "pergunta": "Serie",
             "resp_type": "str",
             "em_branco": "False"
         },
         "Ponto focal": {
-            "table_visible":1,
-            "form_visible":1,
-            "pergunta": "Onde está localizado ",
+            "table_visible": 1,
+            "form_visible": 1,
+            "pergunta": "Localização",
             "resp_type": "str",
             "em_branco": "False"
         },
         "Data": {
-            "form_visible":1,
-            "pergunta":"Data"
+            "form_visible": 1,
+            "pergunta": "Registro de Entrada"
         },
-
-        "Status":{ 
+        "Status": {
             "form_visible": 0,
             "table_visible": 1,
-            "pergunta":"internal"}
+            "pergunta": "internal"
+        }
     },
     "Pontos": {
         "Nome": {
-            "table_visible":1,
-            "form_visible":1,
-            "pergunta": "Nome do local ",
-            "ex" : "agencia",
+            "table_visible": 1,
+            "form_visible": 1,
+            "pergunta": "Nome do local",
+            "ex": "agencia",
             "resp_type": "str",
             "em_branco": "False"
         },
         "Tipo": {
-            "table_visible":1,
-            "form_visible":1,
-            "pergunta": "Tipo: ",
+            "table_visible": 1,
+            "form_visible": 1,
+            "pergunta": "Tipo ",
             "resp_type": "str",
             "em_branco": "False"
         }
-    }   
+    }
 }
