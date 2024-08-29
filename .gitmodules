@@ -1,3 +1,6 @@
 [submodule "components"]
 	path = /src/components
 	url = https://github.com/gabrielsbf/components.git
+[submodule "src/components"]
+	path = src/components
+	url = https://github.com/gabrielsbf/components.git
