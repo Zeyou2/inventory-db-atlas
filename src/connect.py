@@ -3,7 +3,7 @@ from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 from utils.env_p import*
 import pandas as pd
-from components.Files_Handler.module.file_handler import Files_Handling
+from src.components.Files_Handler.module.file_handler import Files_Handling
 
 class Mongo_Manager(Files_Handling):
     def __init__(self, db_name):
@@ -23,7 +23,7 @@ class Mongo_Manager(Files_Handling):
             result = self.invenctory[key].update_many(filter_db, {"$set": value.get(entry)[0]})
             print(f'O elemento foi atualizado!')
         return result
-    
+
     def remove(self, register):
         db = self.invenctory
         all_docs = []
@@ -32,11 +32,11 @@ class Mongo_Manager(Files_Handling):
         for doc in docs: 
             all_docs.append(doc)
         
-    def read_docs(self, collection_name):
+    def get_collection(self, collection_name, filter_by={}, remove_el={'_id': 0}):
         db = self.invenctory
         all_docs = []
         collection = db[collection_name]
-        docs = collection.find({}, {'_id': 0})
+        docs = collection.find(filter_by, remove_el)
         for doc in docs: 
             all_docs.append(doc)
         # dataframe = pd.DataFrame(all_docs)

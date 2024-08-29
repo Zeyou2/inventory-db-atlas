@@ -12,14 +12,14 @@ app = Flask(__name__)
 @app.route('/', methods=["GET", "POST"])
 def index():
     colec = db_atlas.invenctory.list_collection_names()
-    sample = db_sample.read_docs('Usuários')
+    sample = db_sample.get_collection('Usuários')
     if request.method == "POST":
         print()
-    return render_template('index.html', titulo = "Inicio", item_list = colec, sample = sample, samplev2 = samplev2, redirect = redirect("/form"))
+    return render_template('index.html', titulo = "Inicio", item_list = colec, sample = sample,  redirect = redirect("/form"))
 
 @app.route('/cadastro/<register>', methods=['POST', 'GET'])
 def cadastro(register):
-    sample = db_sample.read_docs(register)
+    sample = db_sample.get_collection(register)
     now = datetime.strftime(datetime.now(), "%Y-%m-%d")
     field = db_sample.create_form(register)  
     return render_template('pages/form.html', titulo = "Inicio" , title = register, register = register, field = field, sample = sample, view = sample, date = now )
@@ -31,10 +31,12 @@ def send(register):
         values["Registro"] = datetime.strftime(datetime.now(), "%Y-%m-%d")
     db_sample.input_process(register, 'create', values)
     db_sample.insert_data('create')
-    db_sample.delete_json()
+    db_sample.delete_central()
     return redirect('/view/' + register)
 
 @app.route('/view/<register>', methods=['POST', 'GET'])
 def view(register):
-    sample = db_sample.read_docs(register)
+    sample = db_sample.get_collection(register)
     return render_template('pages/view.html', titulo = "Inicio", title = register, sample = sample )
+
+

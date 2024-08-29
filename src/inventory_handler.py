@@ -1,7 +1,7 @@
-from components.Files_Handler.module.file_handler import Files_Handling
+from src.components.Files_Handler.module.file_handler import Files_Handling
 from datetime import datetime
 from utils.env_p import *
-from connect import Mongo_Manager
+from src.connect import Mongo_Manager
 import os
 import sys
 class InventoryManager(Mongo_Manager, Files_Handling):
@@ -46,7 +46,7 @@ class InventoryManager(Mongo_Manager, Files_Handling):
                                 continue
                             else:
                                 result[key] = input(value["pergunta"])
-                    self.append_file(result, self.base_name, register, entry)
+                    self.append_data(result, self.base_name, register, entry)
                 except KeyboardInterrupt:
                     print("\nEncerrando o programa.")
                 if entry == "update":
@@ -59,10 +59,10 @@ class InventoryManager(Mongo_Manager, Files_Handling):
                     print("\nOpção inválida. Por favor, digite 's' para continuar ou 'n' para sair.")
             print(f'O Bloco {register} foi atualizado no banco de dados!!')
         else:
-                self.append_file(v_value, self.base_name, register, entry)
+                self.append_data(v_value, self.base_name, register, entry)
                 
         
-    def delete_json(self):
+    def delete_central(self):
         data = self.read_file(self.base_name, self.path)
         data = {}
         self.write_file(data, self.base_name, self.path)
@@ -71,14 +71,17 @@ class InventoryManager(Mongo_Manager, Files_Handling):
         print("="*78)
         print("-"*32, "[",f"{register}","]", "-"*32)
         print("="*78)
-        data = self.read_docs(register)
-        print(data[1])
+        data = self.get_collection(register)
+        if len(data) == 0:
+            print("NO DATA")
+        else:
+            print(data[1])
         print("="*78)
         print("-"*24, "[Connected to MongoDB Cloud]", "-"*24)
         print("="*78)
 
 
-    def append_file(self, data, base_name, register, entry):
+    def append_data(self, data, base_name, register, entry):
         try:
             base = self.read_file(self.base_name, self.path)
             base[register][entry].append(data)
@@ -95,7 +98,7 @@ class InventoryManager(Mongo_Manager, Files_Handling):
                     rest = data[0][deleted]
                     result = self.invenctory[register].delete_many(rest)
                     print(f"Documentos excluídos: {result.deleted_count}")
-                    print(self.read_docs(register)[1])
+                    print(self.get_collection(register)[1])
                     break
                 else:
                     print("O número selecionado está fora do intervalo disponível. Tente novamente.")
@@ -127,7 +130,7 @@ class InventoryManager(Mongo_Manager, Files_Handling):
                print("\nInterrupção do teclado.")
             return "Saindo do Menu"         
         try:
-            data = self.read_docs(register)
+            data = self.get_collection(register)
         except Exception:
             self.connection_teste()
             print(f"Ocorreu um erro ao acessar o: {register}, Contate um adminstrador.")
@@ -141,14 +144,14 @@ class InventoryManager(Mongo_Manager, Files_Handling):
                     self.remove_from_database(data, register)
                 elif entry == 0:
                     self.input_process(register, self.management.get(self.method[entry]))
-                    # self.insert_data(self.management.get(self.method[entry]))
+                    self.insert_data(self.management.get(self.method[entry]))
                 elif entry == 1:
                     self.print_db(data, register)
                     result = data[0][int(input('Selecione o numero do elemento que deseja mudar:  '))]
                     self.input_process(register, self.management.get(self.method[entry]))
                     self.update(result, self.management.get(self.method[entry]))
                     self.print_db(data, register)
-                # self.delete_json()
+                self.delete_central()
                 print("...")
             except ValueError:
                 print("O valor digitado não é valido!")
@@ -166,7 +169,7 @@ class InventoryManager(Mongo_Manager, Files_Handling):
         dados = data[register]
         field = []
         for key, value in dados.items():
-            if value['form_visible'] == 1:
+            if value['form_editable'] == 1:
                 field.append(value["pergunta"])
             if key == 'Data de registro':
                 field.append(key)
