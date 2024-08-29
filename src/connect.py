@@ -32,8 +32,6 @@ class Mongo_Manager(Files_Handling):
         for doc in docs: 
             all_docs.append(doc)
         
-      
-
     def read_docs(self, collection_name):
         db = self.invenctory
         all_docs = []
@@ -59,9 +57,6 @@ class Mongo_Manager(Files_Handling):
         except Exception as e:
             print(f"Erro na conexão: {e}")
 
-db = Mongo_Manager("db_invenctory") 
-teste =  db.read_docs("Usuários")
-print(teste)
 
   
     

@@ -171,8 +171,3 @@ class InventoryManager(Mongo_Manager, Files_Handling):
             if key == 'Data de registro':
                 field.append(key)
         return field
-        
-    
-
-inv = InventoryManager('central.json')
-print(inv.create_form('Usuários'))

@@ -13,8 +13,6 @@ app = Flask(__name__)
 def index():
     colec = db_atlas.invenctory.list_collection_names()
     sample = db_sample.read_docs('Usuários')
-    samplev2 = sample[0].keys()
-
     if request.method == "POST":
         print()
     return render_template('index.html', titulo = "Inicio", item_list = colec, sample = sample, samplev2 = samplev2, redirect = redirect("/form"))
@@ -40,91 +38,3 @@ def send(register):
 def view(register):
     sample = db_sample.read_docs(register)
     return render_template('pages/view.html', titulo = "Inicio", title = register, sample = sample )
-
-
-
-# @app.route('/mov', methods=['POST', 'GET'])
-# def view(register):
-#     sample = db_sample.read_docs(register)[0]
-#     return render_template('pages/mov', titulo = "Inicio", title = register, sample = sample )
-
-
-
-# @app.route('/view/<register>', methods = ["GET"])
-# def view_data():
-
-
-
-
-
-
-
-
-# @app.route('/cadastro/usuarios', methods=["POST", 'GET'])
-# def usuarios():
-#     if request.method == 'POST':
-#         values = {
-#         'name' : request.form['nome'],
-#         'contact' : request.form['contato'],
-#         'email' : request.form['email'] 
-#         }
-#         db_sample.input_process('Usuários', 'create', values)
-#         db_sample.insert_data('create')
-#         db_sample.delete_json()
-#         return 'Usuário cadastrado com sucesso!'
-#     return render_template('cadastro_usuarios.html')
-
-# @app.route('/cadastro/produtos', methods=["POST", 'GET'])
-# def produtos():
-#     if request.method == 'POST':
-#         values = {
-#         'name' : request.form['nome'],
-#         'descricao' : request.form['descricao'],
-#         'serie' : request.form['serie'],
-#         'ponto' : request.form['ponto'], 
-         
-#         }
-
-#         # 'date' : request.form['date']
-#         print(request.form['date'])
-#         db_sample.input_process('Produtos', 'create', values)
-#         db_sample.insert_data('create')
-#         db_sample.delete_json()
-
-#         return 'Produto cadastrado com sucesso!'
-#     return render_template('cadastro_produtos.html')
-
-# @app.route('/cadastro/pontos', methods=["POST", 'GET'])
-# def pontos():
-#     if request.method == 'POST':
-#         values = {
-#         'name' : request.form['nome'],
-#         'tipo' : request.form['tipo'] 
-#         }
-#         db_sample.input_process('Pontos', 'create', values)
-#         db_sample.insert_data('create')
-#         db_sample.delete_json()
-
-#         return 'Ponto cadastrado com sucesso!'
-#     return render_template('cadastro_pontos.html')
-
-
-
-# @app.route('/', methods=["GET", "POST"])
-# def main():
-#     sample = db_sample.read_docs("Usuários")[0]
-#     if request.method == "POST":
-#         print(request.data)
-#     return render_template('teste.html', titulo={'nome': 'teste'}, item_list=sample, redirect = redirect("/form"))
-
-# @app.route('/form', methods=["POST","GET"])
-# def form():
-#     data = db_sample.read_file('estruturas_de_dados.json', PATTERN_FOLDER) 
-#     dados = data['Usuários']
-#     print(dados)
-#     field = []
-#     for key, value in dados.items():
-#         if value['form_visible'] == 1:
-#             field.append(key)
-#     return render_template('pages/form.html', field=field)
-
