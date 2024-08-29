@@ -1,3 +1,0 @@
-requests
-gspread
-google-api-support
