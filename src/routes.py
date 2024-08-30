@@ -17,26 +17,26 @@ def index():
         print()
     return render_template('index.html', titulo = "Inicio", item_list = colec, sample = sample,  redirect = redirect("/form"))
 
-@app.route('/cadastro/<register>', methods=['POST', 'GET'])
-def cadastro(register):
-    sample = db_sample.get_collection(register)
+@app.route('/cadastro/<collection_name>', methods=['POST', 'GET'])
+def cadastro(collection_name):
+    sample = db_sample.get_collection(collection_name)
     now = datetime.strftime(datetime.now(), "%Y-%m-%d")
-    field = db_sample.create_form(register)  
-    return render_template('pages/form.html', titulo = "Inicio" , title = register, register = register, field = field, sample = sample, view = sample, date = now )
+    field = db_sample.create_form(collection_name)  
+    return render_template('pages/form.html', titulo = "Inicio" , title = collection_name, collection_name = collection_name, field = field, sample = sample, view = sample, date = now )
 
-@app.route('/send_data/<register>', methods= ['POST'])
-def send(register):
-    values = {key: value for key, value in request.form.items()}
-    if register == 'Usuários':
-        values["Registro"] = datetime.strftime(datetime.now(), "%Y-%m-%d")
-    db_sample.input_process(register, 'create', values)
-    db_sample.insert_data('create')
+@app.route('/send_data/<collection_name>', methods= ['POST'])
+def send(collection_name):
+    form_values = {key: value for key, value in request.form.items()}
+    if collection_name == 'Usuários':
+        form_values["Registro"] = datetime.strftime(datetime.now(), "%Y-%m-%d")
+    db_sample.save_to_central(form_values, collection_name,'create')
+    db_sample.insert_into_db('create')
     db_sample.delete_central()
-    return redirect('/view/' + register)
+    return redirect('/view/' + collection_name)
 
-@app.route('/view/<register>', methods=['POST', 'GET'])
-def view(register):
-    sample = db_sample.get_collection(register)
-    return render_template('pages/view.html', titulo = "Inicio", title = register, sample = sample )
+@app.route('/view/<collection_name>', methods=['POST', 'GET'])
+def view(collection_name):
+    sample = db_sample.get_collection(collection_name)
+    return render_template('pages/view.html', titulo = "Inicio", title = collection_name, sample = sample )
 
 

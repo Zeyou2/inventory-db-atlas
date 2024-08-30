@@ -28,12 +28,12 @@
                     <div id="flush-collapse1" class="accordion-collapse collapse"
                         data-bs-parent="#accordionFlushExample">
                         <div class="accordion-body">
-                            <a href="{{ url_for('cadastro', register='Produtos') }}"
+                            <a href="{{ url_for('cadastro', collection_name='Produtos') }}"
                                 class="list-group-item list-group-item-action list-group-item-light p-3"
                                 style="color: #000000;">
                                 Cadastrar
                             </a>
-                            <a href="{{ url_for('view', register='Produtos') }}"
+                            <a href="{{ url_for('view', collection_name='Produtos') }}"
                                 class="list-group-item list-group-item-action list-group-item-light p-3"
                                 style="color: #000000;">
                                 Visualizar
@@ -53,12 +53,12 @@
                     <div id="flush-collapse2" class="accordion-collapse collapse"
                         data-bs-parent="#accordionFlushExample">
                         <div class="accordion-body">
-                            <a href="{{ url_for('cadastro', register='Usuários') }}"
+                            <a href="{{ url_for('cadastro', collection_name='Usuários') }}"
                                 class="list-group-item list-group-item-action list-group-item-light p-3"
                                 style="color: #000000;">
                                 Cadastrar
                             </a>
-                            <a href="{{ url_for('view', register='Usuários') }}"
+                            <a href="{{ url_for('view', collection_name='Usuários') }}"
                                 class="list-group-item list-group-item-action list-group-item-light p-3"
                                 style="color: #000000;">
                                 Visualizar
@@ -79,12 +79,12 @@
                     <div id="flush-collapse3" class="accordion-collapse collapse"
                         data-bs-parent="#accordionFlushExample">
                         <div class="accordion-body">
-                            <a href="{{ url_for('cadastro', register='Pontos') }}"
+                            <a href="{{ url_for('cadastro', collection_name='Pontos') }}"
                                 class="list-group-item list-group-item-action list-group-item-light p-3"
                                 style="color: #000000;">
                                 Cadastrar
                             </a>
-                            <a href="{{ url_for('view', register='Pontos') }}"
+                            <a href="{{ url_for('view', collection_name='Pontos') }}"
                                 class="list-group-item list-group-item-action list-group-item-light p-3"
                                 style="color: #000000;">
                                 Visualizar
@@ -103,7 +103,7 @@
         {% endblock %}
     </div>
     <div class="position-sticky">
-        <div><a class = "position-absolute bottom-0 end-0", style="margin: 0.3%;" href="{{ url_for('cadastro', register='Transferência') }}">
+        <div><a class = "position-absolute bottom-0 end-0", style="margin: 0.3%;" href="{{ url_for('cadastro', collection_name='Transferência') }}">
             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10s10-4.48 10-10S17.52 2 12 2m5 11h-4v4h-2v-4H7v-2h4V7h2v4h4z"/></svg>
             </div>
         </div>
