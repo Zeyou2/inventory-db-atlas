@@ -30,7 +30,7 @@ class InventoryManager(Mongo_Manager, Files_Handling):
         field = []
         for key, value in dados.items():
             if value['form_editable'] == 1:
-                field.append(value["pergunta"])
+                field.append(value)             
             if key == 'Data de registro':
                 field.append(key)
         return field

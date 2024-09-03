@@ -10,7 +10,10 @@ class Mongo_Manager(Files_Handling):
         self.client = MongoClient(URI, server_api=ServerApi("1"))
         self.invenctory = self.client[db_name]
 
-    def insert_into_db(self, operation_type):
+    def teste(self):
+        self.invenctory["db_invenctory"].insert_many("produtos")
+
+    def insert_into_db(self, operation_type, data = None):
         data = self.read_file("central.json", PATTERN_FOLDER)
         for key, value in data.items():
                 docs = self.invenctory[key].insert_many(value.get(operation_type))
@@ -56,6 +59,3 @@ class Mongo_Manager(Files_Handling):
             print(f"Erro na conexão: {e}")
 
 
-  
-    
- 

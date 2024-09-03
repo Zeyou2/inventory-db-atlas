@@ -1,5 +1,5 @@
 {
-	"Usuários": {
+	"usuarios": {
 		"Nome": {
 			"form_editable": 1,
 			"pergunta": "Nome do usuário",
@@ -9,13 +9,13 @@
 		"Contato": {
 			"form_editable": 1,
 			"pergunta": "Contato",
-			"resp_type": "str",
+			"resp_type": "number",
 			"em_branco": "False"
 		},
 		"Email": {
 			"form_editable": 1,
 			"pergunta": "Email",
-			"resp_type": "emal",
+			"resp_type": "email",
 			"em_branco": "True"
 		},
 		"Data de registro": {
@@ -24,7 +24,7 @@
 			"pergunta": "Data"
 		}
 	},
-	"Produtos": {
+	"produtos": {
 		"Nome": {
 			"table_visible": 1,
 			"form_editable": 1,
@@ -54,7 +54,7 @@
 			"em_branco": "False"
 		}
 	},
-	"Pontos": {
+	"pontos": {
 		"Nome": {
 			"table_visible": 1,
 			"form_editable": 1,
@@ -71,7 +71,7 @@
 			"em_branco": "False"
 		}
 	},
-	"Transferência": {
+	"transferencia": {
 	
 		"Data da movimentação": {
 			"table_visible": 1,

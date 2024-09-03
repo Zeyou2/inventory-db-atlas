@@ -1,34 +1,32 @@
 {% extends "index.html" %}
 {% block content %}
-    <div class="container mt-4">
-        <div class="page-header mb-4">
-            <h1 class="display-4 text-center">Cadastro de {{ title }}</h1>
-            
-        </div>
-        <form action="{{ url_for('send', collection_name=title) }}" method="POST">
-            
-            <fieldset>
-                {% for x in field %}
-                    <div class="form-group" style="font-weight: bold;">
-                        {% if x == "Registro de Entrada" %}
-                            <label for="{{ x }}">Registro de Entrada</label>
-                            <input type="date" id="{{ x }}" name="{{ x }}" class="form-control" required>
-                        {% elif x == "email" %}
-                            <label for="{{ x }}">{{ x }}</label>
-                            <input type="email" id="{{ x }}" name="{{ x }}" class="form-control" required>
-                        {% elif x == "Data de registro" %}
-                            <label for="{{ x }}">{{ x }}</label>
-                            <p>{{date}}</p>
-                        {% else %}
-                            <label for="{{ x }}">{{ x }}</label>
-                            <input type="{{ x }}" id="{{ x }}" name="{{ x }}" class="form-control" required>
-                        {% endif %}
-                    </div>
-                {% endfor %}
-                <button type="submit" class="btn btn-primary">Salvar</button>
-            </fieldset>
-        </form>
+<div class="container mt-4">
+    <div class="page-header mb-4">
+
+        <h1 class="display-4 text-center">Cadastro de {{ title.capitalize() }}</h1>
     </div>
-    </div>
-    </div>
-    {% endblock %}   
+    <form action="{{ url_for('send', collection_name=title) }}" method="POST">
+
+        <fieldset>
+            {% for x in field %}
+            <div class="form-group" style="font-weight: bold;">
+                {% if x == "Registro de Entrada" %}
+                <label for="{{ x }}">Registro de Entrada</label>
+                <input type="x['resp_type']" id="{{ x }}" name="{{ x['pergunta'] }}" class="form-control" required>
+                {% elif x == "Data de registro" %}
+                <label for="{{ x }}">{{ x['pergunta'] }}</label>
+                <p>{{date}}</p>
+                {% else %}
+                <label for="{{ x['pergunta'] }}">{{ x['pergunta'] }}</label>
+                <input type="{{ x['resp_type'] }}" id="{{ x['pergunta']  }}" name="{{ x['pergunta'] }}"
+                    class="form-control" required>
+                {% endif %}
+            </div>
+            {% endfor %}
+            <button type="submit" class="btn btn-primary">Salvar</button>
+        </fieldset>
+    </form>
+</div>
+</div>
+</div>
+{% endblock %}

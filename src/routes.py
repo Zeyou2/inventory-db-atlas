@@ -12,7 +12,7 @@ app = Flask(__name__)
 @app.route('/', methods=["GET", "POST"])
 def index():
     colec = db_atlas.invenctory.list_collection_names()
-    sample = db_sample.get_collection('Usuários')
+    sample = db_sample.get_collection('usuarios')
     if request.method == "POST":
         print()
     return render_template('index.html', titulo = "Inicio", item_list = colec, sample = sample,  redirect = redirect("/form"))
@@ -27,7 +27,7 @@ def cadastro(collection_name):
 @app.route('/send_data/<collection_name>', methods= ['POST'])
 def send(collection_name):
     form_values = {key: value for key, value in request.form.items()}
-    if collection_name == 'Usuários':
+    if collection_name == 'usuarios':
         form_values["Registro"] = datetime.strftime(datetime.now(), "%Y-%m-%d")
     db_sample.save_to_central(form_values, collection_name,'create')
     db_sample.insert_into_db('create')
@@ -37,6 +37,5 @@ def send(collection_name):
 @app.route('/view/<collection_name>', methods=['POST', 'GET'])
 def view(collection_name):
     sample = db_sample.get_collection(collection_name)
-    return render_template('pages/view.html', titulo = "Inicio", title = collection_name, sample = sample )
-
+    return render_template('pages/view.html', titulo = "Inicio", collection_name = collection_name, sample = sample )
 
