@@ -31,7 +31,7 @@ def send(collection_name):
         form_values["Registro"] = datetime.strftime(datetime.now(), "%Y-%m-%d")
     db_sample.save_to_central(form_values, collection_name,'create')
     db_sample.insert_into_db('create')
-    db_sample.delete_central()
+    # db_sample.delete_central()
     return redirect('/view/' + collection_name)
 
 @app.route('/view/<collection_name>', methods=['POST', 'GET'])

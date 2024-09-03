@@ -2,6 +2,7 @@
 	"usuarios": {
 		"Nome": {
 			"form_editable": 1,
+			"form_visible": 1, 
 			"pergunta": "Nome do usuário",
 			"resp_type": "str",
 			"em_branco": "False"
@@ -80,7 +81,7 @@
 			"resp_type": "date",
 			"em_branco": "False"
 		},
-		"Produto": {
+		"Id do Produto": {
 			"table_visible": 1,
 			"form_editable": 1,
 			"pergunta": "Nome do produto: ",

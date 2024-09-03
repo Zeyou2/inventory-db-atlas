@@ -34,3 +34,5 @@ class InventoryManager(Mongo_Manager, Files_Handling):
             if key == 'Data de registro':
                 field.append(key)
         return field
+    
+    #Criar aqui uma função para testar o backend das entradas da central.
