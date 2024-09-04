@@ -26,6 +26,13 @@
 			"form_editable": 0,
 			"form_visible" : 0,
 			"pergunta": "Data"
+		},
+		"senha": {
+			"table_visible": 0,
+			"form_editable": 1,
+			"form_visible" : 1,
+			"pergunta": "Senha",
+			"resp_type": "password"
 		}
 	},
 	"produtos": {

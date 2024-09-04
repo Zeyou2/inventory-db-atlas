@@ -9,6 +9,7 @@ db_sample = InventoryManager("central.json")
 db_atlas = Mongo_Manager('db_invenctory')
 app = Flask(__name__)
 
+
 @app.route('/', methods=["GET", "POST"])
 def index():
     colec = db_atlas.invenctory.list_collection_names()
@@ -39,3 +40,17 @@ def view(collection_name):
     sample = db_sample.get_collection(collection_name)
     return render_template('pages/view.html', titulo = "Inicio", collection_name = collection_name, sample = sample )
 
+@app.route('/login', methods=['POST'])
+def login():
+    if request.method == 'POST':
+        email = request.form.get('email')
+        password = request.form.get('password')
+        print(email)
+        collection_name = db_atlas.invenctory.list_collection_names()
+        user = collection_name.find_one()
+        if user:
+            return redirect(url_for('index.html')) 
+        else:
+            return redirect(url_for('pages/login.html')) 
+
+    return render_template('pages/login.html')
