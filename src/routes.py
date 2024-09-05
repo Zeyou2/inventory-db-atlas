@@ -1,4 +1,5 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, jsonify
+from flask_jwt_extended import JWTManager, create_access_token, jwt_required
 from utils.env_p import *
 from inventory_handler import InventoryManager
 from connect import Mongo_Manager
@@ -9,6 +10,30 @@ db_sample = InventoryManager("central.json")
 db_atlas = Mongo_Manager('db_invenctory')
 app = Flask(__name__)
 
+app.config["JWT_SECRET_KEY"] = "secret"
+
+JWTManager(app)
+
+
+@app.route("/login", methods=["POST"])
+def login():
+    data = request.get_json()
+    email = data["email"]
+    senha = data["senha"]
+    users_collection = db_atlas.get_collection('usuarios')
+    
+    user = users_collection.find_one({"email" : email , "senha" : senha })
+    
+    if user:
+        token = create_access_token({"id": str(user["_id"])})
+        return jsonify({"token": token}), 201
+    
+    return jsonify({"error": "usuario nao existe!"}), 400
+
+@app.route("/protected", methods=["GET"])
+@jwt_required()
+def protected():
+    return jsonify({"message": "secret"})
 
 @app.route('/', methods=["GET", "POST"])
 def index():
@@ -40,7 +65,7 @@ def view(collection_name):
     sample = db_sample.get_collection(collection_name)
     return render_template('pages/view.html', titulo = "Inicio", collection_name = collection_name, sample = sample )
 
-@app.route('/login', methods=['POST'])
+@app.route('/login', methods=['POST', 'GET'])
 def login():
     if request.method == 'POST':
         email = request.form.get('email')
