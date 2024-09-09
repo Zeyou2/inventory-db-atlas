@@ -6,7 +6,7 @@ import os
 import sys
 class InventoryManager(Mongo_Manager, Files_Handling):
     def __init__(self, central_data):
-        Mongo_Manager.__init__(self, "db_invenctory")
+        Mongo_Manager.__init__(self, "inventory")
         self.central_data = central_data
         self.path = PATTERN_FOLDER
             

@@ -1,22 +1,50 @@
+
+name: Example API
 endpoints:
-  - name: "Authencation"
+  - name: Get Items
+    path: /view
     requests:
-      - name: "/Login"
-        path: "http://localhost:5000/login"
-        method: "post"
-        body:
-          name: "pip"
-        vars:
-          token: ${{ response.json()["token"] }}
-        tests:
-          - name: it_returns_status_code_201
-            assert: ${{ response.status_code == 201 }}
-      - name: "/Protected"
-        path: "http://localhost:5000/protected"
+      - method: GET
+        name: Retrieve all items
         headers:
-          Authorization: "Bearer ${token}"
+          Content-Type: application/json
         tests:
-          - name: it_returns_status_code_200
-            assert: ${{ response.status_code == 200 }}
-          - name: it_returns_content_secret
-            assert: ${{ response.json()["message"] == "secret" }}
+          - status_code: 200
+
+
+
+
+# endpoints:
+#   - name: "Home"
+#     requests:
+#       - name: "/"
+#         method: "post"
+#         path: "http://127.0.0.1:5000"
+#         tests:
+#           - name: "status_code_is_200"
+            # assert: "response.status_code == 200"
+
+  # - name: "Login"
+  #   path: "http://127.0.0.1:5000/login"
+  #   requests:
+  #     - name: "Login Request"
+  #       method: "post"
+  #       body:
+  #         username: "user"
+  #         password: "password"
+  #       tests:
+  #         - name: "Check if login is successful"
+  #           assert: "response.status_code == 200"
+  #         - name: "Check if access token is present"
+  #           assert: "'access_token' in response.json()"
+
+  # - name: "Protected Route"
+  #   path: "http://127.0.0.1:5000/protected"
+  #   requests:
+  #     - name: "Get Protected Route with Token"
+  #       method: "get"
+  #       headers:
+  #         Authorization: "Bearer {{access_token}}"
+  #       tests:
+  #         - name: "status_code_is_200"
+  #           assert: "response.status_code == 200"
