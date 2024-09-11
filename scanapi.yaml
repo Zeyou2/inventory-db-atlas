@@ -1,28 +1,24 @@
-
-name: Example API
 endpoints:
-  - name: Get Items
-    path: /view
+  - name: "autenticação"
     requests:
-      - method: GET
-        name: Retrieve all items
-        headers:
-          Content-Type: application/json
+      - name: "/login"
+        method: "post"
+        path: "http://127.0.0.1:5000/login"
+        body:
+          email: "jsoe_100894@hotmail.com"
+        vars:
+          token : ${{ response.json().get("token") }}
         tests:
-          - status_code: 200
+          - name: it_returns_status_code_is_201
+            assert: ${{ response.status_code == 201 }}
 
-
-
-
-# endpoints:
-#   - name: "Home"
-#     requests:
-#       - name: "/"
-#         method: "post"
-#         path: "http://127.0.0.1:5000"
-#         tests:
-#           - name: "status_code_is_200"
-            # assert: "response.status_code == 200"
+      - name: "/protected"
+        path: "http://127.0.0.1:5000/protected"
+        headers:
+          Authorization: "Bearer ${token}"
+        tests:
+          - name: it_returns_status_code_is_200
+            assert: ${{ response.status_code == 200 }}
 
   # - name: "Login"
   #   path: "http://127.0.0.1:5000/login"

@@ -1,7 +1,7 @@
 
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
-from src.utils.env_p import*
+from src.utils.env_p import URI, PATTERN_FOLDER
 import pandas as pd
 from src.components.Files_Handler.module.file_handler import Files_Handling
 
@@ -62,29 +62,29 @@ class Mongo_Manager(Files_Handling):
     def reset_inv(self):
         base = {
     "usuarios": {
-        "Nome do usuario": "None",
-        "Contato": "None",
-        "Email": "None",
-        "Senha": "None",
-        "Registro": "None"
+        "Nome do usuario": None,
+        "Contato": None,
+        "Email": None,
+        "Senha": None,
+        "Registro": None
     },
     "produtos": {
-        "Nome do produto": "None",
-        "Serie": "None",
-        "Categoria do Produto": "None",
-        "Descrição": "None"
+        "Nome do produto": None,
+        "Serie": None,
+        "Categoria do Produto": None,
+        "Descrição": None
     },
     "transferencia": {
-        "data da movimentação": "None",
-        "Nome do produto": "None",
-        "Quantidade": "None",
-        "tipo da transferência do produto": "None",
-        "De": "None",
-        "Para": "None"
+        "data da movimentação": None,
+        "Nome do produto": None,
+        "Quantidade": None,
+        "tipo da transferência do produto": None,
+        "De": None,
+        "Para": None
     },
     "pontos": {
-        "Nome do local": "None",
-        "Tipo": "None"
+        "Nome do local": None,
+        "Tipo": None
     }
 }
         for key, value in base.items():
@@ -93,3 +93,19 @@ class Mongo_Manager(Files_Handling):
                 print(f'O item foi adicionado!')
         print(f'\nNumero de elementos inseridos no Banco de dados: [{len(docs.inserted_ids)}].')
 
+    
+    def print_db(self, collection):
+        db_sample = self.inventory[collection]
+        object_db = db_sample.find_one({'Email': 'Alex@mov'}, {"Email" : 1})
+        print(object_db)
+        # data = []
+        # for names in object_db:
+        #     data.append(names.get('Email'))
+        # print(data)
+
+
+
+
+    
+
+    

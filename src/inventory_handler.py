@@ -3,7 +3,7 @@ from datetime import datetime
 from utils.env_p import *
 from src.connect import Mongo_Manager
 import os
-import sys
+
 class InventoryManager(Mongo_Manager, Files_Handling):
     def __init__(self, central_data):
         Mongo_Manager.__init__(self, "inventory")

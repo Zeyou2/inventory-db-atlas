@@ -1,5 +1,6 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify
-from flask_jwt_extended import JWTManager, create_access_token, jwt_required
+from flask import Flask, render_template, request, redirect, url_for, jsonify, make_response
+from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity, set_access_cookies
+
 from utils.env_p import *
 from inventory_handler import InventoryManager
 from connect import Mongo_Manager
@@ -10,41 +11,49 @@ db_sample = InventoryManager("central.json")
 db_atlas = Mongo_Manager('inventory')
 app = Flask(__name__)
 
-# app.config["JWT_SECRET_KEY"] = "secret"
+app.config["JWT_SECRET_KEY"] = "secret"
 
-# JWTManager(app)
+app.config['JWT_COOKIE_CSRF_PROTECT'] = False
+app.config['JWT_TOKEN_LOCATION'] = ['cookies']
+jwt = JWTManager(app)
 
 
-# @app.route("/login", methods=["POST"])
-# def login():
-#     data = request.get_json()
-#     email = data["email"]
-#     senha = data["senha"]
-#     users_collection = db_atlas.get_collection('usuarios')
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    return render_template('pages/login.html')
+
+@app.route("/validate_user", methods=["POST"])
+def validate_user():
+    print("Entered")
+    email = request.form.get("email")
+    print("user is", email)
+    password = request.form.get('senha')
+    users_collection = db_atlas.inventory['usuarios']
+    user = users_collection.find_one({"Email" : email })
+    if user:
+        print('entrei')
+        token = create_access_token({"id": str(user["_id"]), "email": user["Email"]})
+        resp = make_response(redirect("/"))
+        set_access_cookies(resp, token)
+        return resp
     
-#     user = users_collection.find_one({"email" : email , "senha" : senha })
-    
-#     if user:
-#         token = create_access_token({"id": str(user["_id"])})
-#         return jsonify({"token": token}), 201
-    
-#     return jsonify({"error": "usuario nao existe!"}), 400
-
-# @app.route("/protected", methods=["GET"])
-# @jwt_required()
-# def protected():
-#     return jsonify({"message": "secret"})
+    if not(user):
+        return jsonify({"error": "usuario nao existe!"}), 400
 
 @app.route('/', methods=["GET", "POST"])
+@jwt_required()
 def index():
+    current_user = get_jwt_identity()
+   
+    print(current_user)
     colec = db_atlas.inventory.list_collection_names()
     sample = db_sample.get_collection('usuarios')
     if request.method == "POST":
-        print()
+        print("Requisiçao recebida")
     return render_template('index.html', titulo = "Inicio", item_list = colec, sample = sample,  redirect = redirect("/form"))
 
 @app.route('/cadastro/<collection_name>', methods=['POST',  'GET'])
-# @jwt_required()
+@jwt_required(locations=["cookies"])
 def cadastro(collection_name):
     sample = db_sample.get_collection(collection_name)
     now = datetime.strftime(datetime.now(), "%Y-%m-%d")
@@ -52,6 +61,7 @@ def cadastro(collection_name):
     return render_template('pages/form.html', titulo = "Inicio" , title = collection_name, collection_name = collection_name, field = field, sample = sample, view = sample, date = now )
 
 @app.route('/send_data/<collection_name>', methods= ['POST'])
+@jwt_required()
 def send(collection_name):
     form_values = {key: value for key, value in request.form.items()}
     if collection_name == 'usuarios':
@@ -62,6 +72,7 @@ def send(collection_name):
     return redirect('/view/' + collection_name)
 
 @app.route('/view/<collection_name>', methods=['POST', 'GET'])
+@jwt_required()
 def view(collection_name):
     sample = db_sample.get_collection(collection_name)
     if sample:
@@ -70,8 +81,8 @@ def view(collection_name):
 
 # @app.route('/login', methods=['POST'])
 # def login():
-#     email = request.json.get('email', None)
-#     password = request.json.get('password', None)
+    # email = request.json.get('email', None)
+    # password = request.json.get('password', None)
 
 #     # Aqui você pode colocar a lógica de verificação de login (exemplo básico)
 #     user = db_sample.get_collection('usuarios').get(email)
