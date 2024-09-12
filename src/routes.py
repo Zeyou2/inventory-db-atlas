@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify, make_response
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity, set_access_cookies
-
 from utils.env_p import *
 from inventory_handler import InventoryManager
 from connect import Mongo_Manager
@@ -27,12 +26,13 @@ def validate_user():
     print("Entered")
     email = request.form.get("email")
     print("user is", email)
-    password = request.form.get('senha')
+    senha = request.form.get('senha')
     users_collection = db_atlas.inventory['usuarios']
-    user = users_collection.find_one({"Email" : email })
+    user = users_collection.find_one({"Email" : email , "Senha" : senha})
+    print(user["Senha"])
     if user:
         print('entrei')
-        token = create_access_token({"id": str(user["_id"]), "email": user["Email"]})
+        token = create_access_token({"id": str(user["_id"]), "email": user["Email"], "senha" : user["Senha"]})
         resp = make_response(redirect("/"))
         set_access_cookies(resp, token)
         return resp

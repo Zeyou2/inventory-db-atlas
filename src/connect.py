@@ -1,9 +1,10 @@
 
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
-from src.utils.env_p import URI, PATTERN_FOLDER
+from utils.env_p import URI, PATTERN_FOLDER
 import pandas as pd
 from src.components.Files_Handler.module.file_handler import Files_Handling
+
 
 class Mongo_Manager(Files_Handling):
     def __init__(self, db_name):
