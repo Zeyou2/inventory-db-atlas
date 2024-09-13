@@ -9,9 +9,7 @@ from datetime import datetime
 db_sample = InventoryManager("central.json")
 db_atlas = Mongo_Manager('inventory')
 app = Flask(__name__)
-
 app.config["JWT_SECRET_KEY"] = "secret"
-
 app.config['JWT_COOKIE_CSRF_PROTECT'] = False
 app.config['JWT_TOKEN_LOCATION'] = ['cookies']
 jwt = JWTManager(app)
@@ -53,62 +51,51 @@ def index():
     return render_template('index.html', titulo = "Inicio", item_list = colec, sample = sample,  redirect = redirect("/form"))
 
 @app.route('/cadastro/<collection_name>', methods=['POST',  'GET'])
-@jwt_required(locations=["cookies"])
+# @jwt_required(locations=["cookies"])
 def cadastro(collection_name):
     sample = db_sample.get_collection(collection_name)
     now = datetime.strftime(datetime.now(), "%Y-%m-%d")
     field = db_sample.create_form(collection_name)  
     return render_template('pages/form.html', titulo = "Inicio" , title = collection_name, collection_name = collection_name, field = field, sample = sample, view = sample, date = now )
 
+# @app.route('/cadastro/usuario', methods=['POST',  'GET'])
+# # @jwt_required(locations=["cookies"])
+# def cadastro_user(collection_name = "usuarios"):
+#     sample = db_sample.get_collection(collection_name)
+#     now = datetime.strftime(datetime.now(), "%Y-%m-%d")
+#     field = db_sample.create_form(collection_name)  
+#     return render_template('pages/ca.html', titulo = "Inicio" , title = collection_name, collection_name = collection_name, field = field, sample = sample, view = sample, date = now )
+
+@app.route('/register', methods=['POST', 'GET'])
+def register_user(collection_name = "usuarios"):
+    field = db_sample.create_form(collection_name)
+    now = datetime.strftime(datetime.now(), "%Y-%m-%d")
+ 
+    return render_template('pages/register_user.html', field = field, now = now)
+
 @app.route('/send_data/<collection_name>', methods= ['POST'])
-@jwt_required()
+# @jwt_required()
 def send(collection_name):
     form_values = {key: value for key, value in request.form.items()}
     if collection_name == 'usuarios':
         form_values["Registro"] = datetime.strftime(datetime.now(), "%Y-%m-%d")
+        db_sample.save_to_central(form_values, collection_name,'create')
+        db_sample.insert_into_db('create')
+        db_sample.delete_central()
+        return redirect('/login')
     db_sample.save_to_central(form_values, collection_name,'create')
     db_sample.insert_into_db('create')
     db_sample.delete_central()
     return redirect('/view/' + collection_name)
 
 @app.route('/view/<collection_name>', methods=['POST', 'GET'])
-@jwt_required()
+# @jwt_required()
 def view(collection_name):
     sample = db_sample.get_collection(collection_name)
     if sample:
         return render_template('pages/view.html', titulo = "Inicio", collection_name = collection_name, sample = sample )
     return jsonify(list(sample))
 
-# @app.route('/login', methods=['POST'])
-# def login():
-    # email = request.json.get('email', None)
-    # password = request.json.get('password', None)
-
-#     # Aqui você pode colocar a lógica de verificação de login (exemplo básico)
-#     user = db_sample.get_collection('usuarios').get(email)
-
-#     if user and user['password'] == password:  # Validação de usuário simples
-#         # Cria um token JWT com o email do usuário
-#         access_token = create_access_token(identity=email)
-#         return jsonify(access_token=access_token), 200
-#     else:
-#         return jsonify({"msg": "Bad username or password"}), 401
-    
 
 
-
-# @app.route('/login', methods=['POST', 'GET'])
-# def login():
-#     if request.method == 'POST':
-#         email = request.form.get('email')
-#         password = request.form.get('password')
-#         print(email)
-#         collection_name = db_atlas.inventory.list_collection_names()
-#         user = collection_name.find_one()
-#         if user:
-#             return redirect(url_for('index')) 
-#         else:
-#             return redirect(url_for('login')) 
-
-#     return render_template('pages/login.html')
 

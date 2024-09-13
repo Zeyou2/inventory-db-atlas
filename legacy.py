@@ -159,3 +159,39 @@
 #             if key == 'Data de registro':
 #                 field.append(key)
 #         return field
+
+
+
+# @app.route('/login', methods=['POST'])
+# def login():
+    # email = request.json.get('email', None)
+    # password = request.json.get('password', None)
+
+#     # Aqui você pode colocar a lógica de verificação de login (exemplo básico)
+#     user = db_sample.get_collection('usuarios').get(email)
+
+#     if user and user['password'] == password:  # Validação de usuário simples
+#         # Cria um token JWT com o email do usuário
+#         access_token = create_access_token(identity=email)
+#         return jsonify(access_token=access_token), 200
+#     else:
+#         return jsonify({"msg": "Bad username or password"}), 401
+    
+
+
+
+# @app.route('/login', methods=['POST', 'GET'])
+# def login():
+#     if request.method == 'POST':
+#         email = request.form.get('email')
+#         password = request.form.get('password')
+#         print(email)
+#         collection_name = db_atlas.inventory.list_collection_names()
+#         user = collection_name.find_one()
+#         if user:
+#             return redirect(url_for('index')) 
+#         else:
+#             return redirect(url_for('login')) 
+
+#     return render_template('pages/login.html')
+

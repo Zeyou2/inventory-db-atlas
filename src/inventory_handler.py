@@ -32,8 +32,9 @@ class InventoryManager(Mongo_Manager, Files_Handling):
         for key, value in dados.items():
             if value['form_editable'] == 1:
                 field.append(value)             
-            if key == 'Data de registro':
-                field.append(key)
+            # if key == 'Data de registro':
+            #     field.append(key)
+                
         return field
     
    
@@ -42,4 +43,6 @@ def hash_password(password):
     salt = bcrypt.gensalt()
     hashed_password = bcrypt.hashpw(password.encode('utf-8'), salt)
     return hashed_password
+
+
     #Criar aqui uma função para testar o backend das entradas da central.

@@ -2,44 +2,44 @@
 	"usuarios": {
 		"Nome": {
 			"form_editable": 1,
-			"form_visible": 1, 
+			"form_visible": 1,
 			"pergunta": "Nome do usuário",
 			"resp_type": "str",
 			"em_branco": "False"
 		},
 		"Contato": {
 			"form_editable": 1,
-			"form_visible" : 1,
+			"form_visible": 1,
 			"pergunta": "Contato",
 			"resp_type": "number",
 			"em_branco": "False"
 		},
 		"Email": {
 			"form_editable": 1,
-			"form_visible" : 1,
+			"form_visible": 1,
 			"pergunta": "Email",
 			"resp_type": "email",
 			"em_branco": "True"
 		},
+		"Senha": {
+			"table_visible": 0,
+			"form_editable": 1,
+			"form_visible": 1,
+			"pergunta": "Senha",
+			"resp_type": "password"
+		},
 		"Data de registro": {
 			"table_visible": 1,
 			"form_editable": 0,
-			"form_visible" : 0,
+			"form_visible": 0,
 			"pergunta": "Data"
-		},
-		"senha": {
-			"table_visible": 0,
-			"form_editable": 1,
-			"form_visible" : 1,
-			"pergunta": "Senha",
-			"resp_type": "password"
 		}
 	},
 	"produtos": {
 		"Nome": {
 			"table_visible": 1,
 			"form_editable": 1,
-			"form_visible" : 1,
+			"form_visible": 1,
 			"pergunta": "Nome do produto",
 			"resp_type": "str",
 			"em_branco": "False"
@@ -47,15 +47,15 @@
 		"Serie": {
 			"table_visible": 1,
 			"form_editable": 1,
-			"form_visible" : 1,
+			"form_visible": 1,
 			"pergunta": "Serie",
 			"resp_type": "str",
 			"em_branco": "True"
 		},
-		"Categoria":{
+		"Categoria": {
 			"table_visible": 1,
 			"form_editable": 1,
-			"form_visible" : 1,
+			"form_visible": 1,
 			"pergunta": "Categoria do Produto",
 			"resp_type": "str",
 			"em_branco": "True"
@@ -63,7 +63,7 @@
 		"Observação": {
 			"table_visible": 1,
 			"form_editable": 1,
-			"form_visible" : 1,
+			"form_visible": 1,
 			"pergunta": "Descrição",
 			"resp_type": "str",
 			"em_branco": "False"
@@ -73,7 +73,7 @@
 		"Nome": {
 			"table_visible": 1,
 			"form_editable": 1,
-			"form_visible" : 1,
+			"form_visible": 1,
 			"pergunta": "Nome do local",
 			"ex": "agencia",
 			"resp_type": "str",
@@ -82,18 +82,17 @@
 		"Tipo": {
 			"table_visible": 1,
 			"form_editable": 1,
-			"form_visible" : 1,
+			"form_visible": 1,
 			"pergunta": "Tipo ",
 			"resp_type": "str",
 			"em_branco": "False"
 		}
 	},
 	"transferencia": {
-	
 		"Data da movimentação": {
 			"table_visible": 1,
 			"form_editable": 1,
-			"form_visible" : 1,
+			"form_visible": 1,
 			"pergunta": "data da movimentação: ",
 			"resp_type": "date",
 			"em_branco": "False"
@@ -101,15 +100,15 @@
 		"Id do Produto": {
 			"table_visible": 1,
 			"form_editable": 1,
-			"form_visible" : 1,
+			"form_visible": 1,
 			"pergunta": "Nome do produto: ",
 			"resp_type": "list",
 			"em_branco": "False"
 		},
-		"Quantidade":{
+		"Quantidade": {
 			"table_visible": 1,
 			"form_editable": 1,
-			"form_visible" : 1,
+			"form_visible": 1,
 			"pergunta": "Quantidade: ",
 			"resp_type": "number",
 			"em_branco": "False"
@@ -117,7 +116,7 @@
 		"Tipo": {
 			"table_visible": 1,
 			"form_editable": 1,
-			"form_visible" : 1,
+			"form_visible": 1,
 			"pergunta": "tipo da transferência do produto: ",
 			"resp_type": "str",
 			"em_branco": "False"
@@ -125,7 +124,7 @@
 		"De": {
 			"table_visible": 1,
 			"form_editable": 1,
-			"form_visible" : 1,
+			"form_visible": 1,
 			"pergunta": "De: ",
 			"resp_type": "list",
 			"em_branco": "False"
@@ -133,7 +132,7 @@
 		"Para": {
 			"table_visible": 1,
 			"form_editable": 1,
-			"form_visible" : 1,
+			"form_visible": 1,
 			"pergunta": "Para: ",
 			"resp_type": "list",
 			"em_branco": "False"

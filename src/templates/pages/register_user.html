@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-100">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <title>Cadastro de Usuário</title>
+</head>
+<body class="d-flex align-items-center py-4 bg-body-tertiary h-100">
+    <main class="w-100 m-auto" style="max-width: 400px;">
+        <h1 class="text-center mb-4">Cadastro de Usuário</h1>
+        <form action="{{ url_for('send', collection_name="usuarios") }}" method="POST">
+                <fieldset>
+                    {% for x in field %}
+                    <div class="form-floating mb-3p">
+                        {% if x['pergunta'] == "Senha" %}
+                        <input type="{{ x['resp_type'] }}" id="{{ x['pergunta']  }}" name="{{ x['pergunta'] }}"
+                                class="form-control" placeholder="{{ x['pergunta']  }}" required>
+                        <label for="{{ x['pergunta'] }}">{{ x['pergunta'] }}</label>
+                        <div class="form-floating mb-3">
+                            <input type="password" name="confirmar_senha" class="form-control" id="floatingConfirmPassword" placeholder="Confirme a Senha" required>
+                            <label for="floatingConfirmPassword">Confirmar Senha</label>
+                        </div>
+                        {% else %}
+                            <input type="{{ x['resp_type'] }}" id="{{ x['pergunta']  }}" name="{{ x['pergunta'] }}"
+                                class="form-control" placeholder="{{ x['pergunta']  }}" required>
+                            <label for="{{ x['pergunta'] }}">{{ x['pergunta'] }}</label>
+                        {% endif %}
+                    </div>
+                    
+                    {% endfor %}
+                    
+                    <button type="submit" class="btn btn-primary">Cadastrar</button>
+                </fieldset>
+            </form>
+            <p>Já tem uma conta?</p>
+            <a href="{{ url_for('login') }}" class="btn btn-link">Fazer Login</a>
+
+            
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+o5I5l5U6Uxw8KfRF6qz93f5VbLA8" crossorigin="anonymous"></script>
+</body>
+</html>
