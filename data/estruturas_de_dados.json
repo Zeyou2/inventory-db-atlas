@@ -11,7 +11,7 @@
 			"form_editable": 1,
 			"form_visible": 1,
 			"pergunta": "Contato",
-			"resp_type": "number",
+			"resp_type": "tel",
 			"em_branco": "False"
 		},
 		"Email": {

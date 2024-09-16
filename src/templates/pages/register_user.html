@@ -18,10 +18,11 @@
                         <input type="{{ x['resp_type'] }}" id="{{ x['pergunta']  }}" name="{{ x['pergunta'] }}"
                                 class="form-control" placeholder="{{ x['pergunta']  }}" required>
                         <label for="{{ x['pergunta'] }}">{{ x['pergunta'] }}</label>
-                        <div class="form-floating mb-3">
-                            <input type="password" name="confirmar_senha" class="form-control" id="floatingConfirmPassword" placeholder="Confirme a Senha" required>
-                            <label for="floatingConfirmPassword">Confirmar Senha</label>
-                        </div>
+                       
+                        {% elif x['pergunta'] == "Contato" %}
+                            <input type="tel" id="{{ x['pergunta']  }}" name="{{ x['pergunta'] }}"
+                            class="form-control" placeholder="{{ x['pergunta']  }}"  required>
+                            <label for="{{ x['pergunta'] }}">{{ x['pergunta'] }}</label>
                         {% else %}
                             <input type="{{ x['resp_type'] }}" id="{{ x['pergunta']  }}" name="{{ x['pergunta'] }}"
                                 class="form-control" placeholder="{{ x['pergunta']  }}" required>

@@ -1,6 +1,6 @@
 from src.components.Files_Handler.module.file_handler import Files_Handling
 from datetime import datetime
-from utils.env_p import PATTERN_FOLDER
+from src.utils.env_p import PATTERN_FOLDER
 from src.connect import Mongo_Manager
 import bcrypt
 import os
@@ -39,10 +39,10 @@ class InventoryManager(Mongo_Manager, Files_Handling):
     
    
 
-def hash_password(password):
-    salt = bcrypt.gensalt()
-    hashed_password = bcrypt.hashpw(password.encode('utf-8'), salt)
-    return hashed_password
+# def hash_password(password):
+#     salt = bcrypt.gensalt()
+#     hashed_password = bcrypt.hashpw(password.encode('utf-8'), salt)
+#     return hashed_password
 
 
     #Criar aqui uma função para testar o backend das entradas da central.
