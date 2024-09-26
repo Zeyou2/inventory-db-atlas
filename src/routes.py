@@ -23,8 +23,8 @@ def login():
 @app.route("/validate_user", methods=["POST"])
 def validate_user():
     print("Entered")
-    email = request.form.get("email")
-    print("user is", email)
+    email = request.form.get('email')
+    # print("user is", email)
     senha = request.form.get('senha').encode('utf-8')
     users_collection = db_atlas.inventory['usuarios']
     user = users_collection.find_one({"Email" : email})
@@ -35,12 +35,6 @@ def validate_user():
         resp = make_response(redirect("/"))
         set_access_cookies(resp, token)
         return resp
-    # if user:
-    #     print('entrei')
-    #     token = create_access_token({"id": str(user["_id"]), "email": user["Email"], "senha" : user["Senha"]})
-    #     resp = make_response(redirect("/"))
-    #     set_access_cookies(resp, token)
-    #     return resp
     else:
         return jsonify({"error": "usuario ou senha invalidos"}), 400
 
@@ -63,14 +57,6 @@ def cadastro(collection_name):
     field = db_sample.create_form(collection_name)  
     return render_template('pages/form.html', titulo = "Inicio" , title = collection_name, collection_name = collection_name, field = field, sample = sample, view = sample, date = now )
 
-# @app.route('/cadastro/usuario', methods=['POST',  'GET'])
-# # @jwt_required(locations=["cookies"])
-# def cadastro_user(collection_name = "usuarios"):
-#     sample = db_sample.get_collection(collection_name)
-#     now = datetime.strftime(datetime.now(), "%Y-%m-%d")
-#     field = db_sample.create_form(collection_name)  
-#     return render_template('pages/ca.html', titulo = "Inicio" , title = collection_name, collection_name = collection_name, field = field, sample = sample, view = sample, date = now )
-
 @app.route('/register', methods=['POST', 'GET'])
 def register_user(collection_name = "usuarios"):
     field = db_sample.create_form(collection_name)
@@ -78,10 +64,9 @@ def register_user(collection_name = "usuarios"):
     return render_template('pages/register_user.html', field = field, now = now)
 
 @app.route('/send_data/<collection_name>', methods= ['POST'])
-# @jwt_required()
+@jwt_required()
 def send(collection_name):
     form_values = {key: value for key, value in request.form.items()}
-    del form_values['confirmar_senha']
     if collection_name == 'usuarios':
         form_values["Registro"] = datetime.strftime(datetime.now(), "%Y-%m-%d")
         salt = bcrypt.gensalt()

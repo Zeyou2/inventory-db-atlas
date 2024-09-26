@@ -14,7 +14,21 @@ class Mongo_Manager(Files_Handling):
     def teste(self):
         self.inventory["inventory"].insert_many("produtos")
 
-    def insert_into_db(self, operation_type, data = None):
+    def insert_into_db(self, operation_type):
+        """
+        Inserts data into the database from a JSON file.
+
+        This function reads data from a JSON file and inserts items into the database 
+        based on the specified operation type.
+
+        Args:
+            operation_type (str): The type of operation that determines which set of 
+            data will be inserted into the database. This value is used to access 
+            the corresponding key in the JSON.
+
+        Returns:
+            None
+        """
         data = self.read_file("central.json", PATTERN_FOLDER)
         for key, value in data.items():
                 docs = self.inventory[key].insert_many(value.get(operation_type))
@@ -22,6 +36,24 @@ class Mongo_Manager(Files_Handling):
         print(f'\nNumero de elementos inseridos no Banco de dados: [{len(docs.inserted_ids)}].')
 
     def edit_in_db(self, filter_db : dict, operation_type):
+        """
+    Updates documents in the database based on the provided filter.
+
+    This function reads data from a JSON file and updates multiple documents 
+    in the database that match the specified filter. The update is based on the 
+    operation type specified, which determines the data to be used in the update.
+
+    Args:
+        filter_db (dict): A dictionary containing the filter criteria to match the documents 
+        in the database that will be updated.
+        operation_type (str): The type of operation that defines which set of data 
+        will be used to update the documents. This value is used to access the 
+        corresponding key in the JSON.
+
+    Returns:
+        pymongo.results.UpdateResult: The result of the update operation, including the 
+        number of documents matched and modified.
+    """
         data = self.read_file("central.json", PATTERN_FOLDER)
         for key, value in data.items():
             result = self.inventory[key].update_many(filter_db, {"$set": value.get(operation_type)[0]})
