@@ -1,11 +1,16 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify, make_response
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity, set_access_cookies
-from src.utils.env_p import *
+from utils.env_p import *
 from inventory_handler import InventoryManager
 from connect import Mongo_Manager
 from datetime import datetime
 import bcrypt
 import base64
+
+# CRIAR COLEÇÃO de CATEGORIAS.
+# CADASTRO CATEGORIAS PELA PRÓPRIA LISTA SUSPENSA.
+# TIRAR SENHA DA VISU DOS USUÁRIOS.
+# TIRAR A POSSIBILIDADE DE CRIAR DUAS VEZES.
 
 db_sample = InventoryManager("central.json")
 db_atlas = Mongo_Manager('inventory')
@@ -30,12 +35,15 @@ def validate_user():
     user = users_collection.find_one({"Email" : email})
     if user:
         password = base64.b64decode(user["Senha"])
-    if bcrypt.checkpw(senha, password):
+    else:
+        password = None
+    if password != None and bcrypt.checkpw(senha, password):
         token = create_access_token({"id": str(user["_id"]), "email": user["Email"], "senha" : user["Senha"]})
         resp = make_response(redirect("/"))
         set_access_cookies(resp, token)
         return resp
     else:
+        # Retornar o HTML com um campo de coisa inválida.
         return jsonify({"error": "usuario ou senha invalidos"}), 400
 
 @app.route('/', methods=["GET", "POST"])
@@ -64,7 +72,7 @@ def register_user(collection_name = "usuarios"):
     return render_template('pages/register_user.html', field = field, now = now)
 
 @app.route('/send_data/<collection_name>', methods= ['POST'])
-@jwt_required()
+# @jwt_required()
 def send(collection_name):
     form_values = {key: value for key, value in request.form.items()}
     if collection_name == 'usuarios':
