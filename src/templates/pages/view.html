@@ -39,7 +39,7 @@
                                         {{ user["Nome do produto"] }}
                                     </h5>
                                     {% for key, value in user.items() %}
-                                        {% if "Nome" not in key %}
+                                        {% if "Nome" not in key and key != "Senha" %}
                                             <p style="margin: 0; font-size: 14px;">
                                                 <strong>{{ key }}: </strong>{{ value }}
                                             </p>

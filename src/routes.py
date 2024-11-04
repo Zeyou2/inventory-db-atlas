@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify, make_response
+from flask import Flask, render_template, request, redirect, url_for, jsonify, make_response, flash
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity, set_access_cookies
 from utils.env_p import *
 from inventory_handler import InventoryManager
@@ -9,12 +9,13 @@ import base64
 
 # CRIAR COLEÇÃO de CATEGORIAS.
 # CADASTRO CATEGORIAS PELA PRÓPRIA LISTA SUSPENSA.
-# TIRAR SENHA DA VISU DOS USUÁRIOS.
+# TIRAR SENHA DA VISU DOS USUÁRIOS. ****
 # TIRAR A POSSIBILIDADE DE CRIAR DUAS VEZES.
 
 db_sample = InventoryManager("central.json")
 db_atlas = Mongo_Manager('inventory')
 app = Flask(__name__)
+app.secret_key = SECRET_KEY
 app.config["JWT_SECRET_KEY"] = "secret"
 app.config['JWT_COOKIE_CSRF_PROTECT'] = False
 app.config['JWT_TOKEN_LOCATION'] = ['cookies']
@@ -47,7 +48,7 @@ def validate_user():
         return jsonify({"error": "usuario ou senha invalidos"}), 400
 
 @app.route('/', methods=["GET", "POST"])
-@jwt_required()
+# @jwt_required()
 def index():
     current_user = get_jwt_identity()
     print(current_user)
@@ -58,12 +59,14 @@ def index():
     return render_template('index.html', titulo = "Inicio", item_list = colec, sample = sample,  redirect = redirect("/form"))
 
 @app.route('/cadastro/<collection_name>', methods=['POST',  'GET'])
-@jwt_required(locations=["cookies"])
+# @jwt_required(locations=["cookies"])
 def cadastro(collection_name):
     sample = db_sample.get_collection(collection_name)
     now = datetime.strftime(datetime.now(), "%Y-%m-%d")
-    field = db_sample.create_form(collection_name)  
-    return render_template('pages/form.html', titulo = "Inicio" , title = collection_name, collection_name = collection_name, field = field, sample = sample, view = sample, date = now )
+    field = db_sample.create_form(collection_name) 
+    cat = db_sample.get_collection("categorias")
+    print(cat) 
+    return render_template('pages/form.html', titulo = "Inicio" , title = collection_name, collection_name = collection_name, field = field, sample = sample, view = sample, date = now, cat = cat )
 
 @app.route('/register', methods=['POST', 'GET'])
 def register_user(collection_name = "usuarios"):
@@ -75,7 +78,18 @@ def register_user(collection_name = "usuarios"):
 # @jwt_required()
 def send(collection_name):
     form_values = {key: value for key, value in request.form.items()}
-    if collection_name == 'usuarios':
+    is_error = None
+    if collection_name == "usuarios":
+        is_error = None
+        sample = db_sample.get_collection("usuarios")
+        for x in sample:
+            if form_values['Email'] == x["Email"] or form_values['Nome do usuário'] == x["Nome do usuário"]:
+                is_error = True
+                break  
+        if is_error == True:
+            flash("Usuário ou Email já cadastrado.") 
+            return redirect('/register')
+
         form_values["Registro"] = datetime.strftime(datetime.now(), "%Y-%m-%d")
         salt = bcrypt.gensalt()
         password = form_values['Senha'].encode('utf-8')
@@ -91,10 +105,13 @@ def send(collection_name):
     return redirect('/view/' + collection_name)
 
 @app.route('/view/<collection_name>', methods=['POST', 'GET'])
-@jwt_required()
+# @jwt_required()
 def view(collection_name):
     sample = db_sample.get_collection(collection_name)
+    # del sample[0]["Senha"]
+    # print(sample)
     if sample:
+        
         return render_template('pages/view.html', titulo = "Inicio", collection_name = collection_name, sample = sample )
     return jsonify(list(sample))
 

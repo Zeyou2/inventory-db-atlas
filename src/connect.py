@@ -118,7 +118,9 @@ class Mongo_Manager(Files_Handling):
     "pontos": {
         "Nome do local": None,
         "Tipo": None
-    }
+    },
+    "Categorias": None
+
 }
         for key, value in base.items():
                 docs = self.inventory[key].insert_many([value])

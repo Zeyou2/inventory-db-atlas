@@ -16,6 +16,15 @@
                 {% elif x == "Data de registro" %}
                 <label for="{{ x }}">{{ x['pergunta']}}</label>
                 <input id="{{ x }}" type="date" value="{{date}}" disabled>
+                {% elif x['pergunta'] == "Categoria do Produto" %}
+                <label for="{{ x['pergunta'] }}">{{ x['pergunta'] }}</label>
+                <input type="text" id="{{ x['pergunta'] }}" name="nova_categoria" list="categorias">
+                <datalist id="categorias">
+                    <option value="Selecione uma Categoria">
+                    {% for y in cat %}
+                        <option value="{{ y['Categoria'] }}">
+                    {% endfor %}
+                </datalist>
                 {% else %}
                 <label for="{{ x['pergunta'] }}">{{ x['pergunta'] }}</label>
                 <input type="{{ x['resp_type'] }}" id="{{ x['pergunta']  }}" name="{{ x['pergunta'] }}"
