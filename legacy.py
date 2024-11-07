@@ -1,3 +1,49 @@
+from utils import env_p
+from src.components.Files_Handler.module.file_handler import Files_Handling
+
+
+def field():
+    Files_Handling.read_file('estrutura_de_dados.json')
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # from src.components.Files_Handler.module.file_handler import Files_Handling
 # from datetime import datetime
 # from utils.env_p import *

@@ -12,13 +12,13 @@
             <div class="form-group" style="font-weight: bold;">
                 {% if x == "Registro de Entrada" %}
                 <label for="{{ x }}">Registro de Entrada</label>
-                <input type="x['resp_type']" id="{{ x }}" name="{{ x['pergunta'] }}" class="form-control" required>
+                <input type="{{ x['resp_type'] }}" id="{{ x }}" name="{{ x['pergunta'] }}" class="form-control" {{ x["em_branco"] }}>
                 {% elif x == "Data de registro" %}
                 <label for="{{ x }}">{{ x['pergunta']}}</label>
                 <input id="{{ x }}" type="date" value="{{date}}" disabled>
                 {% elif x['pergunta'] == "Categoria do Produto" %}
                 <label for="{{ x['pergunta'] }}">{{ x['pergunta'] }}</label>
-                <select id="categoria" name="categoria" class="form-control" onchange="toggleNewCategory(this)">
+                <select id="categoria" name="categoria" class="form-control" onchange="toggleNewCategory(this)" >
                     <option value="">Selecione uma Categoria</option>
                     {% for y in cat %}
                         <option value="{{ y['Categoria'] }}">{{ y['Categoria'] }}</option>
@@ -33,7 +33,7 @@
 
                 {% else %}
                     <label for="{{ x['pergunta'] }}">{{ x['pergunta'] }}</label>
-                    <input type="{{ x['resp_type'] }}" id="{{ x['pergunta'] }}" name="{{ x['pergunta'] }}" class="form-control" required>
+                    <input type="{{ x['resp_type'] }}" id="{{ x['pergunta'] }}" name="{{ x['pergunta'] }}" class="form-control" {{ x["em_branco"] }}>
                 {% endif %}
                 </div>
                  {% endfor %}
