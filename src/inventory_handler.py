@@ -22,7 +22,7 @@ class InventoryManager(Mongo_Manager, Files_Handling):
         Mongo_Manager.__init__(self, "inventory")
         self.central_data = central_data
         self.path = PATTERN_FOLDER
-            
+    
     def save_to_central(self, form_values, collection_name, operation_type):
         """
     Saves form values to a central data structure in a specified collection.
@@ -62,6 +62,17 @@ class InventoryManager(Mongo_Manager, Files_Handling):
         data = self.read_file(self.central_data, self.path)
         data = {}
         self.write_file(data, self.central_data, self.path)
+            
+    def field_treatment(self, collection:dict):
+        for key, value in collection.items():
+            #substituir o valor da condicional de form_editable -> 0 vira False e 1 vira True
+            value["em_branco"] = "required" if value["em_branco"] == "False" else ""
+            value["form_editable"] = "disabled" if value["form_editable"] == 0 else ""
+            # tirar essa condicional depois que tudo estiver com 'pre_value'
+            if value.get("pre_value") == None:
+                continue
+            value["pre_value"] = datetime.strftime(datetime.now(), "%Y-%m-%d") if value["pre_value"] == "datetime_now" else value["pre_value"] 
+        return collection
 
     def create_form(self, collection_name):
         """
@@ -79,10 +90,10 @@ class InventoryManager(Mongo_Manager, Files_Handling):
         list: A list of fields that are editable and can be used to create a form.
     """
         data = self.read_file('estruturas_de_dados.json', PATTERN_FOLDER) 
-        dados = data[collection_name]
+        dados = self.field_treatment(data[collection_name])
         field = []
         for key, value in dados.items():
-            if value['form_editable'] == 1:
+            if value['form_visible'] == 1:
                 field.append(value)                    
         return field
     
@@ -132,13 +143,3 @@ class Handle_Operations(InventoryManager):
             if form_values.get('nova_categoria') != None:
                 del form_values["nova_categoria"]
         return form_values
-      
-    def field(self, collection_name):
-        data = self.read_file('estruturas_de_dados.json', PATTERN_FOLDER) 
-        dados = data[collection_name]
-        for x in dados:
-            if x["em_branco"] == False:
-                x["em_branco"] = "required"
-            else:
-                x["em_branco"] = ""
-        return data[collection_name]

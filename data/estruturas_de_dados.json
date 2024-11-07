@@ -1,5 +1,14 @@
 {
 	"usuarios": {
+		"Data de registro": {
+			"table_visible": 1,
+			"form_editable": 0,
+			"pre_value" : "datetime_now",
+			"form_visible": 1,
+			"pergunta": "Data de Cadastro",
+			"resp_type": "date",
+			"em_branco": "False"	
+		},
 		"Nome": {
 			"form_editable": 1,
 			"form_visible": 1,
@@ -26,13 +35,8 @@
 			"form_editable": 1,
 			"form_visible": 1,
 			"pergunta": "Senha",
-			"resp_type": "password"
-		},
-		"Data de registro": {
-			"table_visible": 1,
-			"form_editable": 0,
-			"form_visible": 0,
-			"pergunta": "Data"
+			"resp_type": "password",
+			"em_branco": "False"
 		}
 	},
 	"produtos": {
