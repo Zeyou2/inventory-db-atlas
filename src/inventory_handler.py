@@ -132,5 +132,13 @@ class Handle_Operations(InventoryManager):
             if form_values.get('nova_categoria') != None:
                 del form_values["nova_categoria"]
         return form_values
-    
-    
+      
+    def field(self, collection_name):
+        data = self.read_file('estruturas_de_dados.json', PATTERN_FOLDER) 
+        dados = data[collection_name]
+        for x in dados:
+            if x["em_branco"] == False:
+                x["em_branco"] = "required"
+            else:
+                x["em_branco"] = ""
+        return data[collection_name]

@@ -1,7 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify, make_response, flash
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity, set_access_cookies
 from utils.env_p import *
-
 from inventory_handler import Handle_Operations
 from connect import Mongo_Manager
 from datetime import datetime
@@ -9,14 +8,9 @@ import bcrypt
 import base64
 import json
 
-# CRIAR COLEÇÃO de CATEGORIAS.
-# CADASTRO CATEGORIAS PELA PRÓPRIA LISTA SUSPENSA.
-# TIRAR SENHA DA VISU DOS USUÁRIOS. ****
-# TIRAR A POSSIBILIDADE DE CRIAR DUAS VEZES.
 
 manage_op = Handle_Operations("central.json")
 app = Flask(__name__)
-# app.secret_key = SECRET_KEY
 app.config["JWT_SECRET_KEY"] = "secret"
 app.config['JWT_COOKIE_CSRF_PROTECT'] = False
 app.config['JWT_TOKEN_LOCATION'] = ['cookies']
@@ -45,6 +39,7 @@ def validate_user():
 def index():
     # current_user = get_jwt_identity()
     # print(current_user)
+
     colec = manage_op.inventory.list_collection_names()
     sample = manage_op.get_collection('usuarios')
     if request.method == "POST":
@@ -66,8 +61,8 @@ def cadastro(collection_name):
 @app.route('/register', methods=['POST', 'GET'])
 def register_user(collection_name = "usuarios"):
     login_check = request.args.get('login_check', default=None, type=bool)
-   
     field = manage_op.create_form(collection_name)
+
     now = datetime.strftime(datetime.now(), "%Y-%m-%d")
     return render_template('pages/register_user.html', field = field, now = now, login_check = login_check)
 
