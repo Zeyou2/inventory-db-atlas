@@ -2,6 +2,10 @@ from src.components.Files_Handler.module.file_handler import Files_Handling
 from datetime import datetime
 from utils.env_p import PATTERN_FOLDER
 from src.connect import Mongo_Manager
+import bcrypt
+import base64
+from flask import redirect
+
 
 
 class InventoryManager(Mongo_Manager, Files_Handling):
@@ -85,3 +89,17 @@ class InventoryManager(Mongo_Manager, Files_Handling):
                 field.append(value)                    
         return field
 
+    def process_user_registration(form_values, collection_name, db_sample):
+        form_values["Registro"] = datetime.strftime(datetime.now(), "%Y-%m-%d")
+        
+        salt = bcrypt.gensalt()
+        password = form_values['Senha'].encode('utf-8')
+        hash_password = bcrypt.hashpw(password, salt)
+        
+        form_values["Senha"] = base64.b64encode(hash_password).decode('utf-8')
+        
+        db_sample.save_to_central(form_values, collection_name, 'create')
+        db_sample.insert_into_db('create')
+        db_sample.delete_central()
+        
+        return redirect('/login')

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR" class="h-100">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,7 +11,13 @@
 <body class="d-flex align-items-center py-4 bg-body-tertiary h-100">
     <main class="w-100 m-auto" style="max-width: 400px;">
         <h1 class="text-center mb-4">Cadastro de Usuário</h1>
+        {% if login_check == True %}
+            <div class="alert alert-danger" role="alert">
+                Este e-mail ou nome de usuário já está cadastrado.
+            </div>
+        {% endif %}
         <form action="{{ url_for('send', collection_name="usuarios") }}" method="POST">
+            
                 <fieldset>
                     {% for x in field %}
                     <div class="form-floating mb-3p">
@@ -35,9 +42,9 @@
                     <button type="submit" class="btn btn-primary">Cadastrar</button>
                 </fieldset>
             </form>
+            
             <p>Já tem uma conta?</p>
             <a href="{{ url_for('login') }}" class="btn btn-link">Fazer Login</a>
-
             
     </main>
 

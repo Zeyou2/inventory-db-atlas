@@ -1,11 +1,13 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify, make_response, flash
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity, set_access_cookies
 from utils.env_p import *
+
 from inventory_handler import InventoryManager
 from connect import Mongo_Manager
 from datetime import datetime
 import bcrypt
 import base64
+import json
 
 # CRIAR COLEÇÃO de CATEGORIAS.
 # CADASTRO CATEGORIAS PELA PRÓPRIA LISTA SUSPENSA.
@@ -15,7 +17,7 @@ import base64
 db_sample = InventoryManager("central.json")
 db_atlas = Mongo_Manager('inventory')
 app = Flask(__name__)
-app.secret_key = SECRET_KEY
+# app.secret_key = SECRET_KEY
 app.config["JWT_SECRET_KEY"] = "secret"
 app.config['JWT_COOKIE_CSRF_PROTECT'] = False
 app.config['JWT_TOKEN_LOCATION'] = ['cookies']
@@ -24,7 +26,7 @@ jwt = JWTManager(app)
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    return render_template('pages/login.html', login_check = 0)
+    return render_template('pages/login.html')
 
 @app.route("/validate_user", methods=["POST"])
 def validate_user():
@@ -70,14 +72,42 @@ def cadastro(collection_name):
 
 @app.route('/register', methods=['POST', 'GET'])
 def register_user(collection_name = "usuarios"):
+    
+    # login_check_str = request.args.get('login_check', '{"value": 1 }')
+
+    # try:
+    #     login_check = json.loads(login_check_str)
+    # except json.JSONDecodeError:
+    #     login_check = {"value": 0}
+
+    # print(login_check)  
+    # print(type(login_check))  
+    # print(login_check)
+
+    # if login_check == None:
+    #     login_check = "display : none;"
+    
+   
+    # print(type(login_check))
+    login_check = request.args.get('login_check', default=None, type=bool)
+   
+   
     field = db_sample.create_form(collection_name)
     now = datetime.strftime(datetime.now(), "%Y-%m-%d")
-    return render_template('pages/register_user.html', field = field, now = now)
+    return render_template('pages/register_user.html', field = field, now = now, login_check = login_check)
 
 @app.route('/send_data/<collection_name>', methods= ['POST'])
 # @jwt_required()
 def send(collection_name):
     form_values = {key: value for key, value in request.form.items()}
+    if form_values.get("categoria") == "nova_categoria":
+        form_values["categoria"] = form_values["nova_categoria"]
+        db_sample.save_to_central({'Categoria' : form_values["categoria"]}, "categorias",'create')
+        db_sample.insert_into_db('create')
+        db_sample.delete_central()
+    if form_values.get('nova_categoria') != None:
+        del form_values["nova_categoria"]
+    print(form_values)
     is_error = None
     if collection_name == "usuarios":
         is_error = None
@@ -87,18 +117,9 @@ def send(collection_name):
                 is_error = True
                 break  
         if is_error == True:
-            flash("Usuário ou Email já cadastrado.") 
-            return redirect('/register')
-
-        form_values["Registro"] = datetime.strftime(datetime.now(), "%Y-%m-%d")
-        salt = bcrypt.gensalt()
-        password = form_values['Senha'].encode('utf-8')
-        hash_password = bcrypt.hashpw(password, salt)
-        form_values["Senha"] = base64.b64encode(hash_password).decode('utf-8')
-        db_sample.save_to_central(form_values, collection_name,'create')
-        db_sample.insert_into_db('create')
-        db_sample.delete_central()
-        return redirect('/login')
+            login_check = True
+            return redirect(url_for('register_user', login_check = login_check))
+        InventoryManager.process_user_registration(form_values, collection_name, db_sample)
     db_sample.save_to_central(form_values, collection_name,'create')
     db_sample.insert_into_db('create')
     db_sample.delete_central()
@@ -118,3 +139,12 @@ def view(collection_name):
 
 
 
+# form_values["Registro"] = datetime.strftime(datetime.now(), "%Y-%m-%d")
+        # salt = bcrypt.gensalt()
+        # password = form_values['Senha'].encode('utf-8')
+        # hash_password = bcrypt.hashpw(password, salt)
+        # form_values["Senha"] = base64.b64encode(hash_password).decode('utf-8')
+        # db_sample.save_to_central(form_values, collection_name,'create')
+        # db_sample.insert_into_db('create')
+        # db_sample.delete_central()
+        # return redirect('/login')

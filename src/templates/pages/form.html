@@ -18,22 +18,38 @@
                 <input id="{{ x }}" type="date" value="{{date}}" disabled>
                 {% elif x['pergunta'] == "Categoria do Produto" %}
                 <label for="{{ x['pergunta'] }}">{{ x['pergunta'] }}</label>
-                <input type="text" id="{{ x['pergunta'] }}" name="nova_categoria" list="categorias">
-                <datalist id="categorias">
-                    <option value="Selecione uma Categoria">
+                <select id="categoria" name="categoria" class="form-control" onchange="toggleNewCategory(this)">
+                    <option value="">Selecione uma Categoria</option>
                     {% for y in cat %}
-                        <option value="{{ y['Categoria'] }}">
+                        <option value="{{ y['Categoria'] }}">{{ y['Categoria'] }}</option>
                     {% endfor %}
-                </datalist>
+
+                    <option value="nova_categoria">Nova Categoria</option>
+                 
+                </select>
+                    {% if categoria == nova_categoria %}
+                    <input type="text" id="nova_categoria_input" name="nova_categoria" class="form-control mt-2" placeholder="Digite nova categoria" style="display: none;">
+                    {% endif %}
+
                 {% else %}
-                <label for="{{ x['pergunta'] }}">{{ x['pergunta'] }}</label>
-                <input type="{{ x['resp_type'] }}" id="{{ x['pergunta']  }}" name="{{ x['pergunta'] }}"
-                    class="form-control" required>
+                    <label for="{{ x['pergunta'] }}">{{ x['pergunta'] }}</label>
+                    <input type="{{ x['resp_type'] }}" id="{{ x['pergunta'] }}" name="{{ x['pergunta'] }}" class="form-control" required>
                 {% endif %}
-            </div>
-            {% endfor %}
+                </div>
+                 {% endfor %}
             <button type="submit" class="btn btn-primary">Salvar</button>
         </fieldset>
+        <script>
+            // Função para exibir o campo de nova categoria se "Nova Categoria" for selecionado
+            function toggleNewCategory(select) {
+                const newCategoryInput = document.getElementById('nova_categoria_input');
+                if (select.value === "nova_categoria") {
+                    newCategoryInput.style.display = "block";
+                } else {
+                    newCategoryInput.style.display = "none";
+                }
+            }
+        </script>
     </form>
 </div>
 </div>
