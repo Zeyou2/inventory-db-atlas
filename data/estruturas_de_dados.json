@@ -44,13 +44,13 @@
 			"resp_type": "str",
 			"em_branco": "False"
 		},
-		"Serie": {
+		"Id": {
 			"table_visible": 1,
-			"form_editable": 1,
+			"form_editable": 0,
 			"form_visible": 1,
 			"pergunta": "Serie",
-			"resp_type": "str",
-			"em_branco": "True"
+			"resp_type": "int",
+			"em_branco": "False"
 		},
 		"Categoria": {
 			"table_visible": 1,
@@ -97,11 +97,19 @@
 			"resp_type": "date",
 			"em_branco": "False"
 		},
-		"Id do Produto": {
+		"Nome do Produto": {
 			"table_visible": 1,
 			"form_editable": 1,
 			"form_visible": 1,
 			"pergunta": "Nome do produto: ",
+			"resp_type": "list",
+			"em_branco": "False"
+		},
+		"id do produto" : {
+			"table_visible": 1,
+			"form_editable": 1,
+			"form_visible": 1,
+			"pergunta": "Numero de Série ou Patrimônio: ",
 			"resp_type": "list",
 			"em_branco": "False"
 		},
