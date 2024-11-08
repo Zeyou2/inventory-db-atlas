@@ -50,13 +50,13 @@ def index():
 # @jwt_required(locations=["cookies"])
 def cadastro(collection_name):
     sample = manage_op.get_collection(collection_name)
-    now = datetime.strftime(datetime.now(), "%Y-%m-%d")
     field = manage_op.create_form(collection_name) 
+    print(field)
     if collection_name == "produtos":
         cat = manage_op.get_collection("categorias")
     else: 
         cat = None
-    return render_template('pages/form.html', titulo = "Inicio" , title = collection_name, collection_name = collection_name, field = field, sample = sample, view = sample, date = now, cat = cat )
+    return render_template('pages/form.html', titulo = "Inicio" , title = collection_name, collection_name = collection_name, field = field, sample = sample, view = sample, cat = cat )
 
 @app.route('/register', methods=['POST', 'GET'])
 def register_user(collection_name = "usuarios"):
