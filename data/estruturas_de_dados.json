@@ -2,7 +2,7 @@
 	"usuarios": {
 		"Data de registro": {
 			"table_visible": 1,
-			"form_editable": 0,
+			"form_editable":  "False",
 			"pre_value" : "datetime_now",
 			"form_visible": 1,
 			"pergunta": "Data de Cadastro",
@@ -10,30 +10,37 @@
 			"em_branco": "False"	
 		},
 		"Nome": {
-			"form_editable": 1,
+			"table_visible": 1,
+			"form_editable":  "True",
+			"pre_value" : "",
 			"form_visible": 1,
 			"pergunta": "Nome do usuário",
 			"resp_type": "str",
 			"em_branco": "False"
 		},
 		"Contato": {
-			"form_editable": 1,
+			"table_visible": 0,
+			"form_editable":  "True",
+			"pre_value" : "",
 			"form_visible": 1,
 			"pergunta": "Contato",
 			"resp_type": "tel",
 			"em_branco": "False"
 		},
 		"Email": {
-			"form_editable": 1,
+			"table_visible": 0,
+			"form_editable":  "True",
 			"form_visible": 1,
+			"pre_value" : "",
 			"pergunta": "Email",
 			"resp_type": "email",
 			"em_branco": "True"
 		},
 		"Senha": {
 			"table_visible": 0,
-			"form_editable": 1,
+			"form_editable":  "True",
 			"form_visible": 1,
+			"pre_value" : "",
 			"pergunta": "Senha",
 			"resp_type": "password",
 			"em_branco": "False"
@@ -42,32 +49,36 @@
 	"produtos": {
 		"Nome": {
 			"table_visible": 1,
-			"form_editable": 1,
+			"form_editable":  "True",
 			"form_visible": 1,
+			"pre_value" : "",
 			"pergunta": "Nome do produto",
 			"resp_type": "str",
 			"em_branco": "False"
 		},
 		"Id": {
 			"table_visible": 1,
-			"form_editable": 0,
+			"form_editable":  "False",
 			"form_visible": 1,
+			"pre_value" : "",
 			"pergunta": "Serie",
 			"resp_type": "int",
 			"em_branco": "False"
 		},
 		"Categoria": {
 			"table_visible": 1,
-			"form_editable": 1,
+			"form_editable":  "True",
 			"form_visible": 1,
+			"pre_value" : "",
 			"pergunta": "Categoria do Produto",
 			"resp_type": "str",
 			"em_branco": "True"
 		},
 		"Observação": {
 			"table_visible": 1,
-			"form_editable": 1,
+			"form_editable":  "True",
 			"form_visible": 1,
+			"pre_value" : "",
 			"pergunta": "Descrição",
 			"resp_type": "str",
 			"em_branco": "False"
@@ -76,8 +87,9 @@
 	"pontos": {
 		"Nome": {
 			"table_visible": 1,
-			"form_editable": 1,
+			"form_editable":  "True",
 			"form_visible": 1,
+			"pre_value" : "",
 			"pergunta": "Nome do local",
 			"ex": "agencia",
 			"resp_type": "str",
@@ -85,8 +97,9 @@
 		},
 		"Tipo": {
 			"table_visible": 1,
-			"form_editable": 1,
+			"form_editable":  "True",
 			"form_visible": 1,
+			"pre_value" : "",
 			"pergunta": "Tipo ",
 			"resp_type": "str",
 			"em_branco": "False"
@@ -95,56 +108,63 @@
 	"transferencia": {
 		"Data da movimentação": {
 			"table_visible": 1,
-			"form_editable": 1,
+			"form_editable":  "True",
 			"form_visible": 1,
+			"pre_value" : "",
 			"pergunta": "data da movimentação: ",
 			"resp_type": "date",
 			"em_branco": "False"
 		},
 		"Nome do Produto": {
 			"table_visible": 1,
-			"form_editable": 1,
+			"form_editable":  "True",
 			"form_visible": 1,
+			"pre_value" : "",
 			"pergunta": "Nome do produto: ",
 			"resp_type": "list",
 			"em_branco": "False"
 		},
 		"id do produto" : {
 			"table_visible": 1,
-			"form_editable": 1,
+			"form_editable":  "True",
 			"form_visible": 1,
+			"pre_value" : "",
 			"pergunta": "Numero de Série ou Patrimônio: ",
 			"resp_type": "list",
 			"em_branco": "False"
 		},
 		"Quantidade": {
 			"table_visible": 1,
-			"form_editable": 1,
+			"form_editable":  "True",
 			"form_visible": 1,
+			"pre_value" : "",
 			"pergunta": "Quantidade: ",
 			"resp_type": "number",
 			"em_branco": "False"
 		},
 		"Tipo": {
 			"table_visible": 1,
-			"form_editable": 1,
+			"form_editable":  "True",
 			"form_visible": 1,
+			"pre_value" : "",
 			"pergunta": "tipo da transferência do produto: ",
 			"resp_type": "str",
 			"em_branco": "False"
 		},
 		"De": {
 			"table_visible": 1,
-			"form_editable": 1,
+			"form_editable":  "True",
 			"form_visible": 1,
+			"pre_value" : "",
 			"pergunta": "De: ",
 			"resp_type": "list",
 			"em_branco": "False"
 		},
 		"Para": {
 			"table_visible": 1,
-			"form_editable": 1,
+			"form_editable":  "True",
 			"form_visible": 1,
+			"pre_value" : "",
 			"pergunta": "Para: ",
 			"resp_type": "list",
 			"em_branco": "False"
