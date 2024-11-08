@@ -115,6 +115,23 @@ class Handle_Operations(InventoryManager):
         return form_values
     
     def process_user_validation(self, form_values):
+        """
+    Validates the user based on form input data.
+
+    This method checks if the provided email and password match an existing user 
+    in the users database. The user's password stored in the database is encoded 
+    in base64 and compared with the encrypted password sent from the form.
+
+    Args:
+        form_values (dict): 
+            A dictionary containing form values, where 'email' is the user's email 
+            and 'senha' is the password provided in the form.
+
+    Returns:
+        dict: 
+            Returns the user's document as a dictionary if validation is successful.
+            Returns `None` if the user is not found or if the password is incorrect.
+    """
         email = form_values.get('email')
         # print("user is", email)
         senha = form_values.get('senha').encode('utf-8')
