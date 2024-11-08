@@ -71,6 +71,7 @@ class Mongo_Manager(Files_Handling):
     def get_collection(self, collection_name, filter_by={}, remove_el={'_id': 0}):
         db = self.inventory
         all_docs = []
+        print("colection name is:", collection_name)
         collection = db[collection_name]
         docs = collection.find(filter_by, remove_el)
         for doc in docs: 

@@ -85,9 +85,7 @@ def send(collection_name):
 # @jwt_required()
 def view(collection_name):
     sample = manage_op.get_collection(collection_name)
-    # del sample[0]["Senha"]
-    # print(sample)
+    print("------------------------------------\n",sample)
     if sample:
-        
         return render_template('pages/view.html', titulo = "Inicio", collection_name = collection_name, sample = sample )
     return jsonify(list(sample))
