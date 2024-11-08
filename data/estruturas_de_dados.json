@@ -58,7 +58,7 @@
 		},
 		"Id": {
 			"table_visible": 1,
-			"form_editable":  "False",
+			"form_editable":  "True",
 			"form_visible": 1,
 			"pre_value" : "",
 			"pergunta": "Serie",
@@ -71,7 +71,8 @@
 			"form_visible": 1,
 			"pre_value" : "",
 			"pergunta": "Categoria do Produto",
-			"resp_type": "str",
+			"resp_type": "db_list",
+			"db_origin": {"produtos": "categoria"},
 			"em_branco": "True"
 		},
 		"Observação": {
@@ -115,13 +116,24 @@
 			"resp_type": "date",
 			"em_branco": "False"
 		},
+		"Tipo": {
+			"table_visible": 1,
+			"form_editable":  "True",
+			"form_visible": 1,
+			"pre_value" : "",
+			"pergunta": "tipo de movimentação: ",
+			"resp_type": "list",
+			"list_elements":["Transferencia", "Entrada", "Saida"],
+			"em_branco": "False"
+		},
 		"Nome do Produto": {
 			"table_visible": 1,
 			"form_editable":  "True",
 			"form_visible": 1,
 			"pre_value" : "",
 			"pergunta": "Nome do produto: ",
-			"resp_type": "list",
+			"resp_type": "db_list",
+			"db_origin": {"produtos": "Nome do produto"},
 			"em_branco": "False"
 		},
 		"id do produto" : {
@@ -130,7 +142,8 @@
 			"form_visible": 1,
 			"pre_value" : "",
 			"pergunta": "Numero de Série ou Patrimônio: ",
-			"resp_type": "list",
+			"resp_type": "db_list",
+			"db_origin":{"produtos": "Serie"},
 			"em_branco": "False"
 		},
 		"Quantidade": {
@@ -142,22 +155,14 @@
 			"resp_type": "number",
 			"em_branco": "False"
 		},
-		"Tipo": {
-			"table_visible": 1,
-			"form_editable":  "True",
-			"form_visible": 1,
-			"pre_value" : "",
-			"pergunta": "tipo da transferência do produto: ",
-			"resp_type": "str",
-			"em_branco": "False"
-		},
 		"De": {
 			"table_visible": 1,
 			"form_editable":  "True",
 			"form_visible": 1,
 			"pre_value" : "",
 			"pergunta": "De: ",
-			"resp_type": "list",
+			"resp_type": "db_list",
+			"db_origin": {"pontos": "Nome do local"},
 			"em_branco": "False"
 		},
 		"Para": {
@@ -166,7 +171,8 @@
 			"form_visible": 1,
 			"pre_value" : "",
 			"pergunta": "Para: ",
-			"resp_type": "list",
+			"resp_type": "db_list",
+			"db_origin": {"pontos": "Nome do local"},
 			"em_branco": "False"
 		}
 	}
