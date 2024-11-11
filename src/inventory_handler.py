@@ -70,6 +70,7 @@ class InventoryManager(Mongo_Manager, Files_Handling):
 	def field_treatment(self, collection:dict):
 
 		for key, value in collection.items():
+			value["db_id"] = key
 			if value["resp_type"] == "db_list":
 				value["resp_type"] = "list"
 				[*db_key], [*db_el] = zip(*value["db_origin"].items())
@@ -99,7 +100,7 @@ class InventoryManager(Mongo_Manager, Files_Handling):
 		field = []
 		for key, value in dados.items():
 			if value['form_visible'] == 1:
-				field.append({key: value})                    
+				field.append(value)                 
 		return field
 	
 class Handle_Operations(InventoryManager):
