@@ -27,7 +27,7 @@ class Mongo_Manager(Files_Handling):
             the corresponding key in the JSON.
 
         Returns:
-            None
+            "teste"
         """
         data = self.read_file("central.json", PATTERN_FOLDER)
         for key, value in data.items():
@@ -96,31 +96,34 @@ class Mongo_Manager(Files_Handling):
     def reset_inv(self):
         base = {
     "usuarios": {
-        "Nome do usuario": None,
-        "Contato": None,
-        "Email": None,
-        "Senha": None,
-        "Registro": None
+        "nome_usuario": "teste",
+        "contato": "teste",
+        "email": "teste",
+        "senha": "teste",
+        "registro": "teste"
     },
     "produtos": {
-        "Nome do produto": None,
-        "Serie": None,
-        "Categoria do Produto": None,
-        "Descrição": None
+        "nome_produto": "teste",
+        "serie": "teste",
+        "categoria_produto": "teste",
+        "descricao": "teste"
     },
     "transferencia": {
-        "data da movimentação": None,
-        "Nome do produto": None,
-        "Quantidade": None,
-        "tipo da transferência do produto": None,
-        "De": None,
-        "Para": None
+        "data_da_movimentação": "teste",
+        "nome_do_produto": "teste",
+        "quantidade": "teste",
+        "tipo_da_transferencia_do_produto": "teste",
+        "de": "teste",
+        "para": "teste"
     },
     "pontos": {
-        "Nome do local": None,
-        "Tipo": None
+        "nome_local": "teste",
+        "tipo": "teste"
     },
-    "Categorias": None
+    "categoria": {
+         "categorias": "teste"
+    }
+   
 
 }
         for key, value in base.items():

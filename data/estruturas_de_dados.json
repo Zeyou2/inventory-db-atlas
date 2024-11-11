@@ -86,7 +86,7 @@
 		}
 	},
 	"pontos": {
-		"Nome": {
+		"nome_local": {
 			"table_visible": 1,
 			"form_editable":  "True",
 			"form_visible": 1,
@@ -96,7 +96,7 @@
 			"resp_type": "str",
 			"em_branco": "False"
 		},
-		"Tipo": {
+		"tipo": {
 			"table_visible": 1,
 			"form_editable":  "True",
 			"form_visible": 1,
@@ -107,7 +107,7 @@
 		}
 	},
 	"transferencia": {
-		"Data da movimentação": {
+		"data_movimentação": {
 			"table_visible": 1,
 			"form_editable":  "True",
 			"form_visible": 1,
@@ -116,7 +116,7 @@
 			"resp_type": "date",
 			"em_branco": "False"
 		},
-		"Tipo": {
+		"tipo": {
 			"table_visible": 1,
 			"form_editable":  "True",
 			"form_visible": 1,
@@ -126,7 +126,7 @@
 			"list_elements":["Transferencia", "Entrada", "Saida"],
 			"em_branco": "False"
 		},
-		"Nome do Produto": {
+		"nome_produto": {
 			"table_visible": 1,
 			"form_editable":  "True",
 			"form_visible": 1,
