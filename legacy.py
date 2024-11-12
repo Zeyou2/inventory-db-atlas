@@ -102,7 +102,7 @@ def field():
 #         print("="*78)
 #         print("-"*32, "[",f"{register}","]", "-"*32)
 #         print("="*78)
-#         data = self.get_collection(register)
+#         data = self.get_db_by_collection(register)
 #         if len(data) == 0:
 #             print("NO DATA")
 #         else:
@@ -129,7 +129,7 @@ def field():
 #                     rest = data[0][deleted]
 #                     result = self.invenctory[register].delete_many(rest)
 #                     print(f"Documentos excluídos: {result.deleted_count}")
-#                     print(self.get_collection(register)[1])
+#                     print(self.get_db_by_collection(register)[1])
 #                     break
 #                 else:
 #                     print("O número selecionado está fora do intervalo disponível. Tente novamente.")
@@ -161,7 +161,7 @@ def field():
 #                print("\nInterrupção do teclado.")
 #             return "Saindo do Menu"         
 #         try:
-#             data = self.get_collection(register)
+#             data = self.get_db_by_collection(register)
 #         except Exception:
 #             self.connection_teste()
 #             print(f"Ocorreu um erro ao acessar o: {register}, Contate um adminstrador.")
@@ -214,7 +214,7 @@ def field():
     # password = request.json.get('password', None)
 
 #     # Aqui você pode colocar a lógica de verificação de login (exemplo básico)
-#     user = db_sample.get_collection('usuarios').get(email)
+#     user = db_sample.get_db_by_collection('usuarios').get(email)
 
 #     if user and user['password'] == password:  # Validação de usuário simples
 #         # Cria um token JWT com o email do usuário

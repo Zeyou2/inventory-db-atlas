@@ -41,7 +41,7 @@ def index():
     # print(current_user)
 
     colec = manage_op.inventory.list_collection_names()
-    sample = manage_op.get_collection('usuarios')
+    sample = manage_op.get_db_by_collection('usuarios')
     if request.method == "POST":
         print("Requisiçao recebida")
     return render_template('index.html', titulo = "Inicio", item_list = colec, sample = sample,  redirect = redirect("/form"))
@@ -49,25 +49,14 @@ def index():
 @app.route('/cadastro/<collection_name>', methods=['POST',  'GET'])
 # @jwt_required(locations=["cookies"])
 def cadastro(collection_name):
-    sample = manage_op.get_collection(collection_name)
-    codigo = sample[-1]
-    field = manage_op.create_form(collection_name) 
+    field = manage_op.make_datapack(collection_name, 1) 
     
-    field1 = manage_op.create_form(collection_name)[1][0]
-    t = int(str(codigo['codigo']).split('_')[1])
-    t += 1
-    print('field is ', field1['prefixo'] + str(t))
-    print("codigo is" ,  t)
-    if collection_name == "produtos":
-        cat = manage_op.get_collection("categoria")
-    else: 
-        cat = None
-    return render_template('pages/form.html', titulo = "Inicio" , title = collection_name, collection_name = collection_name, field = field[0], cat = cat, sample = sample )
+    return render_template('pages/form.html', titulo = "Inicio" , title = collection_name, collection_name = collection_name, field = field)
 
 @app.route('/register', methods=['POST', 'GET'])
 def register_user(collection_name = "usuarios"):
     login_check = request.args.get('login_check', default=None, type=bool)
-    field = manage_op.create_form(collection_name)
+    field = manage_op.make_datapack(collection_name, 1)
     now = datetime.strftime(datetime.now(), "%Y-%m-%d")
     return render_template('pages/register_user.html', field = field[0], now = now, login_check = login_check)
 
@@ -75,21 +64,14 @@ def register_user(collection_name = "usuarios"):
 # @jwt_required()
 def send(collection_name):
     form_values = {key: value for key, value in request.form.items()}
-    field = manage_op.create_form(collection_name)[1][0]
-    sample = manage_op.get_collection(collection_name)
-    last_dict = sample[-1]
-    con = int(str(last_dict['codigo']).split('_')[1])+1
-    form_values['codigo'] = field['prefixo'] + str(con)
-    
-    
-
-    print(form_values)
+    form_values = manage_op.hand_mandatory_data(form_values, collection_name)
+    form_values = manage_op.send_treatment(collection_name, form_values)
+    print("prestes a enviar -> form values is: ", form_values)
     if collection_name == "usuarios":
         form_values = manage_op.process_user_registration(form_values)
         if form_values == None:
             return redirect(url_for('register_user', login_check = True))
-    else:
-        form_values = manage_op.send_treatment(collection_name, form_values)
+    
     manage_op.save_to_central(form_values, collection_name,'create')
     manage_op.insert_into_db('create')
     manage_op.delete_central()
@@ -98,13 +80,8 @@ def send(collection_name):
 @app.route('/view/<collection_name>', methods=['POST', 'GET'])
 # @jwt_required()
 def view(collection_name):
-    sample = manage_op.get_collection(collection_name)
-    for x in sample:
-        if 'senha' in x:
-            del x['senha']
-        # if 'codigo' in x:
-        #     del x['codigo']
-        
+    sample = manage_op.make_view_by_att(collection_name, {'table_visible': 1})
+
     print("------------------------------------\n",sample)
     if sample:
         return render_template('pages/view.html', titulo = "Inicio", collection_name = collection_name, sample = sample )

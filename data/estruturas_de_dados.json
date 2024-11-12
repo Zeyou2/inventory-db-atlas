@@ -9,6 +9,16 @@
 			"resp_type": "date",
 			"em_branco": "False"	
 		},
+		"codigo" :{
+			"table_visible": 1,
+			"form_editable":  "False",
+			"form_visible": 0,
+			"pre_value": "",
+			"pergunta": "",
+			"resp_type": "int",
+			"em_branco": "False", 
+			"prefixo" : "us_"
+		},
 		"nome": {
 			"table_visible": 1,
 			"form_editable":  "True",
@@ -45,7 +55,17 @@
 			"resp_type": "password",
 			"em_branco": "False"
 		}
-		,
+	},
+	"produtos": {
+		"data_de_registro": {
+			"table_visible": 1,
+			"form_editable":  "False",
+			"pre_value" : "datetime_now",
+			"form_visible": 1,
+			"pergunta": "Data de Cadastro",
+			"resp_type": "date",
+			"em_branco": "False"	
+		},
 		"codigo" :{
 			"table_visible": 1,
 			"form_editable":  "False",
@@ -53,11 +73,11 @@
 			"pre_value": "",
 			"pergunta": "",
 			"resp_type": "int",
-			"em_branco": "False", 
-			"prefixo" : "us_"
-		}
-	},
-	"produtos": {
+			"em_branco": "False",
+			"prefixo" : "prod_"
+
+
+		},
 		"nome": {
 			"table_visible": 1,
 			"form_editable":  "True",
@@ -76,18 +96,6 @@
 			"resp_type": "int",
 			"em_branco": "False"
 		},
-		"codigo" :{
-			"table_visible": 1,
-			"form_editable":  "False",
-			"form_visible": 0,
-			"pre_value": "",
-			"pergunta": "",
-			"resp_type": "int",
-			"em_branco": "False",
-			"prefixo" : "prod_"
-
-
-		},
 		"categoria": {
 			"table_visible": 1,
 			"form_editable":  "True",
@@ -95,7 +103,7 @@
 			"pre_value" : "",
 			"pergunta": "Categoria do Produto",
 			"resp_type": "db_list",
-			"db_origin": {"produtos": "categoria"},
+			"db_origin": {"categoria": "categoria"},
 			"em_branco": "True"
 		},
 		"observacao": {
@@ -105,11 +113,30 @@
 			"pre_value" : "",
 			"pergunta": "Descrição",
 			"resp_type": "str",
-			"em_branco": "False"
+			"em_branco": "True"
 		}
 		
 	},
 	"pontos": {
+		"data_de_registro": {
+			"table_visible": 1,
+			"form_editable":  "False",
+			"pre_value" : "datetime_now",
+			"form_visible": 1,
+			"pergunta": "Data de Cadastro",
+			"resp_type": "date",
+			"em_branco": "False"	
+		},
+		"codigo" :{
+			"table_visible": 1,
+			"form_editable":  "False",
+			"form_visible": 0,
+			"pre_value": "",
+			"pergunta": "",
+			"resp_type": "int",
+			"em_branco": "False", 
+			"prefixo" : "pt_"
+		},
 		"nome_local": {
 			"table_visible": 1,
 			"form_editable":  "True",
@@ -128,19 +155,18 @@
 			"pergunta": "Tipo ",
 			"resp_type": "str",
 			"em_branco": "False"
-		},
-		"codigo" :{
-			"table_visible": 1,
-			"form_editable":  "False",
-			"form_visible": 0,
-			"pre_value": "",
-			"pergunta": "",
-			"resp_type": "int",
-			"em_branco": "False", 
-			"prefixo" : "pt_"
 		}
 	},
 	"transferencia": {
+		"data_de_registro": {
+			"table_visible": 1,
+			"form_editable":  "False",
+			"pre_value" : "datetime_now",
+			"form_visible": 1,
+			"pergunta": "Data de Cadastro",
+			"resp_type": "date",
+			"em_branco": "False"	
+		},
 		"data_movimentacao": {
 			"table_visible": 1,
 			"form_editable":  "True",

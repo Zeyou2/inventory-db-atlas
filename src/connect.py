@@ -68,7 +68,7 @@ class Mongo_Manager(Files_Handling):
         for doc in docs: 
             all_docs.append(doc)
         
-    def get_collection(self, collection_name, filter_by={}, remove_el={'_id': 0}):
+    def get_db_by_collection(self, collection_name, filter_by={}, remove_el={'_id': 0}):
         db = self.inventory
         all_docs = []
         print("colection name is:", collection_name)
@@ -93,7 +93,8 @@ class Mongo_Manager(Files_Handling):
             print(f"Erro na conexão: {e}")
 
 
-    def reset_inv(self):
+    def reset_inv(self, collection):
+        self.inventory.get_collection(collection).delete_many({})
         data = self.read_file("estruturas_de_dados.json", PATTERN_FOLDER)
         resp = {}
         for key, value in data.items():

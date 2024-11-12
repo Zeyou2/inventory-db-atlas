@@ -14,9 +14,8 @@
                 {% if x['pergunta'] == "Categoria do Produto" %}
                 <label for="{{ x['db_id'] }}">{{ x['pergunta'] }}</label>
                 <select id="{{ x['db_id'] }}" name="{{ x['db_id'] }}" class="form-control" onchange="toggleNewCategory(this)" >
-                    <option value="">Selecione uma Categoria</option>
-                    {% for y in cat %}
-                        <option value="{{ y['categoria'] }}">{{ y['categoria'] }}</option>
+                    {% for el in x['list_elements'] %}
+                        <option value="{{ el }}">{{ el }}</option>
                     {% endfor %}
                     <option value="nova_categoria">Nova Categoria</option>
                  
@@ -24,6 +23,7 @@
                     {% if categoria == nova_categoria %}
                     <input type="text" id="nova_categoria_input" name="nova_categoria" class="form-control mt-2" placeholder="Digite nova categoria" style="display: none;">
                     {% endif %}
+
                 {% elif x['resp_type'] == "list" %}
                     <label for="{{ x['db_id'] }}">{{ y['pergunta'] }}</label>
                     <select id="{{ x['db_id'] }}" name="{{ x['db_id'] }}" value="{{ x['pre_value'] }}" class="form-control" {{ x["em_branco"] }} {{ x['form_editable'] }}>
