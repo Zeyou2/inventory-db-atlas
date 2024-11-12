@@ -54,7 +54,7 @@ def cadastro(collection_name):
     field = manage_op.create_form(collection_name) 
     
     field1 = manage_op.create_form(collection_name)[1][0]
-    t = int(codigo['codigo'][-1])
+    t = int(str(codigo['codigo']).split('_')[1])
     t += 1
     print('field is ', field1['prefixo'] + str(t))
     print("codigo is" ,  t)
@@ -78,8 +78,7 @@ def send(collection_name):
     field = manage_op.create_form(collection_name)[1][0]
     sample = manage_op.get_collection(collection_name)
     last_dict = sample[-1]
-    con = int(last_dict['codigo'][-1])
-    con += 1
+    con = int(str(last_dict['codigo']).split('_')[1])+1
     form_values['codigo'] = field['prefixo'] + str(con)
     
     
@@ -105,6 +104,7 @@ def view(collection_name):
             del x['senha']
         # if 'codigo' in x:
         #     del x['codigo']
+        
     print("------------------------------------\n",sample)
     if sample:
         return render_template('pages/view.html', titulo = "Inicio", collection_name = collection_name, sample = sample )

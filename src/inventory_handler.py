@@ -117,7 +117,7 @@ class Handle_Operations(InventoryManager):
 			if form_values['email'] == x["email"] or form_values['nome'] == x["nome"]:
 				return None  
 		form_values["registro"] = datetime.strftime(datetime.now(), "%Y-%m-%d")
-		form_values["codigo"] = 1
+		# form_values["codigo"] = 1
 		salt = bcrypt.gensalt()
 		password = form_values['senha'].encode('utf-8')
 		hash_password = bcrypt.hashpw(password, salt)
