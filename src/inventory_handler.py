@@ -98,10 +98,14 @@ class InventoryManager(Mongo_Manager, Files_Handling):
 		data = self.read_file('estruturas_de_dados.json', PATTERN_FOLDER) 
 		dados = self.field_treatment(data[collection_name])
 		field = []
+		field_not_visible = []
 		for key, value in dados.items():
 			if value['form_visible'] == 1:
-				field.append(value)                 
-		return field
+				field.append(value)
+			else:
+				field_not_visible.append(value)
+			            
+		return (field, field_not_visible)
 	
 class Handle_Operations(InventoryManager):
 	def __init__(self, central):
@@ -110,14 +114,15 @@ class Handle_Operations(InventoryManager):
 	def process_user_registration(self, form_values):
 		sample = self.get_collection("usuarios")
 		for x in sample:
-			if form_values['Email'] == x["Email"] or form_values['Nome do usuário'] == x["Nome do usuário"]:
+			if form_values['email'] == x["email"] or form_values['nome'] == x["nome"]:
 				return None  
-		form_values["Registro"] = datetime.strftime(datetime.now(), "%Y-%m-%d")
+		form_values["registro"] = datetime.strftime(datetime.now(), "%Y-%m-%d")
+		form_values["codigo"] = 1
 		salt = bcrypt.gensalt()
-		password = form_values['Senha'].encode('utf-8')
+		password = form_values['senha'].encode('utf-8')
 		hash_password = bcrypt.hashpw(password, salt)
 		
-		form_values["Senha"] = base64.b64encode(hash_password).decode('utf-8')
+		form_values["senha"] = base64.b64encode(hash_password).decode('utf-8')
 		return form_values
 	
 	def process_user_validation(self, form_values):

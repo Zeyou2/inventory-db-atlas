@@ -2,6 +2,7 @@ import sys
 import os
 from src.connect import Mongo_Manager
 
+
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), 'src')))
 from src.routes import app
 

@@ -49,25 +49,42 @@ def index():
 @app.route('/cadastro/<collection_name>', methods=['POST',  'GET'])
 # @jwt_required(locations=["cookies"])
 def cadastro(collection_name):
+    sample = manage_op.get_collection(collection_name)
+    codigo = sample[-1]
     field = manage_op.create_form(collection_name) 
-    print(field)
+    
+    field1 = manage_op.create_form(collection_name)[1][0]
+    t = int(codigo['codigo'][-1])
+    t += 1
+    print('field is ', field1['prefixo'] + str(t))
+    print("codigo is" ,  t)
     if collection_name == "produtos":
         cat = manage_op.get_collection("categoria")
     else: 
         cat = None
-    return render_template('pages/form.html', titulo = "Inicio" , title = collection_name, collection_name = collection_name, field = field, cat = cat )
+    return render_template('pages/form.html', titulo = "Inicio" , title = collection_name, collection_name = collection_name, field = field[0], cat = cat, sample = sample )
 
 @app.route('/register', methods=['POST', 'GET'])
 def register_user(collection_name = "usuarios"):
     login_check = request.args.get('login_check', default=None, type=bool)
     field = manage_op.create_form(collection_name)
     now = datetime.strftime(datetime.now(), "%Y-%m-%d")
-    return render_template('pages/register_user.html', field = field, now = now, login_check = login_check)
+    return render_template('pages/register_user.html', field = field[0], now = now, login_check = login_check)
 
 @app.route('/send_data/<collection_name>', methods= ['POST'])
 # @jwt_required()
 def send(collection_name):
     form_values = {key: value for key, value in request.form.items()}
+    field = manage_op.create_form(collection_name)[1][0]
+    sample = manage_op.get_collection(collection_name)
+    last_dict = sample[-1]
+    con = int(last_dict['codigo'][-1])
+    con += 1
+    form_values['codigo'] = field['prefixo'] + str(con)
+    
+    
+
+    print(form_values)
     if collection_name == "usuarios":
         form_values = manage_op.process_user_registration(form_values)
         if form_values == None:
@@ -83,6 +100,11 @@ def send(collection_name):
 # @jwt_required()
 def view(collection_name):
     sample = manage_op.get_collection(collection_name)
+    for x in sample:
+        if 'senha' in x:
+            del x['senha']
+        # if 'codigo' in x:
+        #     del x['codigo']
     print("------------------------------------\n",sample)
     if sample:
         return render_template('pages/view.html', titulo = "Inicio", collection_name = collection_name, sample = sample )

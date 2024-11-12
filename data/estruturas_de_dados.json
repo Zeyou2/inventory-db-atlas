@@ -1,6 +1,6 @@
 {
 	"usuarios": {
-		"Data de registro": {
+		"data_de_registro": {
 			"table_visible": 1,
 			"form_editable":  "False",
 			"pre_value" : "datetime_now",
@@ -9,7 +9,7 @@
 			"resp_type": "date",
 			"em_branco": "False"	
 		},
-		"Nome": {
+		"nome": {
 			"table_visible": 1,
 			"form_editable":  "True",
 			"pre_value" : "",
@@ -18,7 +18,7 @@
 			"resp_type": "str",
 			"em_branco": "False"
 		},
-		"Contato": {
+		"contato": {
 			"table_visible": 0,
 			"form_editable":  "True",
 			"pre_value" : "",
@@ -27,7 +27,7 @@
 			"resp_type": "tel",
 			"em_branco": "False"
 		},
-		"Email": {
+		"email": {
 			"table_visible": 0,
 			"form_editable":  "True",
 			"form_visible": 1,
@@ -36,7 +36,7 @@
 			"resp_type": "email",
 			"em_branco": "True"
 		},
-		"Senha": {
+		"senha": {
 			"table_visible": 0,
 			"form_editable":  "True",
 			"form_visible": 1,
@@ -45,9 +45,20 @@
 			"resp_type": "password",
 			"em_branco": "False"
 		}
+		,
+		"codigo" :{
+			"table_visible": 1,
+			"form_editable":  "False",
+			"form_visible": 0,
+			"pre_value": "",
+			"pergunta": "",
+			"resp_type": "int",
+			"em_branco": "False", 
+			"prefixo" : "us_"
+		}
 	},
 	"produtos": {
-		"Nome": {
+		"nome": {
 			"table_visible": 1,
 			"form_editable":  "True",
 			"form_visible": 1,
@@ -56,7 +67,7 @@
 			"resp_type": "str",
 			"em_branco": "False"
 		},
-		"Id": {
+		"id_produto": {
 			"table_visible": 1,
 			"form_editable":  "True",
 			"form_visible": 1,
@@ -65,7 +76,19 @@
 			"resp_type": "int",
 			"em_branco": "False"
 		},
-		"Categoria": {
+		"codigo" :{
+			"table_visible": 1,
+			"form_editable":  "False",
+			"form_visible": 0,
+			"pre_value": "",
+			"pergunta": "",
+			"resp_type": "int",
+			"em_branco": "False",
+			"prefixo" : "prod_"
+
+
+		},
+		"categoria": {
 			"table_visible": 1,
 			"form_editable":  "True",
 			"form_visible": 1,
@@ -75,7 +98,7 @@
 			"db_origin": {"produtos": "categoria"},
 			"em_branco": "True"
 		},
-		"Observação": {
+		"observacao": {
 			"table_visible": 1,
 			"form_editable":  "True",
 			"form_visible": 1,
@@ -84,6 +107,7 @@
 			"resp_type": "str",
 			"em_branco": "False"
 		}
+		
 	},
 	"pontos": {
 		"nome_local": {
@@ -104,10 +128,20 @@
 			"pergunta": "Tipo ",
 			"resp_type": "str",
 			"em_branco": "False"
+		},
+		"codigo" :{
+			"table_visible": 1,
+			"form_editable":  "False",
+			"form_visible": 0,
+			"pre_value": "",
+			"pergunta": "",
+			"resp_type": "int",
+			"em_branco": "False", 
+			"prefixo" : "pt_"
 		}
 	},
 	"transferencia": {
-		"data_movimentação": {
+		"data_movimentacao": {
 			"table_visible": 1,
 			"form_editable":  "True",
 			"form_visible": 1,
@@ -136,7 +170,7 @@
 			"db_origin": {"produtos": "Nome do produto"},
 			"em_branco": "False"
 		},
-		"id do produto" : {
+		"id_produto" : {
 			"table_visible": 1,
 			"form_editable":  "True",
 			"form_visible": 1,
@@ -146,7 +180,7 @@
 			"db_origin":{"produtos": "Serie"},
 			"em_branco": "False"
 		},
-		"Quantidade": {
+		"quantidade": {
 			"table_visible": 1,
 			"form_editable":  "True",
 			"form_visible": 1,
@@ -155,7 +189,7 @@
 			"resp_type": "number",
 			"em_branco": "False"
 		},
-		"De": {
+		"de": {
 			"table_visible": 1,
 			"form_editable":  "True",
 			"form_visible": 1,
@@ -165,7 +199,7 @@
 			"db_origin": {"pontos": "Nome do local"},
 			"em_branco": "False"
 		},
-		"Para": {
+		"para": {
 			"table_visible": 1,
 			"form_editable":  "True",
 			"form_visible": 1,

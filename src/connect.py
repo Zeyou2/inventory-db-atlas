@@ -94,39 +94,45 @@ class Mongo_Manager(Files_Handling):
 
 
     def reset_inv(self):
-        base = {
-    "usuarios": {
-        "nome_usuario": "teste",
-        "contato": "teste",
-        "email": "teste",
-        "senha": "teste",
-        "registro": "teste"
-    },
-    "produtos": {
-        "nome_produto": "teste",
-        "serie": "teste",
-        "categoria_produto": "teste",
-        "descricao": "teste"
-    },
-    "transferencia": {
-        "data_da_movimentação": "teste",
-        "nome_do_produto": "teste",
-        "quantidade": "teste",
-        "tipo_da_transferencia_do_produto": "teste",
-        "de": "teste",
-        "para": "teste"
-    },
-    "pontos": {
-        "nome_local": "teste",
-        "tipo": "teste"
-    },
-    "categoria": {
-         "categorias": "teste"
-    }
+        data = self.read_file("estruturas_de_dados.json", PATTERN_FOLDER)
+        resp = {}
+        for key, value in data.items():
+            resp[key] = {}
+            for i in value.keys():
+                resp[key].update({i : "teste"})
+    #     "nome_usuario": "teste",
+    #     "contato": "teste",
+    #     "email": "teste",
+    #     "senha": "teste",
+    #     "registro": "teste"
+    # },
+    # "produtos": {
+    #     "nome_produto": "teste",
+    #     "serie": "teste",
+    #     "categoria_produto": "teste",
+    #     "descricao": "teste"
+    # },
+    # "transferencia": {
+    #     "data_da_movimentação": "teste",
+    #     "nome_do_produto": "teste",
+    #     "quantidade": "teste",
+    #     "tipo_da_transferencia_do_produto": "teste",
+    #     "de": "teste",
+    #     "para": "teste"
+    # },
+    # "pontos": {
+    #     "nome_local": "teste",
+    #     "tipo": "teste"
+    # },
+    # "categoria": {
+    #      "categorias": "teste"
+    # }
    
 
-}
-        for key, value in base.items():
+# }
+        print(resp)
+        resp.update({'categoria': {'categoria': 'teste'}})
+        for key, value in resp.items():
                 docs = self.inventory[key].insert_many([value])
                 print(value)
                 print(f'O item foi adicionado!')
