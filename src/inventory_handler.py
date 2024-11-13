@@ -227,3 +227,4 @@ class Handle_Operations(InventoryManager):
 				del form_values["nova_categoria"]
 		return form_values
 	
+

@@ -101,36 +101,6 @@ class Mongo_Manager(Files_Handling):
             resp[key] = {}
             for i in value.keys():
                 resp[key].update({i : "teste"})
-    #     "nome_usuario": "teste",
-    #     "contato": "teste",
-    #     "email": "teste",
-    #     "senha": "teste",
-    #     "registro": "teste"
-    # },
-    # "produtos": {
-    #     "nome_produto": "teste",
-    #     "serie": "teste",
-    #     "categoria_produto": "teste",
-    #     "descricao": "teste"
-    # },
-    # "transferencia": {
-    #     "data_da_movimentação": "teste",
-    #     "nome_do_produto": "teste",
-    #     "quantidade": "teste",
-    #     "tipo_da_transferencia_do_produto": "teste",
-    #     "de": "teste",
-    #     "para": "teste"
-    # },
-    # "pontos": {
-    #     "nome_local": "teste",
-    #     "tipo": "teste"
-    # },
-    # "categoria": {
-    #      "categorias": "teste"
-    # }
-   
-
-# }
         print(resp)
         resp.update({'categoria': {'categoria': 'teste'}})
         for key, value in resp.items():
