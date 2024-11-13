@@ -25,7 +25,7 @@
                     {% endif %}
 
                 {% elif x['resp_type'] == "list" %}
-                    <label for="{{ x['db_id'] }}">{{ y['pergunta'] }}</label>
+                    <label for="{{ x['db_id'] }}">{{ x['pergunta'] }}</label>
                     <select id="{{ x['db_id'] }}" name="{{ x['db_id'] }}" value="{{ x['pre_value'] }}" class="form-control" {{ x["em_branco"] }} {{ x['form_editable'] }}>
                         {% for el in x['list_elements'] %}
                             
