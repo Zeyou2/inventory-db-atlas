@@ -211,6 +211,12 @@ class Handle_Operations(InventoryManager):
 			return user
 		else:
 			return None
+		
+	def make_op_pack(self, data:dict, form_visible=0|1):
+		dados = self.field_treatment(data)
+		field = list(filter(lambda value: value['form_visible'] == form_visible, dados.values()))
+
+		return field
 
 	def send_treatment(self, collection_name, form_values):
 		"""
@@ -227,4 +233,13 @@ class Handle_Operations(InventoryManager):
 				del form_values["nova_categoria"]
 		return form_values
 	
-
+	def return_op(self):
+		data = self.read_file("transf_op.json", PATTERN_FOLDER)
+		operations = data["popular"]["operacoes"]
+		return operations
+	
+	def render_op_form(self, operation:str | None):
+		if operation == None:
+			return None
+		data = self.read_file("transf_op.json", PATTERN_FOLDER)["popular"]
+		return self.make_op_pack(data[operation.lower()], 1)
