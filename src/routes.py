@@ -93,3 +93,20 @@ def operation(op_type=""):
     print("op type is: ", op_type)
     print("field is: ", field)
     return render_template('pages/populate.html', options=options, op_type=op_type, field=field)
+
+# Rota de testes para visulização de cards
+@app.route('/view_teste/<collection_name>', methods=['POST', 'GET'])
+# @jwt_required()
+def view_teste(collection_name):
+    sample = manage_op.make_view_by_att(collection_name, {'table_visible': 1})
+
+    print("------------------------------------\n",sample)
+    if sample:
+        return render_template('pages/view_teste.html', titulo = "Inicio", collection_name = collection_name, sample = sample )
+    return jsonify(list(sample))
+
+@app.route('/div', methods=['POST',  'GET'])
+# @jwt_required(locations=["cookies"])
+def div_teste():
+    
+    return render_template('pages/div_teste.html')

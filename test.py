@@ -10,3 +10,10 @@ op.reset_inv("pontos")
 op.reset_inv("produtos")
 op.reset_inv("transferência")
 op.reset_inv("usuarios")
+
+
+
+
+
+
+
