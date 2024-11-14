@@ -2,11 +2,8 @@ from flask import Flask, render_template, request, redirect, url_for, jsonify, m
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity, set_access_cookies
 from utils.env_p import *
 from inventory_handler import Handle_Operations
-from connect import Mongo_Manager
 from datetime import datetime
-import bcrypt
-import base64
-import json
+
 
 
 manage_op = Handle_Operations("central.json")
@@ -86,3 +83,13 @@ def view(collection_name):
     if sample:
         return render_template('pages/view.html', titulo = "Inicio", collection_name = collection_name, sample = sample )
     return jsonify(list(sample))
+
+@app.route('/operacao', methods=['POST',  'GET'])
+# @jwt_required(locations=["cookies"])
+def operation(op_type=""):
+    options = manage_op.return_op()
+    op_type = None if request.args.get("op_type") == None else request.args.get("op_type")
+    field = manage_op.render_op_form(op_type)
+    print("op type is: ", op_type)
+    print("field is: ", field)
+    return render_template('pages/populate.html', options=options, op_type=op_type, field=field)
