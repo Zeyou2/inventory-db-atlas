@@ -63,7 +63,7 @@ def send(collection_name):
     form_values = {key: value for key, value in request.form.items()}
     form_values = manage_op.hand_mandatory_data(form_values, collection_name)
     form_values = manage_op.send_treatment(collection_name, form_values)
-    print("prestes a enviar -> form values is: ", form_values)
+    # print("prestes a enviar -> form values is: ", form_values)
     if collection_name == "usuarios":
         form_values = manage_op.process_user_registration(form_values)
         if form_values == None:
@@ -90,19 +90,19 @@ def operation(op_type=""):
     options = manage_op.return_op()
     op_type = None if request.args.get("op_type") == None else request.args.get("op_type")
     field = manage_op.render_op_form(op_type)
-    print("op type is: ", op_type)
-    print("field is: ", field)
-    return render_template('pages/populate.html', options=options, op_type=op_type, field=field)
+    # print("op type is: ", op_type)
+    # print("field is: ", field)
+    return render_template('pages/populate.html', titulo = "Inicio", options=options, op_type=op_type, field=field)
 
 # Rota de testes para visulização de cards
-@app.route('/view_teste/<collection_name>', methods=['POST', 'GET'])
+@app.route('/view_test/<collection_name>', methods=['POST', 'GET'])
 # @jwt_required()
 def view_teste(collection_name):
+    print("view test - collection: ", collection_name)
     sample = manage_op.make_view_by_att(collection_name, {'table_visible': 1})
-
     print("------------------------------------\n",sample)
     if sample:
-        return render_template('pages/view_teste.html', titulo = "Inicio", collection_name = collection_name, sample = sample )
+        return render_template('pages/view_test.html', titulo = "Inicio", collection_name = collection_name, sample = sample )
     return jsonify(list(sample))
 
 @app.route('/div', methods=['POST',  'GET'])

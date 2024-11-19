@@ -74,7 +74,7 @@ class Mongo_Manager(Files_Handling):
         print("colection name is:", collection_name)
         collection = db[collection_name]
         docs = collection.find(filter_by, remove_el)
-        for doc in docs: 
+        for doc in docs:
             all_docs.append(doc)
         return all_docs
     

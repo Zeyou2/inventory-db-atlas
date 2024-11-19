@@ -149,14 +149,16 @@
 
         {% endblock %}
     </div>
+    {% if collection_name == 'produtos' %}
     <div class="position-sticky">
         <div><a class="position-absolute bottom-0 end-0" , style="margin: 0.3%;"
-                href="{{ url_for('cadastro', collection_name='transferencia') }}">
+                href="{{ url_for('operation') }}">
                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
                     <path fill="currentColor"
                         d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10s10-4.48 10-10S17.52 2 12 2m5 11h-4v4h-2v-4H7v-2h4V7h2v4h4z" />
                 </svg>
         </div>
+        {% endif %}
     </div>
     </div>
 
