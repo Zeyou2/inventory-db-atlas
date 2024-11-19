@@ -68,7 +68,7 @@ class InventoryManager(Mongo_Manager, Files_Handling):
 		return [x[key] for x in db]
 	
 	def 	field_treatment(self, collection:dict):
-	
+
 		for key, value in collection.items():
 			value["db_id"] = key
 			if value["resp_type"] == "db_list":
@@ -76,7 +76,7 @@ class InventoryManager(Mongo_Manager, Files_Handling):
 				[*db_key], [*db_el] = zip(*value["db_origin"].items())
 				value["list_elements"] = self.insert_db_on_form(db_key[0], db_el[0])
 			value["em_branco"] = "required" if value["em_branco"] == "False" else ""
-			value["form_editable"] = "disabled" if value["form_editable"] == "False" else ""
+			value["form_editable"] = "readonly" if value["form_editable"] == "False" else ""
 			value["pre_value"] = datetime.strftime(datetime.now(), "%Y-%m-%d") if value["pre_value"] == "datetime_now" else value["pre_value"] 
 		return collection
 

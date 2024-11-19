@@ -5,15 +5,4 @@ op = Handle_Operations("central.json")
 # hidden = op.filter_data_struct("usuarios", {"form_editable": 'False'})
 # hidden = op.field_treatment(hidden)
 # print(hidden.values())
-op.reset_inv("categoria")
-op.reset_inv("pontos")
-op.reset_inv("produtos")
-op.reset_inv("transferência")
-op.reset_inv("usuarios")
-
-
-
-
-
-
-
+op.reset_inv("categorias")

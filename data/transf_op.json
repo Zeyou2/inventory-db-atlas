@@ -214,21 +214,6 @@
 				"em_branco": "False",
 				"field_name": "Data da Movimentação"
 			},
-			"tipo": {
-				"table_visible": 1,
-				"form_editable": "True",
-				"form_visible": 1,
-				"pre_value": "",
-				"pergunta": "tipo de movimentação: ",
-				"resp_type": "list",
-				"list_elements": [
-					"Transferencia",
-					"Entrada",
-					"Saida"
-				],
-				"em_branco": "False",
-				"field_name": "Tipo de Movimentação"
-			},
 			"codigo_prod": {
 				"table_visible": 1,
 				"form_editable": "True",
