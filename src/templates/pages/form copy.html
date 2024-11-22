@@ -3,10 +3,12 @@
 <div class="container mt-4">
     <div class="page-header mb-4">
 
-        <h1 class="display-4 text-center">Cadastro de {{ title.capitalize() }}</h1>
+        <h1 class="display-4 text-center">Edição de {{ title.capitalize() }}</h1>
     </div>
+    {{% base in sample %}}
     <form action="{{ url_for('send', collection_name=title) }}" method="POST">
         <fieldset>
+            {% for base in sample %}
             {% for x in field %}
             <div class="form-group" style="font-weight: bold;">
                 <!-- This is a fixed control form used to register the actual date. -->
@@ -15,6 +17,8 @@
                 <select id="{{ x['db_id'] }}" name="{{ x['db_id'] }}" class="form-control" onchange="toggleNewCategory(this)" >
                     {% for el in x['list_elements'] %}
                         <option value="{{ el }}">{{ el }}</option>
+                        <option value="{{ base['categoria'] }}">{{ el }}</option>
+
                     {% endfor %}
                     <option value="nova_categoria">Nova Categoria</option>
                  
@@ -32,9 +36,9 @@
 
                         {% endfor %}
                     </select>
-                {% else %}
+                {% elif base[nome] %}
                     <label for="{{ x['db_id'] }}">{{ x["pergunta"] }}</label>
-                    <input type="{{ x['resp_type'] }}" id="{{ x['db_id'] }}" name="{{ x['db_id'] }}" value="{{ x['pre_value'] }}" class="form-control" {{ x["em_branco"] }} {{ x['form_editable'] }} >
+                    <input type="{{ x['resp_type'] }}" id="{{ x['db_id'] }}" name="{{ x['db_id'] }}" value="{{ base[nome] }}" class="form-control" {{ x["em_branco"] }} {{ x['form_editable'] }} >
                 {% endif %}
                 </div>
             {% endfor %}

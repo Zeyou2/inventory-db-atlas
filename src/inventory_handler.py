@@ -67,7 +67,7 @@ class InventoryManager(Mongo_Manager, Files_Handling):
 		db = self.get_db_by_collection(collection, remove_el={'_id': 0, key: 1})
 		return [x[key] for x in db]
 	
-	def 	field_treatment(self, collection:dict):
+	def field_treatment(self, collection:dict):
 	
 		for key, value in collection.items():
 			value["db_id"] = key
