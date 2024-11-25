@@ -67,8 +67,7 @@ class InventoryManager(Mongo_Manager, Files_Handling):
 		db = self.get_db_by_collection(collection, remove_el={'_id': 0, key: 1})
 		return [x[key] for x in db]
 	
-	def 	field_treatment(self, collection:dict):
-
+	def	field_treatment(self, collection:dict):
 		for key, value in collection.items():
 			value["db_id"] = key
 			if value["resp_type"] == "db_list":
@@ -78,9 +77,8 @@ class InventoryManager(Mongo_Manager, Files_Handling):
 			value["em_branco"] = "required" if value["em_branco"] == "False" else ""
 			value["form_editable"] = "readonly" if value["form_editable"] == "False" else ""
 			value["pre_value"] = datetime.strftime(datetime.now(), "%Y-%m-%d") if value["pre_value"] == "datetime_now" else value["pre_value"] 
+		print("end of field treatment -> dict is: ", collection)
 		return collection
-
-
 class Handle_Operations(InventoryManager):
 	def __init__(self, central):
 		super().__init__(central)
@@ -152,25 +150,22 @@ class Handle_Operations(InventoryManager):
 					is_hidden = True
 			return is_hidden
 		def get_field_name(sample: list[dict], collection:dict):
-			print("collection is: ", collection)
+			# print("collection is: ", collection)
 			final = []
 			for el in range(0, len(sample)):
 				final.append({})
 				for key, value in sample[el].items():
-					print(f"key is {key} and value is {value}")
 					if collection[key].get("title") != None:
 						key_updt = collection[key]["field_name"] + "_title"
 					else : key_updt = collection[key]["field_name"]
-
 					final[el].update({key_updt: value})
-					
 			return final
 		pre_filter = list(filter(lambda x: non_filtred(x, options), t_data.items()))
-		print("pre filter >> ", pre_filter)
+		# print("pre filter >> ", pre_filter)
 		list(map(lambda x : filter_arg.update({x[0]:0}), pre_filter))
 		print("filter arg is >> ", filter_arg)
 		sample = (self.get_db_by_collection(collection_name, remove_el=filter_arg))
-		print("sample is >> ", sample)
+		# print("sample is >> ", sample)
 		result = get_field_name(sample, t_data)
 		return result
 
@@ -195,6 +190,7 @@ class Handle_Operations(InventoryManager):
 					form_value[value] = elem["prefixo"] + str(self.get_last_code(collection_name))
 				elif key == "db_id" and value == "data_de_registro":
 					form_value[value] = datetime.strftime(datetime.now(), "%Y-%m-%d %H:%M:%S")
+		form_value["status"] = "enabled"
 		return form_value
 
 	def process_user_validation(self, form_values):
@@ -248,6 +244,7 @@ class Handle_Operations(InventoryManager):
 				self.delete_central()
 			if form_values.get('nova_categoria') != None:
 				del form_values["nova_categoria"]
+
 		return form_values
 	
 	def return_op(self):

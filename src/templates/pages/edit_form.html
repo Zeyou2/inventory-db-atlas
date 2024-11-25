@@ -43,6 +43,9 @@
                 {% elif x['pergunta'] == "Descrição"  %}
                     <label for="{{ x['db_id'] }}">{{ x["pergunta"] }}</label>
                     <input type="{{ x['resp_type'] }}" id="{{ x['db_id'] }}" name="{{ x['db_id'] }}" value="{{ y['observacao'] }}" class="form-control" {{ x["em_branco"] }} {{ x['form_editable'] }} >
+                {% else %}
+                <label for="{{ x['db_id'] }}">{{ x["pergunta"] }}</label>
+                <input type="" id="{{ x['db_id'] }}" name="{{ x['db_id'] }}" value="{{ y['data_de_registro'] }}" class="form-control" readonly >
                 {% endif %}
                 </div>
             {% endfor %}

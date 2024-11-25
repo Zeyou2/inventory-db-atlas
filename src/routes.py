@@ -66,12 +66,11 @@ def send(collection_name):
         form_values.update({'operacao': url_args.get("op_type")})
     else:
         redirect_to = "/view/" + collection_name
-    print("---------form values on send---------\n", form_values)
 
     if collection_name != "transferencia":
         form_values = manage_op.hand_mandatory_data(form_values, collection_name)
         form_values = manage_op.send_treatment(collection_name, form_values)
-    
+
     print("prestes a enviar -> form values is: ", form_values)
     if collection_name == "usuarios":
         form_values = manage_op.process_user_registration(form_values)
@@ -104,7 +103,7 @@ def operation():
 def edit_card(collection_name, codigo):
     field = manage_op.make_datapack(collection_name, 1)
     sample = manage_op.make_view_by_att(collection_name, {'table_visible': 1,'form_editable' : False})
-    print("meu sample >>>>>>>", sample)
+    # print("meu sample >>>>>>>", field)
     for x in sample:
         if x['Código'] == codigo:           
             one_request = manage_op.get_db_by_collection(collection_name, {'codigo' : codigo}, {})
@@ -113,13 +112,20 @@ def edit_card(collection_name, codigo):
 
 @app.route('/send/edit/<collection_name>/<codigo>', methods = ["POST", "GET"])
 def edit(collection_name, codigo):
-    pass
+    form_values = {key: value for key, value in request.form.items()}
+    # form_values['data_de_registro'] = 'edit_in ' + datetime.strftime(datetime.now(), "%Y-%m-%d %H:%M:%S")
+    if form_values["nova_categoria"] == '':
+        del form_values['nova_categoria']
+    resultado = manage_op.inventory[collection_name].update_one({'codigo' : codigo}, {'$set': form_values})
+    print(f"Documentos modificados: {resultado.modified_count}")
+    print("form", collection_name, codigo, form_values)
+    return redirect('/view/' + collection_name)
 
 # Rota de testes para visulização de cards
 @app.route('/view_test/<collection_name>', methods=['POST', 'GET'])
 # @jwt_required()
 def view_teste(collection_name):
-    print("view test - collection: ", collection_name)
+    # print("view test - collection: ", collection_name)
     sample = manage_op.make_view_by_att(collection_name, {'table_visible': 1})
     if sample:
         return render_template('pages/view_test.html', titulo = "Inicio", collection_name = collection_name, sample = sample )
