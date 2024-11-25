@@ -17,13 +17,13 @@
         </div>
         {% if op_type != None %}
         <p class="h2">{{op_type}}</p>
-        <form action="{{ url_for('send', collection_name=title) }}" method="POST">
+        <form action="{{ url_for('send', collection_name='transferencia', op_type=op_type) }}" method="POST">
 
                 <fieldset>
                     {% for x in field %}
                     <div class="form-group" style="font-weight: bold;">
                         <!-- This is a fixed control form used to register the actual date. -->
-                        {% if x['pergunta'] == "Categoria do Produto" %}
+                        {% if x['db_id'] == "categorias" %}
                         <label for="{{ x['db_id'] }}">{{ x['pergunta'] }}</label>
                         <select id="{{ x['db_id'] }}" name="{{ x['db_id'] }}" class="form-control" onchange="toggleNewCategory(this)" >
                             {% for el in x['list_elements'] %}
@@ -47,7 +47,7 @@
                             </select>
                         {% else %}
                             <label for="{{ x['db_id'] }}">{{ x["pergunta"] }}</label>
-                            <input type="{{ x['resp_type'] }}" id="{{ x['db_id'] }}" name="{{ x['db_id'] }}" value="{{ x['pre_value'] }}" class="form-control" {{ x["em_branco"] }} {{ x['form_editable'] }} >
+                            <input type="{{ x['resp_type'] }}" id="{{ x['db_id'] }}" name="{{ x['db_id'] }}" value="{{ x['pre_value'] }}" class="form-control" {{ x['em_branco'] }} {{ x['form_editable'] }} >
                         {% endif %}
                         </div>
                     {% endfor %}
@@ -57,5 +57,3 @@
         {% endif %}
 </div> 
 {% endblock %}
-
-

@@ -36,8 +36,6 @@ def validate_user():
 # @jwt_required()
 def index():
     # current_user = get_jwt_identity()
-    # print(current_user)
-
     colec = manage_op.inventory.list_collection_names()
     sample = manage_op.get_db_by_collection('usuarios')
     if request.method == "POST":
@@ -62,9 +60,19 @@ def register_user(collection_name = "usuarios"):
 # @jwt_required()
 def send(collection_name):
     form_values = {key: value for key, value in request.form.items()}
-    form_values = manage_op.hand_mandatory_data(form_values, collection_name)
-    form_values = manage_op.send_treatment(collection_name, form_values)
-    # print("prestes a enviar -> form values is: ", form_values)
+    url_args = request.args.to_dict()
+    if url_args.get('op_type') != None:
+        redirect_to = "/operation"
+        form_values.update({'operacao': url_args.get("op_type")})
+    else:
+        redirect_to = "/view/" + collection_name
+    print("---------form values on send---------\n", form_values)
+
+    if collection_name != "transferencia":
+        form_values = manage_op.hand_mandatory_data(form_values, collection_name)
+        form_values = manage_op.send_treatment(collection_name, form_values)
+    
+    print("prestes a enviar -> form values is: ", form_values)
     if collection_name == "usuarios":
         form_values = manage_op.process_user_registration(form_values)
         if form_values == None:
@@ -73,37 +81,23 @@ def send(collection_name):
     manage_op.save_to_central(form_values, collection_name,'create')
     manage_op.insert_into_db('create')
     manage_op.delete_central()
-    return redirect('/view/' + collection_name)
+    return redirect(redirect_to)
 
 @app.route('/view/<collection_name>', methods=['POST', 'GET'])
 # @jwt_required()
 def view(collection_name):
-    codigo = 'prod_3'
     sample = manage_op.make_view_by_att(collection_name, {'table_visible': 1})
-    for x in sample:
-        if x['Código'] == codigo:
-            print('entrei')
-            # teste = manage_op.get_db_by_collection(collection_name, {'codigo' : codigo})
-            
-            # manage_op.inventory[collection_name].update_one({"codigo" : codigo },{"$set":''})
-            
-
-
-    print("------------------------------------\n", sample)
     if sample:
         return render_template('pages/view.html', titulo = "Inicio", collection_name = collection_name, sample = sample )
     return jsonify(list(sample))
 
-@app.route('/operacao', methods=['POST',  'GET'])
+@app.route('/operation', methods=['POST',  'GET'])
 # @jwt_required(locations=["cookies"])
-def operation(op_type=""):
+def operation():
     options = manage_op.return_op()
-    op_type = None if request.args.get("op_type") == None else request.args.get("op_type")
+    op_type = request.args.get("op_type")
     field = manage_op.render_op_form(op_type)
-    # print("op type is: ", op_type)
-    # print("field is: ", field)
-    return render_template('pages/populate.html', titulo = "Inicio", options=options, op_type=op_type, field=field)
-
+    return render_template('pages/populate.html', options=options, op_type=op_type, field=field)
 
 @app.route('/edit_card/<collection_name>/<codigo>', methods=['POST', 'GET'])
 # @jwt_required(locations=["cookies"])
@@ -121,32 +115,12 @@ def edit_card(collection_name, codigo):
 def edit(collection_name, codigo):
     pass
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # Rota de testes para visulização de cards
 @app.route('/view_test/<collection_name>', methods=['POST', 'GET'])
 # @jwt_required()
 def view_teste(collection_name):
     print("view test - collection: ", collection_name)
     sample = manage_op.make_view_by_att(collection_name, {'table_visible': 1})
-    print("------------------------------------\n",sample)
     if sample:
         return render_template('pages/view_test.html', titulo = "Inicio", collection_name = collection_name, sample = sample )
     return jsonify(list(sample))

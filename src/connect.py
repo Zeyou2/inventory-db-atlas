@@ -96,20 +96,14 @@ class Mongo_Manager(Files_Handling):
 
     def reset_inv(self, collection):
         self.inventory.get_collection(collection).delete_many({})
-        data = self.read_file("estruturas_de_dados.json", PATTERN_FOLDER)
+        # data = self.read_file("estruturas_de_dados.json", PATTERN_FOLDER)
         resp = {}
-        for key, value in data.items():
-            resp[key] = {}
-            for i in value.keys():
-                resp[key].update({i : "teste"})
-        print(resp)
-        resp.update({'categoria': {'categoria': 'teste'}})
+        if (collection == "categorias"):
+            resp[collection] = {"categoria" : "lorem ipsum"}
         for key, value in resp.items():
                 docs = self.inventory[key].insert_many([value])
                 print(value)
                 print(f'O item foi adicionado!')
-        print(f'\nNumero de elementos inseridos no Banco de dados: [{len(docs.inserted_ids)}].')
-
     
     def print_db(self, collection):
         db_sample = self.inventory[collection]
