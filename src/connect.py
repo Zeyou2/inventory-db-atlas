@@ -59,14 +59,15 @@ class Mongo_Manager(Files_Handling):
             result = self.inventory[key].update_many(filter_db, {"$set": value.get(operation_type)[0]})
             print(f'O elemento foi atualizado!')
         return result
-
-    def delete_in_db(self, collection_name):
+    #verificar função
+    def search_in_db(self, collection_name):
         db = self.inventory
         all_docs = []
         collection = db[collection_name]
         docs = collection.find()
         for doc in docs: 
             all_docs.append(doc)
+        return all_docs
         
     def get_db_by_collection(self, collection_name, filter_by={}, remove_el={'_id': 0}):
         db = self.inventory
@@ -74,7 +75,7 @@ class Mongo_Manager(Files_Handling):
         print("colection name is:", collection_name)
         collection = db[collection_name]
         docs = collection.find(filter_by, remove_el)
-        for doc in docs: 
+        for doc in docs:
             all_docs.append(doc)
         return all_docs
     
@@ -114,7 +115,19 @@ class Mongo_Manager(Files_Handling):
         # print(data)
 
 
+    # def edit_db(self, collection_name):
 
+    #     collection = self.inventory[collection_name]
+
+    #     for x in collection:
+
+
+    #     collection_data
+        
+    #     # for key, value in data.items():
+    #     #     result = self.inventory[key].update_many(filter_db, {"$set": value.get(operation_type)[0]})
+    #     #     print(f'O elemento foi atualizado!')
+    #     return result
 
     
 

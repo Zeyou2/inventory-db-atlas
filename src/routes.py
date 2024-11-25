@@ -3,6 +3,7 @@ from flask_jwt_extended import JWTManager, create_access_token, jwt_required, ge
 from utils.env_p import *
 from inventory_handler import Handle_Operations
 from datetime import datetime
+from bson.objectid import ObjectId
 
 
 
@@ -86,7 +87,6 @@ def send(collection_name):
 # @jwt_required()
 def view(collection_name):
     sample = manage_op.make_view_by_att(collection_name, {'table_visible': 1})
-    print("------------------------------------\n",sample)
     if sample:
         return render_template('pages/view.html', titulo = "Inicio", collection_name = collection_name, sample = sample )
     return jsonify(list(sample))
@@ -99,13 +99,30 @@ def operation():
     field = manage_op.render_op_form(op_type)
     return render_template('pages/populate.html', options=options, op_type=op_type, field=field)
 
+@app.route('/edit_card/<collection_name>/<codigo>', methods=['POST', 'GET'])
+# @jwt_required(locations=["cookies"])
+def edit_card(collection_name, codigo):
+    field = manage_op.make_datapack(collection_name, 1)
+    sample = manage_op.make_view_by_att(collection_name, {'table_visible': 1,'form_editable' : False})
+    print("meu sample >>>>>>>", sample)
+    for x in sample:
+        if x['Código'] == codigo:           
+            one_request = manage_op.get_db_by_collection(collection_name, {'codigo' : codigo}, {})
+    return render_template('pages/edit_form.html', base = one_request, codigo = codigo, title = collection_name, collection_name = collection_name, field = field)
+
+
+@app.route('/send/edit/<collection_name>/<codigo>', methods = ["POST", "GET"])
+def edit(collection_name, codigo):
+    pass
+
 # Rota de testes para visulização de cards
-@app.route('/view_teste/<collection_name>', methods=['POST', 'GET'])
+@app.route('/view_test/<collection_name>', methods=['POST', 'GET'])
 # @jwt_required()
 def view_teste(collection_name):
+    print("view test - collection: ", collection_name)
     sample = manage_op.make_view_by_att(collection_name, {'table_visible': 1})
     if sample:
-        return render_template('pages/view_teste.html', titulo = "Inicio", collection_name = collection_name, sample = sample )
+        return render_template('pages/view_test.html', titulo = "Inicio", collection_name = collection_name, sample = sample )
     return jsonify(list(sample))
 
 @app.route('/div', methods=['POST',  'GET'])
