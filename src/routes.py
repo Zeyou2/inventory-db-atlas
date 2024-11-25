@@ -1,9 +1,9 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify, make_response, flash
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity, set_access_cookies
 from utils.env_p import *
-from connect import Mongo_Manager
 from inventory_handler import Handle_Operations
 from datetime import datetime
+from bson.objectid import ObjectId
 
 
 
@@ -78,15 +78,18 @@ def send(collection_name):
 @app.route('/view/<collection_name>', methods=['POST', 'GET'])
 # @jwt_required()
 def view(collection_name):
-    codigo = 'prod_2'
+    codigo = 'prod_3'
     sample = manage_op.make_view_by_att(collection_name, {'table_visible': 1})
     for x in sample:
         if x['Código'] == codigo:
             print('entrei')
-            teste = manage_op.get_db_by_collection(collection_name, {'codigo' : codigo}, {'id'})
+            # teste = manage_op.get_db_by_collection(collection_name, {'codigo' : codigo})
+            
+            # manage_op.inventory[collection_name].update_one({"codigo" : codigo },{"$set":''})
+            
 
 
-    print("------------------------------------\n",teste)
+    print("------------------------------------\n", sample)
     if sample:
         return render_template('pages/view.html', titulo = "Inicio", collection_name = collection_name, sample = sample )
     return jsonify(list(sample))
@@ -102,22 +105,30 @@ def operation(op_type=""):
     return render_template('pages/populate.html', titulo = "Inicio", options=options, op_type=op_type, field=field)
 
 
-
-
-
-
-
-
-
-@app.route('/edit/<collection_name>/<codigo>', methods=['POST', 'GET'])
+@app.route('/edit_card/<collection_name>/<codigo>', methods=['POST', 'GET'])
 # @jwt_required(locations=["cookies"])
 def edit_card(collection_name, codigo):
-    sample = manage_op.make_view_by_att(collection_name, {'table_visible': 1})
+    field = manage_op.make_datapack(collection_name, 1)
+    sample = manage_op.make_view_by_att(collection_name, {'table_visible': 1,'form_editable' : False})
+    print("meu sample >>>>>>>", sample)
     for x in sample:
-        if x['Código'] == codigo:
-            print('entrei')
-            teste = manage_op.get_db_by_collection(collection_name, {'codigo' : codigo}, {'id'})
-    return render_template()
+        if x['Código'] == codigo:           
+            one_request = manage_op.get_db_by_collection(collection_name, {'codigo' : codigo}, {})
+    return render_template('pages/edit_form.html', base = one_request, codigo = codigo, title = collection_name, collection_name = collection_name, field = field)
+
+
+@app.route('/send/edit/<collection_name>/<codigo>', methods = ["POST", "GET"])
+def edit(collection_name, codigo):
+    pass
+
+
+
+
+
+
+
+
+
 
 
 

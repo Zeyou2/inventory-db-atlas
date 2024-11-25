@@ -152,10 +152,12 @@ class Handle_Operations(InventoryManager):
 					is_hidden = True
 			return is_hidden
 		def get_field_name(sample: list[dict], collection:dict):
+			print("collection is: ", collection)
 			final = []
 			for el in range(0, len(sample)):
 				final.append({})
 				for key, value in sample[el].items():
+					print(f"key is {key} and value is {value}")
 					if collection[key].get("title") != None:
 						key_updt = collection[key]["field_name"] + "_title"
 					else : key_updt = collection[key]["field_name"]
@@ -241,7 +243,7 @@ class Handle_Operations(InventoryManager):
 			# Condicional para Seção de Produtos
 			if form_values.get("categoria") == "nova_categoria":
 				form_values["categoria"] = form_values["nova_categoria"]
-				self.save_to_central({'Categoria' : form_values["categoria"]}, "categorias",'create')
+				self.save_to_central({'Categoria' : form_values["categoria"]}, "categoria",'create')
 				self.insert_into_db('create')
 				self.delete_central()
 			if form_values.get('nova_categoria') != None:

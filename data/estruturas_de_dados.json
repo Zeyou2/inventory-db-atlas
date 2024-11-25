@@ -112,7 +112,7 @@
 			"pre_value" : "",
 			"pergunta": "Categoria do Produto",
 			"resp_type": "db_list",
-			"db_origin": {"categoria": "categoria"},
+			"db_origin": {"categorias": "categoria"},
 			"em_branco": "True",
 			"field_name": "Categoria"
 		},

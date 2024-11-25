@@ -34,12 +34,13 @@
                                 <div class="card-body d-flex flex-column p-1 position-relative" style="flex-grow: 1; overflow: hidden; max-height: 130px; text-overflow: ellipsis;">
                                     
                                     <!-- Links Editar e Excluir -->
-                                    <div class="card-links position-absolute" style="top: 1px; right: 1px;">
-                                        <a href="/editar/{{ collection_name }}/{{ base['Código'] }}" class="btn btn-sm btn-success me-2">Editar</a>
-                                        <a href="/excluir/{{ base['Código'] }}" class="btn btn-sm btn-danger">Excluir</a>
-                                    </div>
+                                  
 
                                     {% for key, value in base.items() %}
+                                        <div class="card-links position-absolute" style="top: 1px; right: 1px;">
+                                            <a href="/edit_card/{{ collection_name }}/{{ base['Código'] }}" class="btn btn-sm btn-success me-2">Editar</a>
+                                            <a href="/excluir/{{ collection_name }}/{{ base['Código'] }}" class="btn btn-sm btn-danger">Excluir</a>
+                                        </div>
                                         {% if "_title" in key %}
                                             <h5 class="card-title" style="font-weight: bold; color: #000000;">
                                                 {{ value }} 
@@ -69,6 +70,7 @@
                                 </div>
                             </div>
                         </div>
+                                   
                     {% endfor %}
                 </div>
             </div>
