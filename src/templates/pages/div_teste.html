@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hover Effects on Cards</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      background-color: #f4f4f4;
+    }
+
+    .card {
+      width: 250px;
+      padding: 20px;
+      text-align: center;
+      border-radius: 8px;
+      background-color: #fff;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    /* Hover Effects */
+    .card.zoom:hover {
+      transform: scale(1.1);
+    }
+
+    .card.shadow:hover {
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .card.rotate:hover {
+      transform: rotate(5deg);
+    }
+
+    .card.fade:hover {
+      opacity: 0.8;
+    }
+
+    .card.slide:hover {
+      transform: translateY(-10px);
+    }
+
+    .card.color:hover {
+      background-color: #007bff;
+      color: #fff;
+    }
+
+    .card.image:hover img {
+      transform: scale(1.1);
+    }
+
+    .card img {
+      max-width: 100%;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+
+    .card .title {
+      font-size: 18px;
+      margin: 10px 0;
+    }
+
+    .card .description {
+      font-size: 14px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <div class="card zoom">
+    <div class="title">Zoom Effect</div>
+    <div class="description">Card scales up on hover.</div>
+  </div>
+
+  <div class="card shadow">
+    <div class="title">Shadow Effect</div>
+    <div class="description">Shadow becomes more prominent on hover.</div>
+  </div>
+
+  <div class="card rotate">
+    <div class="title">Rotate Effect</div>
+    <div class="description">Card rotates slightly on hover.</div>
+  </div>
+
+  <div class="card fade">
+    <div class="title">Fade Effect</div>
+    <div class="description">Card fades slightly on hover.</div>
+  </div>
+
+  <div class="card slide">
+    <div class="title">Slide Effect</div>
+    <div class="description">Card moves upward on hover.</div>
+  </div>
+
+  <div class="card color">
+    <div class="title">Color Change</div>
+    <div class="description">Background and text color change on hover.</div>
+  </div>
+
+  <div class="card image">
+    <img src="https://via.placeholder.com/250" alt="Placeholder Image">
+    <div class="title">Image Zoom</div>
+    <div class="description">Image zooms in on hover.</div>
+  </div>
+</body>
+</html>

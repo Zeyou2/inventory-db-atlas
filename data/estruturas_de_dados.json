@@ -22,6 +22,7 @@
 			"field_name": "Código"
 		},
 		"nome": {
+			"title": 1,
 			"table_visible": 1,
 			"form_editable":  "True",
 			"pre_value" : "",
@@ -32,7 +33,7 @@
 			"field_name": "Nome do Usuário"
 		},
 		"contato": {
-			"table_visible": 0,
+			"table_visible": 1,
 			"form_editable":  "True",
 			"pre_value" : "",
 			"form_visible": 1,
@@ -42,7 +43,7 @@
 			"field_name": "Contato"
 		},
 		"email": {
-			"table_visible": 0,
+			"table_visible": 1,
 			"form_editable":  "True",
 			"form_visible": 1,
 			"pre_value" : "",
@@ -80,10 +81,11 @@
 			"pergunta": "",
 			"resp_type": "int",
 			"em_branco": "False",
-			"prefixo" : "prod_",
-			"field_name": "Código do Produto"
+			"prefixo" : "PROD_",
+			"field_name": "Código"
 		},
 		"nome": {
+			"title": 1,
 			"table_visible": 1,
 			"form_editable":  "True",
 			"form_visible": 1,
@@ -110,7 +112,7 @@
 			"pre_value" : "",
 			"pergunta": "Categoria do Produto",
 			"resp_type": "db_list",
-			"db_origin": {"categoria": "categoria"},
+			"db_origin": {"categorias": "categoria"},
 			"em_branco": "True",
 			"field_name": "Categoria"
 		},
@@ -122,7 +124,7 @@
 			"pergunta": "Descrição",
 			"resp_type": "str",
 			"em_branco": "True",
-			"field_name": "Observação do Produto"
+			"field_name": "Observação"
 		}
 		
 	},
@@ -149,6 +151,7 @@
 			"field_name": "Código"
 		},
 		"nome_local": {
+			"title": 1,
 			"table_visible": 1,
 			"form_editable":  "True",
 			"form_visible": 1,

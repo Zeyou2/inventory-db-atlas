@@ -3,6 +3,7 @@ from flask_jwt_extended import JWTManager, create_access_token, jwt_required, ge
 from utils.env_p import *
 from inventory_handler import Handle_Operations
 from datetime import datetime
+from bson.objectid import ObjectId
 
 
 
@@ -63,7 +64,7 @@ def send(collection_name):
     form_values = {key: value for key, value in request.form.items()}
     form_values = manage_op.hand_mandatory_data(form_values, collection_name)
     form_values = manage_op.send_treatment(collection_name, form_values)
-    print("prestes a enviar -> form values is: ", form_values)
+    # print("prestes a enviar -> form values is: ", form_values)
     if collection_name == "usuarios":
         form_values = manage_op.process_user_registration(form_values)
         if form_values == None:
@@ -77,9 +78,18 @@ def send(collection_name):
 @app.route('/view/<collection_name>', methods=['POST', 'GET'])
 # @jwt_required()
 def view(collection_name):
+    codigo = 'prod_3'
     sample = manage_op.make_view_by_att(collection_name, {'table_visible': 1})
+    for x in sample:
+        if x['Código'] == codigo:
+            print('entrei')
+            # teste = manage_op.get_db_by_collection(collection_name, {'codigo' : codigo})
+            
+            # manage_op.inventory[collection_name].update_one({"codigo" : codigo },{"$set":''})
+            
 
-    print("------------------------------------\n",sample)
+
+    print("------------------------------------\n", sample)
     if sample:
         return render_template('pages/view.html', titulo = "Inicio", collection_name = collection_name, sample = sample )
     return jsonify(list(sample))
@@ -90,6 +100,59 @@ def operation(op_type=""):
     options = manage_op.return_op()
     op_type = None if request.args.get("op_type") == None else request.args.get("op_type")
     field = manage_op.render_op_form(op_type)
-    print("op type is: ", op_type)
-    print("field is: ", field)
-    return render_template('pages/populate.html', options=options, op_type=op_type, field=field)
+    # print("op type is: ", op_type)
+    # print("field is: ", field)
+    return render_template('pages/populate.html', titulo = "Inicio", options=options, op_type=op_type, field=field)
+
+
+@app.route('/edit_card/<collection_name>/<codigo>', methods=['POST', 'GET'])
+# @jwt_required(locations=["cookies"])
+def edit_card(collection_name, codigo):
+    field = manage_op.make_datapack(collection_name, 1)
+    sample = manage_op.make_view_by_att(collection_name, {'table_visible': 1,'form_editable' : False})
+    print("meu sample >>>>>>>", sample)
+    for x in sample:
+        if x['Código'] == codigo:           
+            one_request = manage_op.get_db_by_collection(collection_name, {'codigo' : codigo}, {})
+    return render_template('pages/edit_form.html', base = one_request, codigo = codigo, title = collection_name, collection_name = collection_name, field = field)
+
+
+@app.route('/send/edit/<collection_name>/<codigo>', methods = ["POST", "GET"])
+def edit(collection_name, codigo):
+    pass
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Rota de testes para visulização de cards
+@app.route('/view_test/<collection_name>', methods=['POST', 'GET'])
+# @jwt_required()
+def view_teste(collection_name):
+    print("view test - collection: ", collection_name)
+    sample = manage_op.make_view_by_att(collection_name, {'table_visible': 1})
+    print("------------------------------------\n",sample)
+    if sample:
+        return render_template('pages/view_test.html', titulo = "Inicio", collection_name = collection_name, sample = sample )
+    return jsonify(list(sample))
+
+@app.route('/div', methods=['POST',  'GET'])
+# @jwt_required(locations=["cookies"])
+def div_teste():
+    
+    return render_template('pages/div_teste.html')

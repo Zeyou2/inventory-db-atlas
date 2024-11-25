@@ -67,7 +67,7 @@ class InventoryManager(Mongo_Manager, Files_Handling):
 		db = self.get_db_by_collection(collection, remove_el={'_id': 0, key: 1})
 		return [x[key] for x in db]
 	
-	def 	field_treatment(self, collection:dict):
+	def field_treatment(self, collection:dict):
 	
 		for key, value in collection.items():
 			value["db_id"] = key
@@ -141,7 +141,6 @@ class Handle_Operations(InventoryManager):
 
 	def make_view_by_att(self, collection_name: str, options:dict):
 		t_data = self.read_file("estruturas_de_dados.json", PATTERN_FOLDER)[collection_name]
-		print(t_data)
 		filter_arg = {'_id': 0}
 		def non_filtred(filter_db:tuple, options: dict):
 			is_hidden = True
@@ -152,10 +151,28 @@ class Handle_Operations(InventoryManager):
 				else:
 					is_hidden = True
 			return is_hidden
+		def get_field_name(sample: list[dict], collection:dict):
+			print("collection is: ", collection)
+			final = []
+			for el in range(0, len(sample)):
+				final.append({})
+				for key, value in sample[el].items():
+					print(f"key is {key} and value is {value}")
+					if collection[key].get("title") != None:
+						key_updt = collection[key]["field_name"] + "_title"
+					else : key_updt = collection[key]["field_name"]
+
+					final[el].update({key_updt: value})
+					
+			return final
 		pre_filter = list(filter(lambda x: non_filtred(x, options), t_data.items()))
-		print(pre_filter)
+		print("pre filter >> ", pre_filter)
 		list(map(lambda x : filter_arg.update({x[0]:0}), pre_filter))
-		return (self.get_db_by_collection(collection_name, remove_el=filter_arg))		
+		print("filter arg is >> ", filter_arg)
+		sample = (self.get_db_by_collection(collection_name, remove_el=filter_arg))
+		print("sample is >> ", sample)
+		result = get_field_name(sample, t_data)
+		return result
 
 	def process_user_registration(self, form_values):
 		sample = self.get_db_by_collection("usuarios")
@@ -226,7 +243,7 @@ class Handle_Operations(InventoryManager):
 			# Condicional para Seção de Produtos
 			if form_values.get("categoria") == "nova_categoria":
 				form_values["categoria"] = form_values["nova_categoria"]
-				self.save_to_central({'Categoria' : form_values["categoria"]}, "categorias",'create')
+				self.save_to_central({'Categoria' : form_values["categoria"]}, "categoria",'create')
 				self.insert_into_db('create')
 				self.delete_central()
 			if form_values.get('nova_categoria') != None:
@@ -243,3 +260,5 @@ class Handle_Operations(InventoryManager):
 			return None
 		data = self.read_file("transf_op.json", PATTERN_FOLDER)["popular"]
 		return self.make_op_pack(data[operation.lower()], 1)
+	
+
