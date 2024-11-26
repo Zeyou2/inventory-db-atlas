@@ -61,6 +61,7 @@ def register_user(collection_name = "usuarios"):
 def send(collection_name):
     form_values = {key: value for key, value in request.form.items()}
     url_args = request.args.to_dict()
+    print("form values before: ", form_values)
     if url_args.get('op_type') != None:
         redirect_to = "/operation"
         form_values.update({'operacao': url_args.get("op_type")})
@@ -96,7 +97,11 @@ def operation():
     options = manage_op.return_op()
     op_type = request.args.get("op_type")
     field = manage_op.render_op_form(op_type)
-    return render_template('pages/populate.html', options=options, op_type=op_type, field=field)
+    final_field, combined_lists = list(), list()
+    if op_type != None:
+        combined_lists = field[1]
+        final_field = field[0]
+    return render_template('pages/populate.html', options=options, op_type=op_type, field=final_field, combined_lists = combined_lists)
 
 @app.route('/edit_card/<collection_name>/<codigo>', methods=['POST', 'GET'])
 # @jwt_required(locations=["cookies"])

@@ -26,7 +26,7 @@
 				"em_branco": "False",
 				"field_name": "Data da Movimentação"
 			},
-			"codigo_prod": {
+			"codigo": {
 				"table_visible": 1,
 				"form_editable": "True",
 				"form_visible": 1,
@@ -117,7 +117,7 @@
 				"em_branco": "False",
 				"field_name": "Data da Movimentação"
 			},
-			"codigo_prod": {
+			"codigo": {
 				"table_visible": 1,
 				"form_editable": "True",
 				"form_visible": 1,
@@ -148,11 +148,8 @@
 				"form_editable": "True",
 				"form_visible": 1,
 				"pre_value": "",
-				"pergunta": "Numero de Série ou Patrimônio: ",
-				"resp_type": "db_list",
-				"db_origin": {
-					"produtos": "id_produto"
-				},
+				"pergunta": "(fazer ser uma lista)Numero de Série ou Patrimônio: ",
+				"resp_type": "str",
 				"em_branco": "False",
 				"field_name": "Id do produto"
 			},
@@ -214,7 +211,7 @@
 				"em_branco": "False",
 				"field_name": "Data da Movimentação"
 			},
-			"codigo_prod": {
+			"codigo": {
 				"table_visible": 1,
 				"form_editable": "True",
 				"form_visible": 1,

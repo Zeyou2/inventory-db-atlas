@@ -1,59 +1,77 @@
 {% extends "index.html" %}
 {% block content %}
+<!-- Include Select2 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+<!-- Include jQuery (necessário para o Select2) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Include Select2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
 <div class="container mt-4">
-            <h1 class="text-center m-4"> Movimentação de Produtos</h1>
+    <h1 class="text-center m-4"> Movimentação de Produtos</h1>
 
-        <div class="dropdown">
-                <button class="btn btn-default dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  Selecione a Categoria
-                </button>
-                <ul class="dropdown-menu" role="menu">
-                {% for opt in options %}
-                  <li>
-                    <a class="dropdown-item" href="{{  url_for('operation', op_type=opt)  }}" >{{opt}}</a>
-                  </li>
-                {% endfor %}
-                </ul>
-        </div>
-        {% if op_type != None %}
-        <p class="h2">{{op_type}}</p>
-        <form action="{{ url_for('send', collection_name='transferencia', op_type=op_type) }}" method="POST">
+    <div class="dropdown">
+        <button class="btn btn-default dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Selecione a Categoria
+        </button>
+        <ul class="dropdown-menu" role="menu">
+            {% for opt in options %}
+            <li>
+                <a class="dropdown-item" href="{{  url_for('operation', op_type=opt)  }}">{{opt}}</a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
 
-                <fieldset>
-                    {% for x in field %}
-                    <div class="form-group" style="font-weight: bold;">
-                        <!-- This is a fixed control form used to register the actual date. -->
-                        {% if x['db_id'] == "categorias" %}
-                        <label for="{{ x['db_id'] }}">{{ x['pergunta'] }}</label>
-                        <select id="{{ x['db_id'] }}" name="{{ x['db_id'] }}" class="form-control" onchange="toggleNewCategory(this)" >
-                            {% for el in x['list_elements'] %}
-                                <option value="{{ el }}">{{ el }}</option>
-                            {% endfor %}
-                            <option value="nova_categoria">Nova Categoria</option>
-                         
-                        </select>
-                            {% if categoria == nova_categoria %}
-                            <input type="text" id="nova_categoria_input" name="nova_categoria" class="form-control mt-2" placeholder="Digite nova categoria" style="display: none;">
-                            {% endif %}
-        
-                        {% elif x['resp_type'] == "list" %}
-                            <label for="{{ x['db_id'] }}">{{ x['pergunta'] }}</label>
-                            <select id="{{ x['db_id'] }}" name="{{ x['db_id'] }}" value="{{ x['pre_value'] }}" class="form-control" {{ x["em_branco"] }} {{ x['form_editable'] }}>
-                                {% for el in x['list_elements'] %}
-                                    
-                                    <option value ="{{el}}">{{el}}</option>
-        
-                                {% endfor %}
-                            </select>
-                        {% else %}
-                            <label for="{{ x['db_id'] }}">{{ x["pergunta"] }}</label>
-                            <input type="{{ x['resp_type'] }}" id="{{ x['db_id'] }}" name="{{ x['db_id'] }}" value="{{ x['pre_value'] }}" class="form-control" {{ x['em_branco'] }} {{ x['form_editable'] }} >
-                        {% endif %}
-                        </div>
+
+    {% if op_type != None %}
+    <p class="h2">{{op_type}}</p>
+    <form action="{{ url_for('send', collection_name='transferencia', op_type=op_type) }}" method="POST">
+        <fieldset">
+            <div class="form-group p-2">
+                <label for="codigo" style="font-weight: bold;">Produto</label>
+                <select id="codigo" name="codigo" class="form-control">
+                    <option value=""></option>
+                    {% for el in combined_lists %}
+                    <option value="{{ el.split('|')[0].strip()}}">{{ el }}</option>
                     {% endfor %}
-                    <button type="submit" class="btn btn-primary">Salvar</button>
-                </fieldset>
-            </form>
-        {% endif %}
-</div> 
+                </select>
+            </div>
+
+
+            {% for x in field %}
+            <div class="form-group p-2" style="font-weight: bold;">
+                {% if x['resp_type'] == "list" %}
+                <label for="{{ x['db_id'] }}">{{ x['pergunta'] }}</label>
+                <select id="{{ x['db_id'] }}" name="{{ x['db_id'] }}" value="{{ x['pre_value'] }}" class="form-control"
+                    {{ x["em_branco"] }} {{ x['form_editable'] }}>
+                    {% for el in x['list_elements'] %}
+
+                    <option value="{{el}}">{{el}}</option>
+
+                    {% endfor %}
+                </select>
+                {% else %}
+                <label for="{{ x['db_id'] }}">{{ x["pergunta"] }}</label>
+                <input type="{{ x['resp_type'] }}" id="{{ x['db_id'] }}" name="{{ x['db_id'] }}"
+                    value="{{ x['pre_value'] }}" class="form-control" {{ x['em_branco'] }} {{ x['form_editable'] }}>
+                {% endif %}
+            </div>
+            {% endfor %}
+            <button type="submit" class="btn btn-primary">Salvar</button>
+        </fieldset>
+    </form>
+    {% endif %}
+</div>
+<script>
+    // Iniciar o Select2 para transformar o select em um campo de pesquisa
+    $(document).ready(function () {
+        $('#codigo').select2({
+            placeholder: "Clique para localizar o produto",
+            allowClear: true
+        });
+    });
+</script>
 {% endblock %}

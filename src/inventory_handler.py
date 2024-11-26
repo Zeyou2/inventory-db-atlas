@@ -77,7 +77,7 @@ class InventoryManager(Mongo_Manager, Files_Handling):
 			value["em_branco"] = "required" if value["em_branco"] == "False" else ""
 			value["form_editable"] = "readonly" if value["form_editable"] == "False" else ""
 			value["pre_value"] = datetime.strftime(datetime.now(), "%Y-%m-%d") if value["pre_value"] == "datetime_now" else value["pre_value"] 
-		print("end of field treatment -> dict is: ", collection)
+		# print("end of field treatment -> dict is: ", collection)
 		return collection
 class Handle_Operations(InventoryManager):
 	def __init__(self, central):
@@ -239,7 +239,7 @@ class Handle_Operations(InventoryManager):
 			# Condicional para Seção de Produtos
 			if form_values.get("categoria") == "nova_categoria":
 				form_values["categoria"] = form_values["nova_categoria"]
-				self.save_to_central({'Categoria' : form_values["categoria"]}, "categoria",'create')
+				self.save_to_central({'categoria' : form_values["categoria"]}, "categoria",'create')
 				self.insert_into_db('create')
 				self.delete_central()
 			if form_values.get('nova_categoria') != None:
@@ -256,6 +256,12 @@ class Handle_Operations(InventoryManager):
 		if operation == None:
 			return None
 		data = self.read_file("transf_op.json", PATTERN_FOLDER)["popular"]
-		return self.make_op_pack(data[operation.lower()], 1)
+		data = self.make_op_pack(data[operation.lower()], 1)
+		list_of_lists = [
+			item['list_elements'] for item in data if 'list_elements' in item and not ('db_origin' in item and 'pontos' in item['db_origin'])]
+		combined_lists = [" | ".join(items) for items in zip(*list_of_lists)]
+		data = list(filter(lambda x : x["db_id"] != "codigo" and x["db_id"] != "nome_produto", data))
+		print(combined_lists)
+		return [data, combined_lists]
 	
 

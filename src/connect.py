@@ -98,7 +98,7 @@ class Mongo_Manager(Files_Handling):
         self.inventory.get_collection(collection).delete_many({})
         # data = self.read_file("estruturas_de_dados.json", PATTERN_FOLDER)
         resp = {}
-        if (collection == "categorias"):
+        if (collection == "categoria"):
             resp[collection] = {"categoria" : "lorem ipsum"}
         for key, value in resp.items():
                 docs = self.inventory[key].insert_many([value])
