@@ -257,11 +257,13 @@ class Handle_Operations(InventoryManager):
 			return None
 		data = self.read_file("transf_op.json", PATTERN_FOLDER)["popular"]
 		data = self.make_op_pack(data[operation.lower()], 1)
+		all_data = data
+		
 		list_of_lists = [
 			item['list_elements'] for item in data if 'list_elements' in item and not ('db_origin' in item and 'pontos' in item['db_origin'])]
 		combined_lists = [" | ".join(items) for items in zip(*list_of_lists)]
 		data = list(filter(lambda x : x["db_id"] != "codigo" and x["db_id"] != "nome_produto", data))
 		print(combined_lists)
-		return [data, combined_lists]
+		return [data, combined_lists, all_data]
 	
 

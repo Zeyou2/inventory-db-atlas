@@ -39,7 +39,7 @@
                                     {% for key, value in base.items() %}
                                         <div class="card-links position-absolute" style="top: 1px; right: 1px;">
                                             <a href="/edit_card/{{ collection_name }}/{{ base['Código'] }}" class="btn btn-sm btn-success me-2">Editar</a>
-                                            <a href="/excluir/{{ collection_name }}/{{ base['Código'] }}" class="btn btn-sm btn-danger">Excluir</a>
+                                            <a href="/desable_card/{{ collection_name }}/{{ base['Código'] }}" class="btn btn-sm btn-danger" onclick="return confirmarExclusao(event)">Excluir</a>
                                         </div>
                                         {% if "_title" in key %}
                                             <h5 class="card-title" style="font-weight: bold; color: #000000;">
@@ -92,26 +92,40 @@
         }
     </style>
 
-        <script>
-            // Função para filtrar os cards com base na pesquisa
-            function searchCards() {
-                var input, filter, cards, cardItems, cardTitle, i, txtValue;
-                input = document.getElementById("searchInput");
-                filter = input.value.toLowerCase();
-                cards = document.getElementById("card-container");
-                cardItems = cards.getElementsByClassName("card-item");
-
-                for (i = 0; i < cardItems.length; i++) {
-                    cardTitle = cardItems[i].getElementsByClassName("card-title")[0];
-                    if (cardTitle) {
-                        txtValue = cardTitle.textContent || cardTitle.innerText;
-                        if (txtValue.toLowerCase().indexOf(filter) > -1) {
-                            cardItems[i].style.display = "";
-                        } else {
-                            cardItems[i].style.display = "none";
-                        }
+    <script>
+        // Função para filtrar os cards com base na pesquisa
+        function searchCards() {
+            var input, filter, cards, cardItems, cardTitle, i, txtValue;
+            input = document.getElementById("searchInput");
+            filter = input.value.toLowerCase();
+            cards = document.getElementById("card-container");
+            cardItems = cards.getElementsByClassName("card-item");
+    
+            for (i = 0; i < cardItems.length; i++) {
+                cardTitle = cardItems[i].getElementsByClassName("card-title")[0];
+                if (cardTitle) {
+                    txtValue = cardTitle.textContent || cardTitle.innerText;
+                    if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                        cardItems[i].style.display = "";
+                    } else {
+                        cardItems[i].style.display = "none";
                     }
                 }
             }
-        </script>
-{% endblock %}
+        }
+    
+        // Função para exibir alerta de confirmação antes de excluir
+        function confirmarExclusao(event) {
+            // Exibe o alerta de confirmação
+            const confirmacao = confirm("Tem certeza que deseja excluir este item?");
+            
+            // Se o usuário cancelar, impede a navegação
+            if (!confirmacao) {
+                event.preventDefault(); // Impede o redirecionamento
+                return false;
+            }
+            // Se confirmado, segue para a rota
+            return true;
+        }
+    </script>
+    {% endblock %}
