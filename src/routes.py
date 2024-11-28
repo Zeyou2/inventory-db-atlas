@@ -86,10 +86,11 @@ def send(collection_name):
 @app.route('/view/<collection_name>', methods=['POST', 'GET'])
 # @jwt_required()
 def view(collection_name):
-    sample = manage_op.make_view_by_att(collection_name, {'table_visible': 1})
-    if sample:
-        return render_template('pages/view.html', titulo = "Inicio", collection_name = collection_name, sample = sample )
-    return jsonify(list(sample))
+    sample = manage_op.make_view_by_att(collection_name, {"status": "enabled"},
+                                                          ["status"]) 
+
+    return render_template('pages/view.html', titulo = "Inicio", collection_name = collection_name, sample = sample )
+    # return jsonify(list(sample))
 
 @app.route('/operation', methods=['POST',  'GET'])
 # @jwt_required(locations=["cookies"])
@@ -98,6 +99,8 @@ def operation():
     op_type = request.args.get("op_type")
     field = manage_op.render_op_form(op_type)
     final_field, combined_lists = list(), list()
+    
+    print("Esse", field[2])
     if op_type != None:
         combined_lists = field[1]
         final_field = field[0]
@@ -107,8 +110,8 @@ def operation():
 # @jwt_required(locations=["cookies"])
 def edit_card(collection_name, codigo):
     field = manage_op.make_datapack(collection_name, 1)
-    sample = manage_op.make_view_by_att(collection_name, {'table_visible': 1,'form_editable' : False})
-    # print("meu sample >>>>>>>", field)
+    sample = manage_op.make_view_by_att(collection_name, {})
+    print("meu sample >>>>>>>", sample)
     for x in sample:
         if x['Código'] == codigo:           
             one_request = manage_op.get_db_by_collection(collection_name, {'codigo' : codigo}, {})
@@ -116,28 +119,20 @@ def edit_card(collection_name, codigo):
 
 
 @app.route('/send/edit/<collection_name>/<codigo>', methods = ["POST", "GET"])
+# @jwt_required(locations=["cookies"])
 def edit(collection_name, codigo):
     form_values = {key: value for key, value in request.form.items()}
     # form_values['data_de_registro'] = 'edit_in ' + datetime.strftime(datetime.now(), "%Y-%m-%d %H:%M:%S")
-    if form_values["nova_categoria"] == '':
-        del form_values['nova_categoria']
+    form_values = manage_op.hand_mandatory_data(form_values, collection_name)
+    form_values = manage_op.send_treatment(collection_name, form_values)
     resultado = manage_op.inventory[collection_name].update_one({'codigo' : codigo}, {'$set': form_values})
     print(f"Documentos modificados: {resultado.modified_count}")
     print("form", collection_name, codigo, form_values)
     return redirect('/view/' + collection_name)
 
-# Rota de testes para visulização de cards
-@app.route('/view_test/<collection_name>', methods=['POST', 'GET'])
-# @jwt_required()
-def view_teste(collection_name):
-    # print("view test - collection: ", collection_name)
-    sample = manage_op.make_view_by_att(collection_name, {'table_visible': 1})
-    if sample:
-        return render_template('pages/view_test.html', titulo = "Inicio", collection_name = collection_name, sample = sample )
-    return jsonify(list(sample))
-
-@app.route('/div', methods=['POST',  'GET'])
+@app.route('/disable_card/<collection_name>/<codigo>', methods=['POST', 'GET'])
 # @jwt_required(locations=["cookies"])
-def div_teste():
-    
-    return render_template('pages/div_teste.html')
+def disable_card(collection_name, codigo):
+    resultado = manage_op.inventory[collection_name].update_one({"codigo":codigo} ,  {'$set': {"status" : 'disabled'}})
+    print(f"Documentos modificados: {resultado.modified_count}")
+    return redirect('/view/'+ collection_name)

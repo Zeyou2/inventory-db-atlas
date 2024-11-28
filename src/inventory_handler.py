@@ -67,7 +67,7 @@ class InventoryManager(Mongo_Manager, Files_Handling):
 		db = self.get_db_by_collection(collection, remove_el={'_id': 0, key: 1})
 		return [x[key] for x in db]
 	
-	def	field_treatment(self, collection:dict):
+	def	field_treatment(self, collection: dict):
 		for key, value in collection.items():
 			value["db_id"] = key
 			if value["resp_type"] == "db_list":
@@ -137,18 +137,24 @@ class Handle_Operations(InventoryManager):
 		list(map(lambda x: res_dict.update({x[0]:x[1]}), list_process))
 		return res_dict
 
-	def make_view_by_att(self, collection_name: str, options:dict):
+	def	filter_db_list(self, data: list[dict], options: dict):
+		for key, value in options.items():
+			print("key is: ", key ,"and value is: ", value)
+			data = list(filter(lambda x: x[key] == value, data))
+		return data
+	
+	def remove_field_from_list(self, data: list[dict], remove_list: list):
+		for i in remove_list:
+			for el in data:
+				del el[i]
+		return data
+
+	def make_view_by_att(self, collection_name: str, filter_els:dict, remove_field = []):
 		t_data = self.read_file("estruturas_de_dados.json", PATTERN_FOLDER)[collection_name]
-		filter_arg = {'_id': 0}
-		def non_filtred(filter_db:tuple, options: dict):
-			is_hidden = True
-			for key, value in options.items():
-				if filter_db[1][key] == value:
-					is_hidden = False
-					break
-				else:
-					is_hidden = True
-			return is_hidden
+		remove_status = {'_id': 0}
+		sample = (self.get_db_by_collection(collection_name, remove_el=remove_status))
+		sample = self.filter_db_list(sample, filter_els)
+		sample = self.remove_field_from_list(sample, remove_field)
 		def get_field_name(sample: list[dict], collection:dict):
 			# print("collection is: ", collection)
 			final = []
@@ -160,13 +166,8 @@ class Handle_Operations(InventoryManager):
 					else : key_updt = collection[key]["field_name"]
 					final[el].update({key_updt: value})
 			return final
-		pre_filter = list(filter(lambda x: non_filtred(x, options), t_data.items()))
-		# print("pre filter >> ", pre_filter)
-		list(map(lambda x : filter_arg.update({x[0]:0}), pre_filter))
-		print("filter arg is >> ", filter_arg)
-		sample = (self.get_db_by_collection(collection_name, remove_el=filter_arg))
-		# print("sample is >> ", sample)
 		result = get_field_name(sample, t_data)
+		print('result is', result)
 		return result
 
 	def process_user_registration(self, form_values):
@@ -224,7 +225,7 @@ class Handle_Operations(InventoryManager):
 			return user
 		else:
 			return None
-		
+
 	def make_op_pack(self, data:dict, form_visible=0|1):
 		dados = self.field_treatment(data)
 		field = list(filter(lambda value: value['form_visible'] == form_visible, dados.values()))
@@ -257,11 +258,13 @@ class Handle_Operations(InventoryManager):
 			return None
 		data = self.read_file("transf_op.json", PATTERN_FOLDER)["popular"]
 		data = self.make_op_pack(data[operation.lower()], 1)
+		all_data = data
+		
 		list_of_lists = [
 			item['list_elements'] for item in data if 'list_elements' in item and not ('db_origin' in item and 'pontos' in item['db_origin'])]
 		combined_lists = [" | ".join(items) for items in zip(*list_of_lists)]
 		data = list(filter(lambda x : x["db_id"] != "codigo" and x["db_id"] != "nome_produto", data))
 		print(combined_lists)
-		return [data, combined_lists]
+		return [data, combined_lists, all_data]
 	
 

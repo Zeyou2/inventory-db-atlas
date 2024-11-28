@@ -77,6 +77,7 @@ class Mongo_Manager(Files_Handling):
         docs = collection.find(filter_by, remove_el)
         for doc in docs:
             all_docs.append(doc)
+        print(all_docs)
         return all_docs
     
     def close_connection(self):
