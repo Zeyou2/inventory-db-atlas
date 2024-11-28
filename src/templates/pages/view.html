@@ -39,10 +39,11 @@
                                     {% for key, value in base.items() %}
                                         <div class="card-links position-absolute" style="top: 1px; right: 1px;">
                                             <a href="/edit_card/{{ collection_name }}/{{ base['Código'] }}" class="btn btn-sm btn-success me-2">Editar</a>
-                                            <a href="/desable_card/{{ collection_name }}/{{ base['Código'] }}" class="btn btn-sm btn-danger" onclick="return confirmarExclusao(event)">Excluir</a>
+                                            <a href="/disable_card/{{ collection_name }}/{{ base['Código'] }}" class="btn btn-sm btn-danger" onclick="return confirmarExclusao(event)">Excluir</a>
                                         </div>
+                                    
                                         {% if "_title" in key %}
-                                            <h5 class="card-title" style="font-weight: bold; color: #000000;">
+                                            <h5 class="card-title" style="font-weight: bold; color: #f00a0a;">
                                                 {{ value }} 
                                             </h5>
                                         {% endif %}
