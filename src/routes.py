@@ -100,7 +100,6 @@ def operation():
     field = manage_op.render_op_form(op_type)
     final_field, combined_lists = list(), list()
     
-    print("Esse", field[2])
     if op_type != None:
         combined_lists = field[1]
         final_field = field[0]
@@ -110,12 +109,9 @@ def operation():
 # @jwt_required(locations=["cookies"])
 def edit_card(collection_name, codigo):
     field = manage_op.make_datapack(collection_name, 1)
-    sample = manage_op.make_view_by_att(collection_name, {})
-    print("meu sample >>>>>>>", sample)
-    for x in sample:
-        if x['Código'] == codigo:           
-            one_request = manage_op.get_db_by_collection(collection_name, {'codigo' : codigo}, {})
-    return render_template('pages/edit_form.html', base = one_request, codigo = codigo, title = collection_name, collection_name = collection_name, field = field)
+    sample = manage_op.make_view_by_att(collection_name, {}, ty = "edit")
+    sample = [item for item in sample if item['Código'] == codigo]
+    return render_template('pages/edit_form.html', base = sample, codigo = codigo, title = collection_name, collection_name = collection_name, field = field)
 
 
 @app.route('/send/edit/<collection_name>/<codigo>', methods = ["POST", "GET"])

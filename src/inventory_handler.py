@@ -149,7 +149,7 @@ class Handle_Operations(InventoryManager):
 				del el[i]
 		return data
 
-	def make_view_by_att(self, collection_name: str, filter_els:dict, remove_field = []):
+	def make_view_by_att(self, collection_name: str, filter_els:dict, remove_field = [], ty = None):
 		t_data = self.read_file("estruturas_de_dados.json", PATTERN_FOLDER)[collection_name]
 		remove_status = {'_id': 0}
 		sample = (self.get_db_by_collection(collection_name, remove_el=remove_status))
@@ -161,13 +161,12 @@ class Handle_Operations(InventoryManager):
 			for el in range(0, len(sample)):
 				final.append({})
 				for key, value in sample[el].items():
-					if collection[key].get("title") != None:
+					if collection[key].get("title") != None and ty == None:
 						key_updt = collection[key]["field_name"] + "_title"
 					else : key_updt = collection[key]["field_name"]
 					final[el].update({key_updt: value})
 			return final
 		result = get_field_name(sample, t_data)
-		print('result is', result)
 		return result
 
 	def process_user_registration(self, form_values):
