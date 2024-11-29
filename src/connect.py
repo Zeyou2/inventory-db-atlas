@@ -97,7 +97,6 @@ class Mongo_Manager(Files_Handling):
 
     def reset_inv(self, collection):
         self.inventory.get_collection(collection).delete_many({})
-        # data = self.read_file("estruturas_de_dados.json", PATTERN_FOLDER)
         resp = {}
         if (collection == "categoria"):
             resp[collection] = {"categoria" : "lorem ipsum"}

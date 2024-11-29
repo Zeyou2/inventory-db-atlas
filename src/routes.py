@@ -100,7 +100,6 @@ def operation():
     field = manage_op.render_op_form(op_type)
     final_field, combined_lists = list(), list()
     
-    print("Esse", field[2])
     if op_type != None:
         combined_lists = field[1]
         final_field = field[0]

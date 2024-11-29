@@ -59,7 +59,8 @@
 			"pre_value" : "",
 			"pergunta": "Senha",
 			"resp_type": "password",
-			"em_branco": "False"
+			"em_branco": "False",
+			"field_name": "senha"
 		},
 		"status": {
 			"table_visible": 0,

@@ -82,6 +82,7 @@ class InventoryManager(Mongo_Manager, Files_Handling):
 class Handle_Operations(InventoryManager):
 	def __init__(self, central):
 		super().__init__(central)
+		self.dt_struct = self.read_file("estruturas_de_dados.json", PATTERN_FOLDER)
 
 	def get_last_code(self, collection_name):
 		def parse_code(code: str):
@@ -115,14 +116,14 @@ class Handle_Operations(InventoryManager):
 	Returns:
 		list: A list of fields that are editable and can be used to create a form.
 	"""
-		data = self.read_file('estruturas_de_dados.json', PATTERN_FOLDER)
+		data = self.dt_struct
 		dados = self.field_treatment(data[collection_name])
 		field = list(filter(lambda value: value['form_visible'] == form_visible, dados.values()))
 
 		return field
 	
 	def filter_data_struct(self, collection_name:str, options:dict):
-		t_data = self.read_file("estruturas_de_dados.json", PATTERN_FOLDER)[collection_name]
+		t_data = self.dt_struct[collection_name]
 		res_dict = dict()
 		def filter_att(filter_db:tuple, options: dict):
 			att_true = True
@@ -137,24 +138,35 @@ class Handle_Operations(InventoryManager):
 		list(map(lambda x: res_dict.update({x[0]:x[1]}), list_process))
 		return res_dict
 
-	def	filter_db_list(self, data: list[dict], options: dict):
+	def filter_db_list(self, data: list[dict], options: dict):
 		for key, value in options.items():
 			print("key is: ", key ,"and value is: ", value)
 			data = list(filter(lambda x: x[key] == value, data))
 		return data
 	
-	def remove_field_from_list(self, data: list[dict], remove_list: list):
+	def rm_dbfield(self, data: list[dict], remove_list: list):
 		for i in remove_list:
 			for el in data:
 				del el[i]
 		return data
 
+	def filter_db_by_dtstruct(self, data: list[dict], collection_name: str, filter_by: dict):
+		t_data = self.dt_struct[collection_name]
+		result = []
+		for key, value in filter_by.items():
+			t_data = list(filter(lambda x: x[1][key] == value, t_data.items()))
+		t_data = list(map(lambda x: x[0], t_data))
+		for value in data:
+			result.append({x: value[x] for x in t_data})
+		return result
+		
 	def make_view_by_att(self, collection_name: str, filter_els:dict, remove_field = []):
-		t_data = self.read_file("estruturas_de_dados.json", PATTERN_FOLDER)[collection_name]
+		t_data = self.dt_struct[collection_name]
 		remove_status = {'_id': 0}
 		sample = (self.get_db_by_collection(collection_name, remove_el=remove_status))
 		sample = self.filter_db_list(sample, filter_els)
-		sample = self.remove_field_from_list(sample, remove_field)
+		sample = self.rm_dbfield(sample, remove_field)
+		sample = self.filter_db_by_dtstruct(sample, collection_name, {"table_visible": 1})
 		def get_field_name(sample: list[dict], collection:dict):
 			# print("collection is: ", collection)
 			final = []
@@ -167,7 +179,7 @@ class Handle_Operations(InventoryManager):
 					final[el].update({key_updt: value})
 			return final
 		result = get_field_name(sample, t_data)
-		print('result is', result)
+		print('visualization will be:', result)
 		return result
 
 	def process_user_registration(self, form_values):
