@@ -16,25 +16,14 @@
                 Este e-mail ou nome de usuário já está cadastrado.
             </div>
         {% endif %}
-        <form action="{{ url_for('send', collection_name="usuarios") }}" method="POST">
+        <form action="{{ url_for('send', collection_name='usuarios', codigo = 'codigo') }}" method="POST">
             
                 <fieldset>
                     {% for x in field %}
                     <div class="form-floating mb-3p">
-                        {% if x['pergunta'] == "Senha" %}
                         <input type="{{ x['resp_type'] }}" id="{{ x['pergunta']  }}" name="{{ x['pergunta'] }}"
                                 class="form-control" placeholder="{{ x['pergunta']  }}" required>
                         <label for="{{ x['pergunta'] }}">{{ x['pergunta'] }}</label>
-                       
-                        {% elif x['pergunta'] == "Contato" %}
-                            <input type="tel" id="{{ x['pergunta']  }}" name="{{ x['pergunta'] }}"
-                            class="form-control" placeholder="{{ x['pergunta']  }}"  required>
-                            <label for="{{ x['pergunta'] }}">{{ x['pergunta'] }}</label>
-                        {% else %}
-                            <input type="{{ x['resp_type'] }}" id="{{ x['pergunta']  }}" name="{{ x['pergunta'] }}"
-                                class="form-control" placeholder="{{ x['pergunta']  }}" required>
-                            <label for="{{ x['pergunta'] }}">{{ x['pergunta'] }}</label>
-                        {% endif %}
                     </div>
                     
                     {% endfor %}
@@ -43,8 +32,8 @@
                 </fieldset>
             </form>
             
-            <p>Já tem uma conta?</p>
-            <a href="{{ url_for('login') }}" class="btn btn-link">Fazer Login</a>
+            <!-- <p>Já tem uma conta?</p>
+            <a href="{{ url_for('login') }}" class="btn btn-link">Fazer Login</a> -->
             
     </main>
 
