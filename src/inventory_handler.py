@@ -82,6 +82,7 @@ class InventoryManager(Mongo_Manager, Files_Handling):
 class Handle_Operations(InventoryManager):
 	def __init__(self, central):
 		super().__init__(central)
+		self.dt_struct = self.read_file("estruturas_de_dados.json", PATTERN_FOLDER)
 
 	def get_last_code(self, collection_name):
 		def parse_code(code: str):
@@ -115,6 +116,7 @@ class Handle_Operations(InventoryManager):
 	Returns:
 		list: A list of fields that are editable and can be used to create a form.
 	"""
+
 		data = self.read_file("estruturas_de_dados.json", PATTERN_FOLDER)
 		dados = self.field_treatment(data[collection_name])
 		# print('dados', dados)
@@ -126,6 +128,7 @@ class Handle_Operations(InventoryManager):
 		t_data = self.read_file("estruturas_de_dados.json", PATTERN_FOLDER)[collection_name]
 		print("t data is: ",t_data)
 		res_dict = {}
+    
 		def filter_att(filter_db:tuple, options: dict):
 			att_true = True
 			for key, value in options.items():
@@ -171,7 +174,7 @@ class Handle_Operations(InventoryManager):
 		return result
 		
 	def make_view_by_att(self, collection_name: str, filter_els:dict, remove_field = []):
-		t_data = self.read_file("estruturas_de_dados.json", PATTERN_FOLDER)[collection_name]
+		t_data = self.dt_struct[collection_name]
 		remove_status = {'_id': 0}
 		sample = (self.get_db_by_collection(collection_name, remove_el=remove_status))
 		sample = self.filter_db_list(sample, filter_els)
@@ -189,7 +192,6 @@ class Handle_Operations(InventoryManager):
 					final[el].update({key_updt: value})
 			return final
 		result = get_field_name(sample, t_data)
-		# print('visualization will be:', result)
 		return result
 
 	def process_user_registration(self, form_values):
