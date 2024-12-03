@@ -77,7 +77,7 @@ class InventoryManager(Mongo_Manager, Files_Handling):
 			value["em_branco"] = "required" if value["em_branco"] == "False" else ""
 			value["form_editable"] = "readonly" if value["form_editable"] == "False" else ""
 			value["pre_value"] = datetime.strftime(datetime.now(), "%Y-%m-%d") if value["pre_value"] == "datetime_now" else value["pre_value"] 
-		# print("end of field treatment -> dict is: ", collection)
+		print("end of field treatment -> dict is: ", collection)
 		return collection
 class Handle_Operations(InventoryManager):
 	def __init__(self, central):
@@ -92,7 +92,7 @@ class Handle_Operations(InventoryManager):
 		num = 0
 		db = self.get_db_by_collection(collection_name)
 		for elem in db:
-			print("elem is: ", elem)
+			# print("elem is: ", elem)
 			if (elem.get("codigo") != None):
 				num_check = parse_code(elem["codigo"])
 				if num_check == None:
@@ -116,15 +116,19 @@ class Handle_Operations(InventoryManager):
 	Returns:
 		list: A list of fields that are editable and can be used to create a form.
 	"""
-		data = self.dt_struct
-		dados = self.field_treatment(data[collection_name])
-		field = list(filter(lambda value: value['form_visible'] == form_visible, dados.values()))
 
+		data = self.read_file("estruturas_de_dados.json", PATTERN_FOLDER)
+		dados = self.field_treatment(data[collection_name])
+		# print('dados', dados)
+		field = list(filter(lambda value: value['form_visible'] == form_visible, dados.values()))
+		# print('field is:', field)
 		return field
 	
 	def filter_data_struct(self, collection_name:str, options:dict):
-		t_data = self.dt_struct[collection_name]
-		res_dict = dict()
+		t_data = self.read_file("estruturas_de_dados.json", PATTERN_FOLDER)[collection_name]
+		print("t data is: ",t_data)
+		res_dict = {}
+    
 		def filter_att(filter_db:tuple, options: dict):
 			att_true = True
 			for key, value in options.items():
@@ -136,11 +140,20 @@ class Handle_Operations(InventoryManager):
 			return att_true
 		list_process =  list(filter(lambda x: filter_att(x, options), t_data.items()))
 		list(map(lambda x: res_dict.update({x[0]:x[1]}), list_process))
+		print("res dict is: ", res_dict)
 		return res_dict
+
+	def edit_preview(self, code,  field, collection_name):
+		data = self.get_db_by_collection(collection_name, {"codigo": code})[0]
+		# print("data in edit preview: ", data)
+		# print("field in preview is: ", field)
+		for el in field:
+			el["pre_value"] = data[el["db_id"]]
+		return (field)
 
 	def filter_db_list(self, data: list[dict], options: dict):
 		for key, value in options.items():
-			print("key is: ", key ,"and value is: ", value)
+			# print("key is: ", key ,"and value is: ", value)
 			data = list(filter(lambda x: x[key] == value, data))
 		return data
 	
@@ -151,7 +164,7 @@ class Handle_Operations(InventoryManager):
 		return data
 
 	def filter_db_by_dtstruct(self, data: list[dict], collection_name: str, filter_by: dict):
-		t_data = self.dt_struct[collection_name]
+		t_data = self.read_file("estruturas_de_dados.json", PATTERN_FOLDER)[collection_name]
 		result = []
 		for key, value in filter_by.items():
 			t_data = list(filter(lambda x: x[1][key] == value, t_data.items()))
@@ -168,7 +181,7 @@ class Handle_Operations(InventoryManager):
 		sample = self.rm_dbfield(sample, remove_field)
 		sample = self.filter_db_by_dtstruct(sample, collection_name, {"table_visible": 1})
 		def get_field_name(sample: list[dict], collection:dict):
-			# print("collection is: ", collection)
+			# # print("collection is: ", collection)
 			final = []
 			for el in range(0, len(sample)):
 				final.append({})
@@ -179,7 +192,6 @@ class Handle_Operations(InventoryManager):
 					final[el].update({key_updt: value})
 			return final
 		result = get_field_name(sample, t_data)
-		print('visualization will be:', result)
 		return result
 
 	def process_user_registration(self, form_values):
@@ -190,20 +202,22 @@ class Handle_Operations(InventoryManager):
 		salt = bcrypt.gensalt()
 		password = form_values['senha'].encode('utf-8')
 		hash_password = bcrypt.hashpw(password, salt)
-		
 		form_values["senha"] = base64.b64encode(hash_password).decode('utf-8')
 		return form_values
 		
 	def hand_mandatory_data(self, form_value, collection_name):
 		hidden = self.filter_data_struct(collection_name, {"form_editable": 'False'})
-		hidden = self.field_treatment(hidden)
-		for elem in hidden.values():
+		form_filtered = self.field_treatment(hidden)
+		print("hidden is: ", hidden)
+		for elem in form_filtered.values():
 			for key, value in elem.items():
 				if key == "db_id" and value == "codigo":
+					print("Entered in codigo")
 					form_value[value] = elem["prefixo"] + str(self.get_last_code(collection_name))
 				elif key == "db_id" and value == "data_de_registro":
 					form_value[value] = datetime.strftime(datetime.now(), "%Y-%m-%d %H:%M:%S")
 		form_value["status"] = "enabled"
+		print("form value now is:-----------------------------", form_value)
 		return form_value
 
 	def process_user_validation(self, form_values):
@@ -225,7 +239,7 @@ class Handle_Operations(InventoryManager):
 			Returns `None` if the user is not found or if the password is incorrect.
 	"""
 		email = form_values.get('email')
-		# print("user is", email)
+		# # print("user is", email)
 		senha = form_values.get('senha').encode('utf-8')
 		users_collection = self.inventory['usuarios']
 		user = users_collection.find_one({"Email" : email})
@@ -276,7 +290,7 @@ class Handle_Operations(InventoryManager):
 			item['list_elements'] for item in data if 'list_elements' in item and not ('db_origin' in item and 'pontos' in item['db_origin'])]
 		combined_lists = [" | ".join(items) for items in zip(*list_of_lists)]
 		data = list(filter(lambda x : x["db_id"] != "codigo" and x["db_id"] != "nome_produto", data))
-		print(combined_lists)
+		# print(combined_lists)
 		return [data, combined_lists, all_data]
 	
 

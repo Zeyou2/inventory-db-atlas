@@ -16,7 +16,7 @@
 			"form_visible": 0,
 			"pre_value": "",
 			"pergunta": "",
-			"resp_type": "int",
+			"resp_type": "str",
 			"em_branco": "False", 
 			"prefixo" : "US_",
 			"field_name": "Código"
@@ -90,7 +90,7 @@
 			"form_visible": 0,
 			"pre_value": "",
 			"pergunta": "",
-			"resp_type": "int",
+			"resp_type": "str",
 			"em_branco": "False",
 			"prefixo" : "PROD_",
 			"field_name": "Código"
@@ -155,7 +155,7 @@
 			"form_visible": 0,
 			"pre_value": "",
 			"pergunta": "",
-			"resp_type": "int",
+			"resp_type": "str",
 			"em_branco": "False", 
 			"prefixo" : "LOC_",
 			"field_name": "Código"

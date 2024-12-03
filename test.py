@@ -2,7 +2,7 @@ from src.inventory_handler import Handle_Operations
 from src.connect import Mongo_Manager
 
 op = Handle_Operations("central.json")
-# # print(op.filter_data_struct("usuarios", {'table_visible': 1}))
+# # # print(op.filter_data_struct("usuarios", {'table_visible': 1}))
 # hidden = op.filter_data_struct("usuarios", {"form_editable": 'False'})
 # hidden = op.field_treatment(hidden)
 # print(hidden.values())

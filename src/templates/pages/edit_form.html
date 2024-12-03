@@ -8,47 +8,39 @@
     <form action="{{ url_for('edit', collection_name=title, codigo = codigo) }}" method="POST">
         <fieldset>
             {% for x in field %}
-            {% for y in base %}
             <div class="form-group" style="font-weight: bold;">
                 <!-- This is a fixed control form used to register the actual date. -->
                 {% if x['pergunta'] == "Categoria do Produto" %}
                 <label for="{{ x['db_id'] }}">{{ x['pergunta'] }}</label>
-                <select id="{{ x['db_id'] }}" name="{{ x['db_id'] }}" value="base['categorias']" class="form-control" onchange="toggleNewCategory(this)" >
+                <select id="{{ x['db_id'] }}" name="{{ x['db_id'] }}" value="{{ x['pre_value'] }}"
+                    class="form-control" onchange="toggleNewCategory(this)">
                     {% for el in x['list_elements'] %}
-                        <option value="{{ el }}">{{ el }}</option>
+                    <option value="{{ el }}">{{ el }}</option>
                     {% endfor %}
                     <option value="nova_categoria">Nova Categoria</option>
-                 
+
                 </select>
-                    {% if categoria == nova_categoria %}
-                    <input type="text" id="nova_categoria_input" name="nova_categoria" class="form-control mt-2" placeholder="Digite nova categoria" style="display: none;">
-                    {% endif %}
+                {% if categoria == nova_categoria %}
+                <input type="text" id="nova_categoria_input" name="nova_categoria" class="form-control mt-2"
+                    placeholder="Digite nova categoria" style="display: none;">
+                {% endif %}
 
                 {% elif x['resp_type'] == "list" %}
-                    <label for="{{ x['db_id'] }}">{{ x['pergunta'] }}</label>
-                    <select id="{{ x['db_id'] }}" name="{{ x['db_id'] }}" value="" class="form-control" {{ x["em_branco"] }} {{ x['form_editable'] }}>
-                        {% for el in x['list_elements'] %}
-                            
-                            <option value ="{{el}}">{{el}}</option>
+                <label for="{{ x['db_id'] }}">{{ x['pergunta'] }}</label>
+                <select id="{{ x['db_id'] }}" name="{{ x['db_id'] }}" value="" class="form-control">
+                    {% for el in x['list_elements'] %}
 
-                        {% endfor %}
-                    </select>
+                    <option value="{{el}}">{{el}}</option>
 
-                {% elif x['pergunta'] == "Nome do produto" %}
-                    <label for="{{ x['db_id'] }}">{{ x["pergunta"] }}</label>
-                    <input type="{{ x['resp_type'] }}" id="{{ x['db_id'] }}" name="{{ x['db_id'] }}" value="{{ y['nome'] }}" class="form-control" {{ x["em_branco"] }} {{ x['form_editable'] }} >
-                {% elif x['pergunta'] == "Serie" %}
-                    <label for="{{ x['db_id'] }}">{{ x["pergunta"] }}</label>
-                    <input type="{{ x['resp_type'] }}" id="{{ x['db_id'] }}" name="{{ x['db_id'] }}" value="{{ y['id_produto'] }}" class="form-control" {{ x["em_branco"] }} {{ x['form_editable'] }} >
-                {% elif x['pergunta'] == "Descrição"  %}
-                    <label for="{{ x['db_id'] }}">{{ x["pergunta"] }}</label>
-                    <input type="{{ x['resp_type'] }}" id="{{ x['db_id'] }}" name="{{ x['db_id'] }}" value="{{ y['observacao'] }}" class="form-control" {{ x["em_branco"] }} {{ x['form_editable'] }} >
+                    {% endfor %}
+                </select>
+
                 {% else %}
                 <label for="{{ x['db_id'] }}">{{ x["pergunta"] }}</label>
-                <input type="" id="{{ x['db_id'] }}" name="{{ x['db_id'] }}" value="{{ y['data_de_registro'] }}" class="form-control" readonly >
+                <input type="" id="{{ x['db_id'] }}" name="{{ x['db_id'] }}" value="{{ x['pre_value'] }}"
+                    class="form-control" {{ x["em_branco"] }} {{ x['form_editable'] }}>
                 {% endif %}
-                </div>
-            {% endfor %}
+            </div>
             {% endfor %}
             <button type="submit" class="btn btn-primary">Salvar</button>
         </fieldset>

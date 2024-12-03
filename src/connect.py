@@ -32,8 +32,8 @@ class Mongo_Manager(Files_Handling):
         data = self.read_file("central.json", PATTERN_FOLDER)
         for key, value in data.items():
                 docs = self.inventory[key].insert_many(value.get(operation_type))
-                print(f'O item foi adicionado!')
-        print(f'\nNumero de elementos inseridos no Banco de dados: [{len(docs.inserted_ids)}].')
+                # print(f'O item foi adicionado!')
+        # print(f'\nNumero de elementos inseridos no Banco de dados: [{len(docs.inserted_ids)}].')
 
     def edit_in_db(self, filter_db : dict, operation_type):
         """
@@ -57,7 +57,7 @@ class Mongo_Manager(Files_Handling):
         data = self.read_file("central.json", PATTERN_FOLDER)
         for key, value in data.items():
             result = self.inventory[key].update_many(filter_db, {"$set": value.get(operation_type)[0]})
-            print(f'O elemento foi atualizado!')
+            # print(f'O elemento foi atualizado!')
         return result
     #verificar função
     def search_in_db(self, collection_name):
@@ -72,25 +72,25 @@ class Mongo_Manager(Files_Handling):
     def get_db_by_collection(self, collection_name, filter_by={}, remove_el={'_id': 0}):
         db = self.inventory
         all_docs = []
-        print("colection name is:", collection_name)
+        # print("colection name is:", collection_name)
         collection = db[collection_name]
         docs = collection.find(filter_by, remove_el)
         for doc in docs:
             all_docs.append(doc)
-        print(all_docs)
+        # print(all_docs)
         return all_docs
     
     def close_connection(self):
         try:
             self.client.close()
-            print("MongoDB connection closed successfully.")
+            # print("MongoDB connection closed successfully.")
         except Exception as e:
             print(f"Error closing the connection: {e}")
 
     def connection_teste(self):
         try:
             self.client.admin.command("ping")
-            print("Conectado ao MongoDB Atlas com sucesso!")
+            # print("Conectado ao MongoDB Atlas com sucesso!")
         except Exception as e:
             print(f"Erro na conexão: {e}")
 
@@ -108,11 +108,11 @@ class Mongo_Manager(Files_Handling):
     def print_db(self, collection):
         db_sample = self.inventory[collection]
         object_db = db_sample.find_one({'Email': 'Alex@mov'}, {"Email" : 1})
-        print(object_db)
+        # print(object_db)
         # data = []
         # for names in object_db:
         #     data.append(names.get('Email'))
-        # print(data)
+        # # print(data)
 
 
     # def edit_db(self, collection_name):
@@ -126,7 +126,7 @@ class Mongo_Manager(Files_Handling):
         
     #     # for key, value in data.items():
     #     #     result = self.inventory[key].update_many(filter_db, {"$set": value.get(operation_type)[0]})
-    #     #     print(f'O elemento foi atualizado!')
+    #     #     # print(f'O elemento foi atualizado!')
     #     return result
 
     
