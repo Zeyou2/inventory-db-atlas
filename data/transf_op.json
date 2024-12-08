@@ -243,10 +243,7 @@
 				"form_visible": 1,
 				"pre_value": "",
 				"pergunta": "Numero de Série ou Patrimônio: ",
-				"resp_type": "db_list",
-				"db_origin": {
-					"produtos": "id_produto"
-				},
+				"resp_type": "str",
 				"em_branco": "False",
 				"field_name": "Id do produto"
 			},
