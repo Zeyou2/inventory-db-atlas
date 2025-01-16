@@ -4,8 +4,8 @@ from utils.env_p import *
 from inventory_handler import Handle_Operations
 from datetime import datetime
 from bson.objectid import ObjectId
-
-
+import os
+from itertools import zip_longest
 
 manage_op = Handle_Operations("central.json")
 app = Flask(__name__)
@@ -89,8 +89,25 @@ def send(collection_name):
 # @jwt_required()
 def view(collection_name):
     sample = manage_op.make_view_by_att(collection_name, {"status": "enabled"}) 
-
-    return render_template('pages/view.html', titulo = "Inicio", collection_name = collection_name, sample = sample )
+    base_dir = os.path.abspath(os.path.dirname(__file__))
+    path = os.path.join(base_dir, 'static/images_db')
+    file = os.listdir(path)
+    print(path)
+    category_filter = []
+    for db_dict in sample:
+        entered = 0
+        for icon in file:
+            icon = icon.split("-")[1]
+            print(icon.split('.')[0])
+            if db_dict['Categoria'].lower() == icon.split('.')[0]:
+                category_filter.append(icon)
+                entered = 1
+                break
+        if entered == 0:
+            category_filter.append("notfound.jpg")
+    print(category_filter)
+    zipped = zip_longest(sample, category_filter, fillvalue=None)
+    return render_template('pages/view.html', titulo = "Inicio", collection_name = collection_name, zipped = zipped)
     # return jsonify(list(sample))
 
 @app.route('/operation', methods=['POST',  'GET'])
