@@ -21,7 +21,6 @@ def login():
 
 @app.route("/validate_user", methods=["POST"])
 def validate_user():
-    # print("Entered")
     form_values = request.form
     user = manage_op.process_user_validation(form_values)
     if user == None:
@@ -39,7 +38,7 @@ def index():
     colec = manage_op.inventory.list_collection_names()
     sample = manage_op.get_db_by_collection('usuarios')
     if request.method == "POST":
-        print("Requisiçao recebida")
+        ("Requisiçao recebida")
     return render_template('index.html', titulo = "Inicio", item_list = colec, sample = sample,  redirect = redirect("/form"))
 
 @app.route('/cadastro/<collection_name>', methods=['POST',  'GET'])
@@ -54,7 +53,6 @@ def register_user(collection_name = "usuarios"):
     login_check = request.args.get('login_check', default=None, type=bool)
     field = manage_op.make_datapack(collection_name, 1)
     now = datetime.strftime(datetime.now(), "%Y-%m-%d")
-    # print('field is:', field)
    
     return render_template('pages/register_user.html', field = field, now = now, login_check = login_check)
 
@@ -62,11 +60,9 @@ def register_user(collection_name = "usuarios"):
 # @jwt_required()
 def send(collection_name):
     form_values = {key: value for key, value in request.form.items()}
-
-    # print('teste >>>>>>>', form_values)
     url_args = request.args.to_dict()
-    # print("form values before: ", form_values)
-    if url_args.get('op_type') != None:
+    op_type = url_args.get('op_type')
+    if op_type != None:
         redirect_to = "/operation"
         form_values.update({'operacao': url_args.get("op_type")})
     else:
@@ -76,7 +72,6 @@ def send(collection_name):
         form_values = manage_op.hand_mandatory_data(form_values, collection_name)
         form_values = manage_op.send_treatment(collection_name, form_values)
 
-    # print("prestes a enviar -> form values is: ", form_values)
     if collection_name == "usuarios":
         form_values = manage_op.process_user_registration(form_values)
         if form_values == None:
@@ -85,6 +80,9 @@ def send(collection_name):
     manage_op.save_to_central(form_values, collection_name,'create')
     manage_op.insert_into_db('create')
     manage_op.delete_central()
+
+    if collection_name == "transferencia":
+        manage_op.create_position(form_values)
     return redirect(redirect_to)
 
 @app.route('/view/<collection_name>', methods=['POST', 'GET'])
@@ -106,6 +104,7 @@ def operation():
     if op_type != None:
         combined_lists = field[1]
         final_field = field[0]
+    # print(f"combined list is: {combined_lists}, final field: {final_field}")
     return render_template('pages/populate.html', options=options, op_type=op_type, field=final_field, combined_lists = combined_lists)
 
 @app.route('/edit_card/<collection_name>/<codigo>', methods=['POST', 'GET'])
@@ -125,13 +124,11 @@ def edit(collection_name, codigo):
     form_values = manage_op.hand_mandatory_data(form_values, collection_name)
     form_values = manage_op.send_treatment(collection_name, form_values)
     resultado = manage_op.inventory[collection_name].update_one({'codigo' : codigo}, {'$set': form_values})
-    # print(f"Documentos modificados: {resultado.modified_count}")
-    # print("form", collection_name, codigo, form_values)
     return redirect('/view/' + collection_name)
 
 @app.route('/disable_card/<collection_name>/<codigo>', methods=['POST', 'GET'])
 # @jwt_required(locations=["cookies"])
 def disable_card(collection_name, codigo):
     resultado = manage_op.inventory[collection_name].update_one({"codigo":codigo} ,  {'$set': {"status" : 'disabled'}})
-    # print(f"Documentos modificados: {resultado.modified_count}")
+    print(f"Documentos modificados: {resultado.modified_count}")
     return redirect('/view/'+ collection_name)
