@@ -112,7 +112,8 @@ def view(collection_name):
                 category_filter.append("notfound.jpg")
         print(category_filter)
         zipped = zip_longest(sample, category_filter, fillvalue=None)
-    return render_template('pages/view.html', titulo = "Inicio", collection_name = collection_name, zipped = zipped)
+        return render_template('pages/view.html', titulo = "Inicio", collection_name = collection_name, zipped = zipped)
+    return render_template('pages/view.html', titulo = "Inicio", collection_name = collection_name, sample = sample)
     # return jsonify(list(sample))
 
 @app.route('/operation', methods=['POST',  'GET'])
@@ -133,7 +134,7 @@ def operation():
 # @jwt_required(locations=["cookies"])
 def edit_card(collection_name, codigo):
     field = manage_op.make_datapack(collection_name, 1)
-    field = manage_op.edit_preview(codigo, field, collection_name)
+    field = manage_op.edit_preview(database, codigo, field, collection_name)
     # sample = manage_op.make_view_by_att(collection_name, {}, ty = "edit")
     return render_template('pages/edit_form.html', codigo = codigo, title = collection_name, collection_name = collection_name, field = field)
 
