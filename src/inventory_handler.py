@@ -1,12 +1,12 @@
 from src.components.Files_Handler.module.file_handler import Files_Handling
 from datetime import datetime
-from utils.env_p import PATTERN_FOLDER
+from utils.env_p import PATTERN_FOLDER, URI
 from src.connect import Mongo_Manager
 import bcrypt
 import base64
 
 class InventoryManager(Mongo_Manager, Files_Handling):
-	def __init__(self, central_data):
+	def __init__(self, central_data, db_name):
 		"""
 		Manages inventory operations by handling data storage and retrieval.
 
@@ -19,9 +19,10 @@ class InventoryManager(Mongo_Manager, Files_Handling):
 			central_data (str): The path to the central data file.
 			path (str): The directory path for file operations.
 		"""
-		Mongo_Manager.__init__(self, "inventory")
+		Mongo_Manager.__init__(self, URI)
 		self.central_data = central_data
 		self.path = PATTERN_FOLDER
+		self.database = Mongo_Manager(URI).set_db(db_name)
 	
 	def save_to_central(self, form_values, collection_name, operation_type):
 		"""
@@ -69,7 +70,7 @@ class InventoryManager(Mongo_Manager, Files_Handling):
 		if collection != "categoria":
 			print("entrei !")
 			filter_by["status"] = "enabled"
-		db = self.get_db_by_collection(collection, filter_by, remove_el={'_id': 0, key: 1})
+		db = self.get_db_by_collection(self.database, collection, filter_by, remove_el={'_id': 0, key: 1})
 		return [x[key] for x in db]
 	
 	def	field_treatment(self, collection: dict):
@@ -83,10 +84,12 @@ class InventoryManager(Mongo_Manager, Files_Handling):
 			value["form_editable"] = "readonly" if value["form_editable"] == "False" else ""
 			value["pre_value"] = datetime.strftime(datetime.now(), "%Y-%m-%d") if value["pre_value"] == "datetime_now" else value["pre_value"] 
 		return collection
+	
 class Handle_Operations(InventoryManager):
-	def __init__(self, central):
-		super().__init__(central)
+	def __init__(self, central, db_name):
+		super().__init__(central, db_name)
 		self.dt_struct = self.read_file("estruturas_de_dados.json", PATTERN_FOLDER)
+		self.database = Mongo_Manager(URI).set_db(db_name)
 
 	def get_last_code(self, collection_name):
 		def parse_code(code: str):
@@ -94,7 +97,7 @@ class Handle_Operations(InventoryManager):
 			try: return (int(num_code))
 			except: return None
 		num = 0
-		db = self.get_db_by_collection(collection_name)
+		db = self.get_db_by_collection(self.database,collection_name)
 		for elem in db:
 			if (elem.get("codigo") != None):
 				num_check = parse_code(elem["codigo"])
@@ -142,8 +145,8 @@ class Handle_Operations(InventoryManager):
 		list(map(lambda x: res_dict.update({x[0]:x[1]}), list_process))
 		return res_dict
 
-	def edit_preview(self, code,  field, collection_name):
-		data = self.get_db_by_collection(collection_name, {"codigo": code})[0]
+	def edit_preview(self, database, code,  field, collection_name):
+		data = self.get_db_by_collection(self.database, collection_name, {"codigo": code})[0]
 		for el in field:
 			el["pre_value"] = data[el["db_id"]]
 		return (field)
@@ -172,7 +175,7 @@ class Handle_Operations(InventoryManager):
 	def make_view_by_att(self, collection_name: str, filter_els:dict, remove_field = []):
 		t_data = self.dt_struct[collection_name]
 		remove_status = {'_id': 0}
-		sample = (self.get_db_by_collection(collection_name, remove_el=remove_status))
+		sample = (self.get_db_by_collection(self.database, collection_name, remove_el=remove_status))
 		sample = self.filter_db_list(sample, filter_els)
 		sample = self.rm_dbfield(sample, remove_field)
 		sample = self.filter_db_by_dtstruct(sample, collection_name, {"table_visible": 1})
@@ -191,7 +194,7 @@ class Handle_Operations(InventoryManager):
 		return result
 
 	def process_user_registration(self, form_values):
-		sample = self.get_db_by_collection("usuarios")
+		sample = self.get_db_by_collection(self.database, "usuarios")
 		for x in sample:
 			if form_values['email'] == x["email"] or form_values['nome'] == x["nome"]:
 				return None  
@@ -233,7 +236,7 @@ class Handle_Operations(InventoryManager):
 	"""
 		email = form_values.get('email')
 		senha = form_values.get('senha').encode('utf-8')
-		users_collection = self.inventory['usuarios']
+		users_collection = self.database['usuarios']
 		user = users_collection.find_one({"Email" : email})
 		if user:
 			password = base64.b64decode(user["Senha"])

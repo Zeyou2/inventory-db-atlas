@@ -7,14 +7,18 @@ from src.components.Files_Handler.module.file_handler import Files_Handling
 
 
 class Mongo_Manager(Files_Handling):
-    def __init__(self, db_name):
-        self.client = MongoClient(URI, server_api=ServerApi("1"))
-        self.inventory = self.client[db_name]
+    def __init__(self, uri):
+        self.client = MongoClient(uri, server_api=ServerApi("1"))
 
-    def teste(self):
-        self.inventory["inventory"].insert_many("produtos")
+    def set_db(self, db_name : str):
+        return self.client[db_name]
+        
+    def teste(self, database, collection_name, data):
+        database[collection_name].insert_many(data)
+        print(f"Documentos inseridos no DB '{database}', coleção '{collection_name}'!")
+       
 
-    def insert_into_db(self, operation_type):
+    def insert_into_db(self, database: object, operation_type : str):
         """
         Inserts data into the database from a JSON file.
 
@@ -31,11 +35,11 @@ class Mongo_Manager(Files_Handling):
         """
         data = self.read_file("central.json", PATTERN_FOLDER)
         for key, value in data.items():
-                docs = self.inventory[key].insert_many(value.get(operation_type))
+                docs = database[key].insert_many(value.get(operation_type))
                 print(f'O item foi adicionado!')
         print(f'\nNumero de elementos inseridos no Banco de dados: [{len(docs.inserted_ids)}].')
 
-    def edit_in_db(self, filter_db : dict, operation_type):
+    def edit_in_db(self, database, filter_db : dict, operation_type : str):
         """
     Updates documents in the database based on the provided filter.
 
@@ -55,25 +59,24 @@ class Mongo_Manager(Files_Handling):
         number of documents matched and modified.
     """
         data = self.read_file("central.json", PATTERN_FOLDER)
+
         for key, value in data.items():
-            result = self.inventory[key].update_many(filter_db, {"$set": value.get(operation_type)[0]})
+            result = database[key].update_many(filter_db, {"$set": value.get(operation_type)[0]})
             print(f'O elemento foi atualizado!')
         return result
     #verificar função
-    def search_in_db(self, collection_name):
-        db = self.inventory
+    def search_in_db(self, database, collection_name):
         all_docs = []
-        collection = db[collection_name]
+        collection = database[collection_name]
         docs = collection.find()
         for doc in docs: 
             all_docs.append(doc)
         return all_docs
         
-    def get_db_by_collection(self, collection_name, filter_by={}, remove_el={'_id': 0}):
-        db = self.inventory
+    def get_db_by_collection(self, database, collection_name, filter_by={}, remove_el={'_id': 0}):
         all_docs = []
         print(f"colection name is:", collection_name)
-        collection = db[collection_name]
+        collection = database[collection_name]
         docs = collection.find(filter_by, remove_el)
         for doc in docs:
             all_docs.append(doc)
@@ -95,13 +98,13 @@ class Mongo_Manager(Files_Handling):
             print(f"Erro na conexão: {e}")
 
 
-    def reset_inv(self, collection):
-        self.inventory.get_collection(collection).delete_many({})
+    def reset_inv(self, database, collection):
+        database.get_collection(collection).delete_many({})
         resp = {}
         if (collection == "categoria"):
             resp[collection] = {"categoria" : "lorem ipsum"}
         for key, value in resp.items():
-                docs = self.inventory[key].insert_many([value])
+                docs = database[key].insert_many([value])
                 print(value)
                 print(f'O item foi adicionado!')
     

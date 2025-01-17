@@ -2,12 +2,16 @@ from flask import Flask, render_template, request, redirect, url_for, jsonify, m
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity, set_access_cookies
 from utils.env_p import *
 from inventory_handler import Handle_Operations
+from connect import Mongo_Manager
 from datetime import datetime
 from bson.objectid import ObjectId
 import os
 from itertools import zip_longest
 
-manage_op = Handle_Operations("central.json")
+
+db_name = "inventory"
+manage_op = Handle_Operations("central.json", db_name)
+database = manage_op.set_db(db_name)
 app = Flask(__name__)
 app.config["JWT_SECRET_KEY"] = "secret"
 app.config['JWT_COOKIE_CSRF_PROTECT'] = False
@@ -35,8 +39,8 @@ def validate_user():
 # @jwt_required()
 def index():
     # current_user = get_jwt_identity()
-    colec = manage_op.inventory.list_collection_names()
-    sample = manage_op.get_db_by_collection('usuarios')
+    colec = manage_op.set_db(db_name).list_collection_names()
+    sample = manage_op.get_db_by_collection(database, 'usuarios')
     if request.method == "POST":
         ("Requisiçao recebida")
     return render_template('index.html', titulo = "Inicio", item_list = colec, sample = sample,  redirect = redirect("/form"))
@@ -78,7 +82,7 @@ def send(collection_name):
             return redirect(url_for('register_user', login_check = True))
     
     manage_op.save_to_central(form_values, collection_name,'create')
-    manage_op.insert_into_db('create')
+    manage_op.insert_into_db(database, 'create')
     manage_op.delete_central()
 
     if collection_name == "transferencia":
@@ -89,24 +93,25 @@ def send(collection_name):
 # @jwt_required()
 def view(collection_name):
     sample = manage_op.make_view_by_att(collection_name, {"status": "enabled"}) 
-    base_dir = os.path.abspath(os.path.dirname(__file__))
-    path = os.path.join(base_dir, 'static/images_db')
-    file = os.listdir(path)
-    print(path)
-    category_filter = []
-    for db_dict in sample:
-        entered = 0
-        for icon in file:
-            icon = icon.split("-")[1]
-            print(icon.split('.')[0])
-            if db_dict['Categoria'].lower() == icon.split('.')[0]:
-                category_filter.append(icon)
-                entered = 1
-                break
-        if entered == 0:
-            category_filter.append("notfound.jpg")
-    print(category_filter)
-    zipped = zip_longest(sample, category_filter, fillvalue=None)
+    if collection_name == "produtos":
+        base_dir = os.path.abspath(os.path.dirname(__file__))
+        path = os.path.join(base_dir, 'static/images_db')
+        file = os.listdir(path)
+        print(path)
+        category_filter = []
+        for db_dict in sample:
+            entered = 0
+            for icon in file:
+                icon = icon.split("-")[1]
+                print(icon.split('.')[0])
+                if db_dict['Categoria'].lower() == icon.split('.')[0]:
+                    category_filter.append(icon)
+                    entered = 1
+                    break
+            if entered == 0:
+                category_filter.append("notfound.jpg")
+        print(category_filter)
+        zipped = zip_longest(sample, category_filter, fillvalue=None)
     return render_template('pages/view.html', titulo = "Inicio", collection_name = collection_name, zipped = zipped)
     # return jsonify(list(sample))
 
@@ -140,12 +145,12 @@ def edit(collection_name, codigo):
     # form_values['data_de_registro'] = 'edit_in ' + datetime.strftime(datetime.now(), "%Y-%m-%d %H:%M:%S")
     form_values = manage_op.hand_mandatory_data(form_values, collection_name)
     form_values = manage_op.send_treatment(collection_name, form_values)
-    resultado = manage_op.inventory[collection_name].update_one({'codigo' : codigo}, {'$set': form_values})
+    resultado = manage_op.database[collection_name].update_one({'codigo' : codigo}, {'$set': form_values})
     return redirect('/view/' + collection_name)
 
 @app.route('/disable_card/<collection_name>/<codigo>', methods=['POST', 'GET'])
 # @jwt_required(locations=["cookies"])
 def disable_card(collection_name, codigo):
-    resultado = manage_op.inventory[collection_name].update_one({"codigo":codigo} ,  {'$set': {"status" : 'disabled'}})
+    resultado = manage_op.database[collection_name].update_one({"codigo":codigo} ,  {'$set': {"status" : 'disabled'}})
     print(f"Documentos modificados: {resultado.modified_count}")
     return redirect('/view/'+ collection_name)
