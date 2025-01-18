@@ -6,7 +6,7 @@ import bcrypt
 import base64
 
 class InventoryManager(Mongo_Manager, Files_Handling):
-	def __init__(self, central_data, db_name):
+	def __init__(self, central_data):
 		"""
 		Manages inventory operations by handling data storage and retrieval.
 
@@ -22,9 +22,8 @@ class InventoryManager(Mongo_Manager, Files_Handling):
 		Mongo_Manager.__init__(self, URI)
 		self.central_data = central_data
 		self.path = PATTERN_FOLDER
-		self.database = Mongo_Manager(URI).set_db(db_name)
-	
-	def save_to_central(self, form_values, collection_name, operation_type):
+		
+	def save_to_central(self,  form_values, collection_name, operation_type):
 		"""
 	Saves form values to a central data structure in a specified collection.
 
@@ -64,40 +63,39 @@ class InventoryManager(Mongo_Manager, Files_Handling):
 		data = {}
 		self.write_file(data, self.central_data, self.path)
 			
-	def insert_db_on_form(self, collection, key=""):
+	def insert_db_on_form(self, database, collection, key=""):
 		filter_by = {}
 		print("collection on db is: ", collection)
 		if collection != "categoria":
 			print("entrei !")
 			filter_by["status"] = "enabled"
-		db = self.get_db_by_collection(self.database, collection, filter_by, remove_el={'_id': 0, key: 1})
+		db = self.get_db_by_collection(database, collection, filter_by, remove_el={'_id': 0, key: 1})
 		return [x[key] for x in db]
 	
-	def	field_treatment(self, collection: dict):
+	def	field_treatment(self, database, collection: dict):
 		for key, value in collection.items():
 			value["db_id"] = key
 			if value["resp_type"] == "db_list":
 				value["resp_type"] = "list"
 				[*db_key], [*db_el] = zip(*value["db_origin"].items())
-				value["list_elements"] = self.insert_db_on_form(db_key[0], db_el[0])
+				value["list_elements"] = self.insert_db_on_form(database, db_key[0], db_el[0])
 			value["em_branco"] = "required" if value["em_branco"] == "False" else ""
 			value["form_editable"] = "readonly" if value["form_editable"] == "False" else ""
 			value["pre_value"] = datetime.strftime(datetime.now(), "%Y-%m-%d") if value["pre_value"] == "datetime_now" else value["pre_value"] 
 		return collection
 	
 class Handle_Operations(InventoryManager):
-	def __init__(self, central, db_name):
-		super().__init__(central, db_name)
+	def __init__(self, central):
+		super().__init__(central)
 		self.dt_struct = self.read_file("estruturas_de_dados.json", PATTERN_FOLDER)
-		self.database = Mongo_Manager(URI).set_db(db_name)
-
-	def get_last_code(self, collection_name):
+		
+	def get_last_code(self, database, collection_name):
 		def parse_code(code: str):
 			num_code = code.split("_")[-1]
 			try: return (int(num_code))
 			except: return None
 		num = 0
-		db = self.get_db_by_collection(self.database,collection_name)
+		db = self.get_db_by_collection(database,collection_name)
 		for elem in db:
 			if (elem.get("codigo") != None):
 				num_check = parse_code(elem["codigo"])
@@ -107,7 +105,7 @@ class Handle_Operations(InventoryManager):
 					num = num_check if num_check > num else num
 		return (num + 1)
 	
-	def make_datapack(self, collection_name, form_visible=0|1):
+	def make_datapack(self, database,  collection_name, form_visible=0|1):
 		"""
 	Creates a form structure based on editable fields from a specified collection.
 
@@ -124,7 +122,7 @@ class Handle_Operations(InventoryManager):
 	"""
 
 		data = self.read_file("estruturas_de_dados.json", PATTERN_FOLDER)
-		dados = self.field_treatment(data[collection_name])
+		dados = self.field_treatment(database, data[collection_name])
 		field = list(filter(lambda value: value['form_visible'] == form_visible, dados.values()))
 		return field
 	
@@ -146,7 +144,7 @@ class Handle_Operations(InventoryManager):
 		return res_dict
 
 	def edit_preview(self, database, code,  field, collection_name):
-		data = self.get_db_by_collection(self.database, collection_name, {"codigo": code})[0]
+		data = self.get_db_by_collection(database, collection_name, {"codigo": code})[0]
 		for el in field:
 			el["pre_value"] = data[el["db_id"]]
 		return (field)
@@ -172,10 +170,10 @@ class Handle_Operations(InventoryManager):
 			result.append({x: value[x] for x in t_data})
 		return result
 		
-	def make_view_by_att(self, collection_name: str, filter_els:dict, remove_field = []):
+	def make_view_by_att(self, database, collection_name: str, filter_els:dict, remove_field = []):
 		t_data = self.dt_struct[collection_name]
 		remove_status = {'_id': 0}
-		sample = (self.get_db_by_collection(self.database, collection_name, remove_el=remove_status))
+		sample = (self.get_db_by_collection(database, collection_name, remove_el=remove_status))
 		sample = self.filter_db_list(sample, filter_els)
 		sample = self.rm_dbfield(sample, remove_field)
 		sample = self.filter_db_by_dtstruct(sample, collection_name, {"table_visible": 1})
@@ -193,8 +191,8 @@ class Handle_Operations(InventoryManager):
 		result = get_field_name(sample, t_data)
 		return result
 
-	def process_user_registration(self, form_values):
-		sample = self.get_db_by_collection(self.database, "usuarios")
+	def process_user_registration(self, database, form_values):
+		sample = self.get_db_by_collection(database, "usuarios")
 		for x in sample:
 			if form_values['email'] == x["email"] or form_values['nome'] == x["nome"]:
 				return None  
@@ -204,19 +202,19 @@ class Handle_Operations(InventoryManager):
 		form_values["senha"] = base64.b64encode(hash_password).decode('utf-8')
 		return form_values
 		
-	def hand_mandatory_data(self, form_value, collection_name):
+	def hand_mandatory_data(self, database, form_value, collection_name):
 		hidden = self.filter_data_struct(collection_name, {"form_editable": 'False'})
-		form_filtered = self.field_treatment(hidden)
+		form_filtered = self.field_treatment(database, hidden)
 		for elem in form_filtered.values():
 			for key, value in elem.items():
 				if key == "db_id" and value == "codigo":
-					form_value[value] = elem["prefixo"] + str(self.get_last_code(collection_name))
+					form_value[value] = elem["prefixo"] + str(self.get_last_code(database, collection_name))
 				elif key == "db_id" and value == "data_de_registro":
 					form_value[value] = datetime.strftime(datetime.now(), "%Y-%m-%d %H:%M:%S")
 		form_value["status"] = "enabled"
 		return form_value
 
-	def process_user_validation(self, form_values):
+	def process_user_validation(self, database, form_values):
 		"""
 	Validates the user based on form input data.
 
@@ -236,7 +234,7 @@ class Handle_Operations(InventoryManager):
 	"""
 		email = form_values.get('email')
 		senha = form_values.get('senha').encode('utf-8')
-		users_collection = self.database['usuarios']
+		users_collection = database['usuarios']
 		user = users_collection.find_one({"Email" : email})
 		if user:
 			password = base64.b64decode(user["Senha"])
@@ -247,13 +245,13 @@ class Handle_Operations(InventoryManager):
 		else:
 			return None
 
-	def make_op_pack(self, data:dict, form_visible=0|1):
-		dados = self.field_treatment(data)
+	def make_op_pack(self, database, data:dict, form_visible=0|1):
+		dados = self.field_treatment(database, data)
 		field = list(filter(lambda value: value['form_visible'] == form_visible, dados.values()))
 
 		return field
 
-	def send_treatment(self, collection_name, form_values):
+	def send_treatment(self, database, collection_name, form_values):
 		"""
 			Make the procedure to return the correct form_values     
 		"""    
@@ -262,7 +260,7 @@ class Handle_Operations(InventoryManager):
 			if form_values.get("categoria") == "nova_categoria":
 				form_values["categoria"] = form_values["nova_categoria"]
 				self.save_to_central({'categoria' : form_values["categoria"]}, "categoria",'create')
-				self.insert_into_db('create')
+				self.insert_into_db(database, 'create')
 				self.delete_central()
 			if form_values.get('nova_categoria') != None:
 				del form_values["nova_categoria"]
@@ -278,11 +276,11 @@ class Handle_Operations(InventoryManager):
 		operations = data["popular"]["operacoes"]
 		return operations
 	
-	def render_op_form(self, operation:str | None):
+	def render_op_form(self, database, operation:str | None):
 		if operation == None:
 			return None
 		data = self.read_file("transf_op.json", PATTERN_FOLDER)["popular"]
-		data = self.make_op_pack(data[operation.lower()], 1)
+		data = self.make_op_pack(database,data[operation.lower()], 1)
 		print("Data before is: ", data)
 		list_of_lists = [
 			item['list_elements'] for item in data if 'list_elements' in item and not ('db_origin' in item and 'pontos' in item['db_origin'])]
