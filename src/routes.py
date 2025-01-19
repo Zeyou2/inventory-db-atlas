@@ -43,7 +43,7 @@ def index():
     sample = manage_op.get_db_by_collection(database, 'usuarios')
     if request.method == "POST":
         ("Requisiçao recebida")
-    return render_template('index.html', titulo = "Inicio", item_list = colec, sample = sample,  redirect = redirect("/form"))
+    return render_template('index.html', item_list = colec, sample = sample,  redirect = redirect("/form"))
 
 @app.route('/cadastro/<collection_name>', methods=['POST',  'GET'])
 # @jwt_required(locations=["cookies"])
@@ -93,28 +93,28 @@ def send(collection_name):
 # @jwt_required()
 def view(collection_name):
     print(database['produtos'])
-    sample = manage_op.make_view_by_att(database, collection_name, {"status": "enabled"}) 
+    sample = manage_op.make_view_by_att(database, collection_name, {"status": "enabled"})
+    base_dir = os.path.abspath(os.path.dirname(__file__))
+    path = os.path.join(base_dir, 'static/images_'  + collection_name)
+    file = os.listdir(path)
     if collection_name == "produtos":
-        base_dir = os.path.abspath(os.path.dirname(__file__))
-        path = os.path.join(base_dir, 'static/images_db')
-        file = os.listdir(path)
-        # print(path)
+        print(path)
         category_filter = []
         for db_dict in sample:
             entered = 0
             for icon in file:
                 icon = icon.split("-")[1]
-                # print(icon.split('.')[0])
                 if db_dict['Categoria'].lower() == icon.split('.')[0]:
                     category_filter.append(icon)
                     entered = 1
                     break
             if entered == 0:
                 category_filter.append("notfound.jpg")
-        # print(category_filter)
+            print(category_filter)
         zipped = zip_longest(sample, category_filter, fillvalue=None)
         return render_template('pages/view.html', titulo = "Inicio", collection_name = collection_name, zipped = zipped)
-    return render_template('pages/view.html', titulo = "Inicio", collection_name = collection_name, sample = sample)
+    zipped = zip_longest(sample, file, fillvalue= file[0])
+    return render_template('pages/view.html', titulo = "Inicio", collection_name = collection_name, zipped = zipped)
     # return jsonify(list(sample))
 
 @app.route('/operation', methods=['POST',  'GET'])
