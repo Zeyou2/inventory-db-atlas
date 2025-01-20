@@ -9,7 +9,6 @@
         <fieldset>
             {% for x in field %}
             <div class="form-group" style="font-weight: bold;">
-                <!-- This is a fixed control form used to register the actual date. -->
                 {% if x['pergunta'] == "Categoria do Produto" %}
                 <label for="{{ x['db_id'] }}">{{ x['pergunta'] }}</label>
                 <select id="{{ x['db_id'] }}" name="{{ x['db_id'] }}" class="form-control"
@@ -18,21 +17,17 @@
                     <option value="{{ el }}">{{ el }}</option>
                     {% endfor %}
                     <option value="nova_categoria">Nova Categoria</option>
-
                 </select>
                 {% if categoria == nova_categoria %}
                 <input type="text" id="nova_categoria_input" name="nova_categoria" class="form-control mt-2"
                     placeholder="Digite nova categoria" style="display: none;">
                 {% endif %}
-
                 {% elif x['resp_type'] == "list" %}
                 <label for="{{ x['db_id'] }}">{{ x['pergunta'] }}</label>
                 <select id="{{ x['db_id'] }}" name="{{ x['db_id'] }}" value="{{ x['pre_value'] }}" class="form-control"
                     {{ x["em_branco"] }} {{ x['form_editable'] }}>
                     {% for el in x['list_elements'] %}
-
                     <option value="{{el}}">{{el}}</option>
-
                     {% endfor %}
                 </select>
                 {% else %}
@@ -45,7 +40,6 @@
             <button type="submit" class="btn btn-primary">Salvar</button>
         </fieldset>
         <script>
-            // Função para exibir o campo de nova categoria se "Nova Categoria" for selecionado
             function toggleNewCategory(select) {
                 const newCategoryInput = document.getElementById('nova_categoria_input');
                 if (select.value === "nova_categoria") {

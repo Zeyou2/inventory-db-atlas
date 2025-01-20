@@ -20,7 +20,7 @@
                                             style="border: 1px solid rgba(104, 88, 88, 0.808); background-color: #B0E0E6; display: flex; flex-direction: row; align-items: center; height: 140px;">
                                                 <div class="card-img-left" style="flex-shrink: 0; width: 100px; height: 100px; background-color: #000000; border-radius: 50px; border: 1px solid rgba(104, 88, 88, 0.808); overflow: hidden; display: flex; justify-content: center; align-items: center;">
                                                     {% if collection_name == 'pontos' %}
-                                                        <img src="{{ url_for('static', filename='images_pontos/icone-predio.jpg') }}" alt="Imagem" class="img-fluid" style="object-fit: cover; width: 100%; height: 100%;">
+                                                        <img src="{{ url_for('static', filename='images_' + collection_name + '/' + category) }}" alt="Imagem" class="img-fluid" style="object-fit: cover; width: 100%; height: 100%;">
                                                     {% else %}
                                                         <img src="{{ url_for('static', filename='images_' + collection_name + '/icone-' + category) }}" alt="Imagem" class="img-fluid" style="object-fit: cover; width: 100%; height: 100%;">
                                                     {% endif %}
@@ -81,7 +81,7 @@
         }
 
         .card-hover:hover {
-            transform: scale(1.05); /* Zoom de 5% */
+            transform: scale(1.05);
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
         }
     </style>
@@ -99,10 +99,10 @@
                 if (cardTitle) {
                     const txtValue = cardTitle.textContent || cardTitle.innerText;
                     if (txtValue.toLowerCase().indexOf(filter) > -1) {
-                        cardItems[i].style.display = ""; // Mostra o item
-                        visibleCount++; // Incrementa a contagem de itens visíveis
+                        cardItems[i].style.display = "";
+                        visibleCount++; 
                     } else {
-                        cardItems[i].style.display = "none"; // Esconde o item
+                        cardItems[i].style.display = "none"; 
                     }
                 }
             }
