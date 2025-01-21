@@ -1,10 +1,8 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify, make_response, flash
-from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity, set_access_cookies
+from flask import Flask, render_template, request, redirect, url_for, jsonify, make_response
+from flask_jwt_extended import JWTManager, create_access_token, set_access_cookies
 from utils.env_p import *
 from inventory_handler import Handle_Operations
-from connect import Mongo_Manager
 from datetime import datetime
-from bson.objectid import ObjectId
 import os
 from itertools import zip_longest
 
@@ -23,13 +21,17 @@ jwt = JWTManager(app)
 def login():
     return render_template('pages/login.html')
 
+@app.route("/logout", methods=["GET", "POST"])
+def logout():
+    return redirect("login")
+
 @app.route("/validate_user", methods=["POST"])
 def validate_user():
     form_values = request.form
     user = manage_op.process_user_validation(form_values)
     if user == None:
         return jsonify({"error": "usuario ou senha invalidos"}), 400
-    else: 
+    else:
         token = create_access_token({"id": str(user["_id"]), "email": user["Email"], "senha" : user["Senha"]})
         resp = make_response(redirect("/"))
         set_access_cookies(resp, token)

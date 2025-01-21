@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
+    <style>
+        body {
+          overflow: hidden; /* Remove ambas as barras de rolagem */
+        }
+      </style>
 <head>
     <meta charset="UTF-8">
     {% if collection_name %}
@@ -15,100 +19,137 @@
         crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
+
 <body>
-    <div class="d-flex" style="background-color: #777875;">
-        <div class="position-absolute top-0 end-0 d-flex align-items-center" style="margin: 10px; z-index: 999;">
-            <img 
-                src="{{ url_for('static', filename='images_users/icone-user.jpg') }}" 
-                alt="Ícone de usuário" 
-                class="img-fluid" 
-                style="object-fit: cover; width: 60px; height: 60px; margin-right: 12px; border-radius: 50%; box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);">
-            <a href="#" class="text-decoration-none" aria-label="Sair do sistema" 
-               style="font-size: 16px; color: white; font-weight: bold; transition: color 0.3s ease, transform 0.2s ease;">
-               Sair
-            </a>
-        </div>
-     
-        <div class="bg-black border-end" id="sidebar-wrapper" style="min-height: 100vh; width: 250px;">
-           
-            <div class="sidebar-heading border-bottom p-3 text-center" style="background-color: #ffffff; color: #ffffff;">
-                <div style="display: flex; justify-content: center; margin-top: 10px;">
-                    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="img-fluid" style="object-fit: cover; width: 200px; height: 200x;">
+    <div class="p-3" style="background-color: rgb(0, 0, 0);">
+
+
+        <div class="d-flex" style="background-color: #777875;">
+
+
+            <div class="bg-white border-end px-0" id="sidebar-wrapper" style="min-height: 100vh; width: 250px">
+                <!-- <div class="position-absolute top-0 end-0 d-flex align-items-center" style="margin: 10px; z-index: 999;">
+                    <img 
+                        src="{{ url_for('static', filename='images_users/icone-user.jpg') }}" 
+                        alt="Ícone de usuário" 
+                        class="img-fluid" 
+                        style="object-fit: cover; width: 60px; height: 60px; margin-right: 12px; border-radius: 50%; box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);">
+                    <a href="{{ url_for('logout') }}" class="btn btn-sm btn-danger" aria-label="Sair do sistema" 
+                    style="font-size: 16px; color: white; font-weight: bold; transition: color 0.3s ease, transform 0.2s ease;">
+                    Sair
+                    </a>
+                </div> -->
+                <div class="sidebar-heading border-bottom p-3 text-center"
+                    style="background-color: #ffffff; color: #ffffff;">
+                    <div style="display: flex; justify-content: center; margin-top: 10px;">
+                        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="img-fluid"
+                            style="object-fit: cover; width: 200px; height: 200x;">
+                    </div>
+                    <a href="{{ url_for('index') }}" style="color: #000000; text-decoration: none;">
+                        <h1 class="fs-4">Inicio</h1>
+                    </a>
                 </div>
-                <a href="{{ url_for('index') }}" style="color: #000000; text-decoration: none;">
-                    <h1 class="fs-4">Inicio</h1>
-                </a>
-            </div>
-            <div class="accordion accordion-flush align-middle text-center" style="background-color: #ffffff" id="accordionFlushExample" >
-                <div class="accordion-item">
-                    <h2 class="accordion-header">
-                        <button class="accordion-button collapsed " type="button" data-bs-toggle="collapse"
-                            data-bs-target="#flush-collapse1" aria-expanded="false" aria-controls="flush-collapse1"
-                            style="text-align: center; font-size: 1.5rem; font-weight: bold; padding: 1rem;">
-                            Produtos
-                        </button>
-                    </h2>
-                    <div id="flush-collapse1" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample" >
-                        <div class="accordion-body" >
-                            <a href="{{ url_for('cadastro', collection_name='produtos') }}"
-                                class="list-group-item list-group-item-action list-group-item-light p-3"
-                                style="color: #000000;">
-                                Cadastrar
-                            </a>
-                            <a href="{{ url_for('view', collection_name='produtos') }}"
-                                class="list-group-item list-group-item-action list-group-item-light p-3"
-                                style="color: #000000;">
-                                Visualizar
-                            </a>
+                <div class="accordion accordion-flush align-middle text-center" style="background-color: #ffffff; border-style: solid;"
+                    id="accordionFlushExample">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed " type="button" data-bs-toggle="collapse"
+                                data-bs-target="#flush-collapse1" aria-expanded="false" aria-controls="flush-collapse1"
+                                style="text-align: center; font-size: 1.5rem; font-weight: bold; padding: 1rem;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                    class="bi bi-file-earmark-x" viewBox="0 0 16 16">
+                                    <path
+                                        d="M6.854 7.146a.5.5 0 1 0-.708.708L7.293 9l-1.147 1.146a.5.5 0 0 0 .708.708L8 9.707l1.146 1.147a.5.5 0 0 0 .708-.708L8.707 9l1.147-1.146a.5.5 0 0 0-.708-.708L8 8.293z" />
+                                    <path
+                                        d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z" />
+                                </svg>
+                                Produtos
+                            </button>
+                        </h2>
+                        <div id="flush-collapse1" class="accordion-collapse collapse"
+                            data-bs-parent="#accordionFlushExample">
+                            <div class="accordion-body">
+                                <a href="{{ url_for('cadastro', collection_name='produtos') }}"
+                                    class="list-group-item list-group-item-action list-group-item-light p-3"
+                                    style="color: #000000;">
+                                    Cadastrar
+                                </a>
+                                <a href="{{ url_for('view', collection_name='produtos') }}"
+                                    class="list-group-item list-group-item-action list-group-item-light p-3"
+                                    style="color: #000000;">
+                                    Visualizar
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="accordion accordion-flush align-middle text-center" id="accordionFlushExample">
-                <div class="accordion-item">
-                    <h2 class="accordion-header">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#flush-collapse3" aria-expanded="false" aria-controls="flush-collapse3"
-                            style="text-align: center; font-size: 1.5rem; font-weight: bold; padding: 1rem;">
-                            Locais
-                        </button>
-                    </h2>
-                    <div id="flush-collapse3" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
-                        <div class="accordion-body">
-                            <a href="{{ url_for('cadastro', collection_name='pontos') }}"
-                                class="list-group-item list-group-item-action list-group-item-light p-3"
-                                style="color: #000000;">
-                                Cadastrar
-                            </a>
-                            <a href="{{ url_for('view', collection_name='pontos') }}"
-                                class="list-group-item list-group-item-action list-group-item-light p-3"
-                                style="color: #000000;">
-                                Visualizar
-                            </a>
+                <div class="accordion accordion-flush align-middle text-center" id="accordionFlushExample"
+                    style="border-radius: 50%;">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#flush-collapse3" aria-expanded="false" aria-controls="flush-collapse3"
+                                style="text-align: center; font-size: 1.5rem; font-weight: bold; padding: 1rem;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                    class="bi bi-building-fill" viewBox="0 0 16 16">
+                                    <path
+                                        d="M3 0a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h3v-3.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5V16h3a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1zm1 2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3.5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5M4 5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zM7.5 5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5m2.5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zM4.5 8h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5m2.5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3.5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5" />
+                                </svg>
+                                Locais
+                            </button>
+                        </h2>
+                        <div id="flush-collapse3" class="accordion-collapse collapse"
+                            data-bs-parent="#accordionFlushExample">
+                            <div class="accordion-body">
+                                <a href="{{ url_for('cadastro', collection_name='pontos') }}"
+                                    class="list-group-item list-group-item-action list-group-item-light p-3"
+                                    style="color: #000000;">
+                                    Cadastrar
+                                </a>
+                                <a href="{{ url_for('view', collection_name='pontos') }}"
+                                    class="list-group-item list-group-item-action list-group-item-light p-3"
+                                    style="color: #000000;">
+                                    Visualizar
+                                </a>
+                            </div>
+
                         </div>
+
                     </div>
+
+                </div>
+                <div class="dropdown pb-3 fixed-bottom ms-4">
+                    <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
+                        id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="{{ url_for('static', filename='images_users/icone-user.jpg') }}" alt="hugenerd"
+                            width="50" height="50" class="rounded-circle">
+                        <span class="d-none d-sm-inline mx-1" style="color: #000000;">user_name</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
+                        <li><a class="dropdown-item" href="#">Registrar Movimentação</a></li>
+                        <li><a class="dropdown-item" href="#">Settings</a></li>
+                        <li><a class="dropdown-item" href="#">Profile</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item" href="#">Sign out</a></li>
+                    </ul>
                 </div>
             </div>
+            {% block content %}
+            {% if request.endpoint == 'index' %}
+            <div class="container">
+                <h2>Ultimas Movimentações</h2>
+            </div>
+            {% endif %}
+            {% endblock %}
         </div>
-        {% block content %}
-        {% if request.endpoint == 'index' %}
-        <div class="container">
-            <h2>Ultimas Movimentações</h2>
-        </div>
-        {% endif %}
-        {% endblock %}
-    </div>
-    {% if collection_name == 'produtos' %}
-    <div class="position-sticky">
-        <div><a class="position-absolute bottom-0 end-0" , style="margin: 0.3%;" href="{{ url_for('operation') }}">
-                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
-                    <path fill="currentColor"
-                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10s10-4.48 10-10S17.52 2 12 2m5 11h-4v4h-2v-4H7v-2h4V7h2v4h4z" />
-                </svg>
-        </div>
-        {% endif %}
+
     </div>
     </div>
+
+    </div>
+
 </body>
 
 </html>

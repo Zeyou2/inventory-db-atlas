@@ -1,7 +1,7 @@
 {% extends "index.html" %}
 {% block content %}
-<div class="container p-5 rounded" style="background-color: #777875;">
-    <div class="page-header bm-4" style="background-color: #777875; ">
+<div class="container-fluid rounded" style="background-color: #777875;">
+    <div class="page-header bm-1" style="background-color: #777875; ">
         <h1 class="text-center m-4" style="color: white; text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black;" >Sessão {{ collection_name.capitalize() }}</h1>
         <div class="row mb-4">
             <div class="col-12">
@@ -74,6 +74,18 @@
         </div>
     
     </div>
+
+    {% if collection_name == 'produtos' %}
+    <div class="position-sticky">
+        <div><a class="position-absolute bottom-0 end-0" , style="margin: 0.3%;" href="{{ url_for('operation') }}" >
+               
+            
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
+                    <path fill="currentColor"
+                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10s10-4.48 10-10S17.52 2 12 2m5 11h-4v4h-2v-4H7v-2h4V7h2v4h4z" />
+                </svg>
+        </div>
+        {% endif %}
 </div>
     <style>
         .card-hover {
