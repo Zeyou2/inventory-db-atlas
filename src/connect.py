@@ -16,7 +16,6 @@ class Mongo_Manager(Files_Handling):
     def teste(self, database, collection_name, data):
         database[collection_name].insert_many(data)
         print(f"Documentos inseridos no DB '{database}', coleção '{collection_name}'!")
-       
 
     def insert_into_db(self, database: object, operation_type : str):
         """

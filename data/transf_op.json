@@ -12,7 +12,7 @@
 				"pre_value": "datetime_now",
 				"form_visible": 1,
 				"pergunta": "Data de Cadastro",
-				"resp_type": "date",
+				"resp_type": "datetime-local",
 				"em_branco": "False",
 				"field_name": "Data do Registro"
 			},
@@ -22,7 +22,7 @@
 				"form_visible": 1,
 				"pre_value": "datetime_now",
 				"pergunta": "data da movimentação: ",
-				"resp_type": "date",
+				"resp_type": "datetime-local",
 				"em_branco": "False",
 				"field_name": "Data da Movimentação"
 			},
@@ -103,7 +103,7 @@
 				"pre_value": "datetime_now",
 				"form_visible": 1,
 				"pergunta": "Data de Cadastro",
-				"resp_type": "date",
+				"resp_type": "datetime-local",
 				"em_branco": "False",
 				"field_name": "Data do Registro"
 			},
@@ -113,7 +113,7 @@
 				"form_visible": 1,
 				"pre_value": "datetime_now",
 				"pergunta": "data da movimentação: ",
-				"resp_type": "date",
+				"resp_type": "datetime-local",
 				"em_branco": "False",
 				"field_name": "Data da Movimentação"
 			},
@@ -197,7 +197,7 @@
 				"pre_value": "datetime_now",
 				"form_visible": 1,
 				"pergunta": "Data de Cadastro",
-				"resp_type": "date",
+				"resp_type": "datetime-local",
 				"em_branco": "False",
 				"field_name": "Data do Registro"
 			},
@@ -207,7 +207,7 @@
 				"form_visible": 1,
 				"pre_value": "datetime_now",
 				"pergunta": "data da movimentação: ",
-				"resp_type": "date",
+				"resp_type": "datetime-local",
 				"em_branco": "False",
 				"field_name": "Data da Movimentação"
 			},
