@@ -11,9 +11,12 @@ class Mongo_Manager(Files_Handling):
         self.client = MongoClient(URI, server_api=ServerApi("1"))
         self.inventory = self.client[db_name]
 
+    def set_database(self, db_name):
+        return self.client[db_name]
+
     def teste(self):
         self.inventory["inventory"].insert_many("produtos")
-
+        
     def insert_into_db(self, operation_type):
         """
         Inserts data into the database from a JSON file.
