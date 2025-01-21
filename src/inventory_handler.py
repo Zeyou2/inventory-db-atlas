@@ -276,8 +276,7 @@ class Handle_Operations(InventoryManager):
 			entries["para"] = 1
 
 		if entries["de"] == 1:
-
-			
+			pass
 
 			
 	def return_op(self):
