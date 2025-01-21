@@ -6,7 +6,7 @@
 			"pre_value" : "datetime_now",
 			"form_visible": 1,
 			"pergunta": "Data de Cadastro",
-			"resp_type": "date",
+			"resp_type": "datetime",
 			"em_branco": "False",
 			"field_name": "Data de Registro"	
 		},
@@ -80,7 +80,7 @@
 			"pre_value" : "datetime_now",
 			"form_visible": 1,
 			"pergunta": "Data de Cadastro",
-			"resp_type": "date",
+			"resp_type": "datetime",
 			"em_branco": "False",
 			"field_name": "Data de Cadastro"	
 		},
@@ -145,7 +145,7 @@
 			"pre_value" : "datetime_now",
 			"form_visible": 1,
 			"pergunta": "Data de Cadastro",
-			"resp_type": "date",
+			"resp_type": "datetime",
 			"em_branco": "False",
 			"field_name": "Data de Cadastro"
 		},
