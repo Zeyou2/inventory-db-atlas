@@ -5,7 +5,7 @@
 			"form_editable":  "False",
 			"pre_value" : "datetime_now",
 			"form_visible": 1,
-			"pergunta": "Data de Cadastro",
+			"pergunta": "data de Cadastro",
 			"resp_type": "date",
 			"em_branco": "False",
 			"field_name": "Data de Registro"	
@@ -27,7 +27,7 @@
 			"form_editable":  "True",
 			"pre_value" : "",
 			"form_visible": 1,
-			"pergunta": "Nome do usuário",
+			"pergunta": "nome do usuário",
 			"resp_type": "str",
 			"em_branco": "False",
 			"field_name": "Nome do Usuário"
@@ -37,7 +37,7 @@
 			"form_editable":  "True",
 			"pre_value" : "",
 			"form_visible": 1,
-			"pergunta": "Contato",
+			"pergunta": "contato",
 			"resp_type": "tel",
 			"em_branco": "False",
 			"field_name": "Contato"
@@ -47,7 +47,7 @@
 			"form_editable":  "True",
 			"form_visible": 1,
 			"pre_value" : "",
-			"pergunta": "Email",
+			"pergunta": "email",
 			"resp_type": "email",
 			"em_branco": "True",
 			"field_name": "Email"
@@ -57,7 +57,7 @@
 			"form_editable":  "True",
 			"form_visible": 1,
 			"pre_value" : "",
-			"pergunta": "Senha",
+			"pergunta": "senha",
 			"resp_type": "password",
 			"em_branco": "False",
 			"field_name": "senha"

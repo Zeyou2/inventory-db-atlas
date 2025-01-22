@@ -28,7 +28,7 @@ def logout():
 @app.route("/validate_user", methods=["POST"])
 def validate_user():
     form_values = request.form
-    user = manage_op.process_user_validation(form_values)
+    user = manage_op.process_user_validation(database, form_values)
     if user == None:
         return jsonify({"error": "usuario ou senha invalidos"}), 400
     else:
@@ -66,6 +66,7 @@ def register_user(collection_name = "usuarios"):
 # @jwt_required()
 def send(collection_name):
     form_values = {key: value for key, value in request.form.items()}
+    print(form_values)
     url_args = request.args.to_dict()
     op_type = url_args.get('op_type')
     if op_type != None:
@@ -79,14 +80,15 @@ def send(collection_name):
         form_values = manage_op.send_treatment(database, collection_name, form_values)
 
     if collection_name == "usuarios":
-        form_values = manage_op.process_user_registration(form_values)
+        form_values = manage_op.process_user_registration(database, form_values)
         if form_values == None:
             return redirect(url_for('register_user', login_check = True))
     
     manage_op.save_to_central(form_values, collection_name,'create')
     manage_op.insert_into_db(database, 'create')
     manage_op.delete_central()
-
+    if collection_name == "usuarios":
+        return redirect("/login")
     if collection_name == "transferencia":
         manage_op.create_position(form_values)
     return redirect(redirect_to)
@@ -159,3 +161,8 @@ def disable_card(collection_name, codigo):
     resultado = database[collection_name].update_one({"codigo":codigo} ,  {'$set': {"status" : 'disabled'}})
     print(f"Documentos modificados: {resultado.modified_count}")
     return redirect('/view/'+ collection_name)
+
+
+@app.route('/sair', methods=['POST', 'GET'])
+def sair():
+    return redirect('/login')

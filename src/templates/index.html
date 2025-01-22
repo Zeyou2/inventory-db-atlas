@@ -2,8 +2,13 @@
 <html lang="pt-br">
     <style>
         body {
-          overflow: hidden; /* Remove ambas as barras de rolagem */
+          overflow: hidden;
         }
+        .table-overflow {
+          max-height:600px;
+          overflow-y:auto;
+        }
+</Style>
       </style>
 <head>
     <meta charset="UTF-8">
@@ -24,10 +29,10 @@
     <div class="p-3" style="background-color: rgb(0, 0, 0);">
 
 
-        <div class="d-flex" style="background-color: #777875;">
+        <div class="d-flex" style="border-style: solid; border-color: rgb(255, 255, 255);">
+ 
 
-
-            <div class="bg-white border-end px-0" id="sidebar-wrapper" style="min-height: 100vh; width: 250px">
+            <div class="bg-white border-end px-0" id="sidebar-wrapper" style="min-height: 100vh; width: 250px; background: #ff00c3;">
                 <!-- <div class="position-absolute top-0 end-0 d-flex align-items-center" style="margin: 10px; z-index: 999;">
                     <img 
                         src="{{ url_for('static', filename='images_users/icone-user.jpg') }}" 
@@ -40,18 +45,18 @@
                     </a>
                 </div> -->
                 <div class="sidebar-heading border-bottom p-3 text-center"
-                    style="background-color: #ffffff; color: #ffffff;">
-                    <div style="display: flex; justify-content: center; margin-top: 10px;">
+                style="border-style: solid; border-color: rgb(255, 0, 0);">
+                    <!-- <div style="display: flex; justify-content: center; margin-top: 10px;">
                         <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="img-fluid"
                             style="object-fit: cover; width: 200px; height: 200x;">
-                    </div>
+                    </div> -->
                     <a href="{{ url_for('index') }}" style="color: #000000; text-decoration: none;">
                         <h1 class="fs-4">Inicio</h1>
                     </a>
                 </div>
-                <div class="accordion accordion-flush align-middle text-center" style="background-color: #ffffff; border-style: solid;"
+                <div class="accordion accordion-flush align-middle text-center" style="border-style: solid; border-color: rgb(93, 11, 244);""
                     id="accordionFlushExample">
-                    <div class="accordion-item">
+                    <div class="accordion-item" style="border-style: solid;">
                         <h2 class="accordion-header">
                             <button class="accordion-button collapsed " type="button" data-bs-toggle="collapse"
                                 data-bs-target="#flush-collapse1" aria-expanded="false" aria-controls="flush-collapse1"
@@ -67,8 +72,8 @@
                             </button>
                         </h2>
                         <div id="flush-collapse1" class="accordion-collapse collapse"
-                            data-bs-parent="#accordionFlushExample">
-                            <div class="accordion-body">
+                            data-bs-parent="#accordionFlushExample" style="border-style: solid; border-color: aquamarine;">
+                            <div class="accordion-body" style="border-style: solid; border-color: #f50808">
                                 <a href="{{ url_for('cadastro', collection_name='produtos') }}"
                                     class="list-group-item list-group-item-action list-group-item-light p-3"
                                     style="color: #000000;">
@@ -84,8 +89,8 @@
                     </div>
                 </div>
                 <div class="accordion accordion-flush align-middle text-center" id="accordionFlushExample"
-                    style="border-radius: 50%;">
-                    <div class="accordion-item">
+                    style="border-style: solid; border-color: chocolate;">
+                    <div class="accordion-item" style="border-style: solid; border-color: rgb(7, 235, 15);">
                         <h2 class="accordion-header">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                 data-bs-target="#flush-collapse3" aria-expanded="false" aria-controls="flush-collapse3"
@@ -99,7 +104,7 @@
                             </button>
                         </h2>
                         <div id="flush-collapse3" class="accordion-collapse collapse"
-                            data-bs-parent="#accordionFlushExample">
+                            data-bs-parent="#accordionFlushExample" style="border-style: solid; border-color: rgb(136, 255, 0);">
                             <div class="accordion-body">
                                 <a href="{{ url_for('cadastro', collection_name='pontos') }}"
                                     class="list-group-item list-group-item-action list-group-item-light p-3"
@@ -118,7 +123,7 @@
                     </div>
 
                 </div>
-                <div class="dropdown pb-3 fixed-bottom ms-4">
+                <div class="dropdown position-absolute bottom-0 " style="border-style: solid; border-color: rgb(7, 40, 255);">
                     <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
                         id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
                         <img src="{{ url_for('static', filename='images_users/icone-user.jpg') }}" alt="hugenerd"
@@ -127,12 +132,10 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
                         <li><a class="dropdown-item" href="#">Registrar Movimentação</a></li>
-                        <li><a class="dropdown-item" href="#">Settings</a></li>
-                        <li><a class="dropdown-item" href="#">Profile</a></li>
                         <li>
                             <hr class="dropdown-divider">
                         </li>
-                        <li><a class="dropdown-item" href="#">Sign out</a></li>
+                        <li><a class="dropdown-item" href="{{ url_for('sair') }}">Sair</a></li>
                     </ul>
                 </div>
             </div>
