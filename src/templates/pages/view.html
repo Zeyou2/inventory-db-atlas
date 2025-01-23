@@ -1,19 +1,33 @@
 {% extends "index.html" %}
 {% block content %}
-
-<div class="container-fluid  table-overflow" style="background-color: #777875; border-style: solid; border-color: rgb(10, 255, 59);" >
+<!-- <style>
+    body {
+        overflow: hidden;
+    }
+    .table-overflow {
+      
+      max-height: 100%;
+      overflow-x: auto;
+      overflow-y:hidden;
+      border: 1px solid #c20909;
+    }
+    .box {
+        display: flex;
+    }
+  </style> -->
+<div class="container-fluid" style="background-color: #777875; border-style: solid; border-color: rgb(10, 255, 59);" >
     <div class="page-header bm-1" style="background-color: #777875; border-style: solid; border-color: rgb(215, 2, 2);">
         <h1 class="text-center m-4" style="color: white; text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black;" > collection_name</h1>
-        <div class="row mb-4 justify-content-center align-items-center overflow-auto" style="border-style: solid; border-color: rgb(29, 7, 193);">
+        <div class="row mb-3 justify-content-center align-items-center " style="border-style: solid; border-color: rgb(29, 7, 193);">
             <div class="col-10" style="border-style: solid; border-color: rgb(29, 172, 67);">
                 <input type="text" id="searchInput" class="form-control" placeholder="Pesquisar em {{ collection_name }}" onkeyup="searchCards()">
                 <h4 id="resultsCount" style="color: rgb(0, 0, 0); font-weight: bold; font-size: 18px;"></h4>
             </div>
         </div>
             {% if zipped %}
-                <div id="main-content" class="flex-grow-1 p-1 m-4" style="background-color: #777875; border-style: solid; border-color: rgb(84, 0, 239);">
+                <div id="main-content" class="flex-grow-1 p-1 m-3 table-overflow" style="background-color: #777875; border-style: solid; border-color: rgb(84, 0, 239);">
                     <div class="container">
-                        <div class="row jus" id="card-container" style="background-color: #777875; border-style: solid; border-color: rgb(154, 5, 187);">
+                        <div class="row" id="card-container" style="background-color: #777875; border-style: solid; border-color: rgb(154, 5, 187);">
                             {% for base, category in zipped %}
                                 {% if base and category %}
                                     <div class="col-12 mb-4 card-item" style="background-color: #777875; border-style: solid; border-color: rgb(5, 99, 24);">

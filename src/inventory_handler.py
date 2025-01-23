@@ -235,9 +235,9 @@ class Handle_Operations(InventoryManager):
 		email = form_values.get('email')
 		senha = form_values.get('senha').encode('utf-8')
 		users_collection = database['usuarios']
-		user = users_collection.find_one({"Email" : email})
+		user = users_collection.find_one({"email" : email})
 		if user:
-			password = base64.b64decode(user["Senha"])
+			password = base64.b64decode(user["senha"])
 		else:
 			password = None
 		if password != None and bcrypt.checkpw(senha, password):

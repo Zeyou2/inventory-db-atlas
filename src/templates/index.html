@@ -2,13 +2,19 @@
 <html lang="pt-br">
     <style>
         body {
-          overflow: hidden;
+            overflow: hidden;
         }
         .table-overflow {
-          max-height:600px;
+          
+          
+          overflow-x: hidden;
           overflow-y:auto;
+          height: 80vb;
+          border: 1px solid #c20909;
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
         }
-</Style>
       </style>
 <head>
     <meta charset="UTF-8">
@@ -100,7 +106,7 @@
                                     <path
                                         d="M3 0a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h3v-3.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5V16h3a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1zm1 2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3.5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5M4 5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zM7.5 5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5m2.5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zM4.5 8h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5m2.5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3.5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5" />
                                 </svg>
-                                Locais
+                                      <p>Locais</p>
                             </button>
                         </h2>
                         <div id="flush-collapse3" class="accordion-collapse collapse"
@@ -128,21 +134,21 @@
                         id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
                         <img src="{{ url_for('static', filename='images_users/icone-user.jpg') }}" alt="hugenerd"
                             width="50" height="50" class="rounded-circle">
-                        <span class="d-none d-sm-inline mx-1" style="color: #000000;">user_name</span>
+                        <span class="d-none d-sm-inline mx-1" style="color: #000000;">{{ user_name }}</span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
                         <li><a class="dropdown-item" href="#">Registrar Movimentação</a></li>
                         <li>
                             <hr class="dropdown-divider">
                         </li>
-                        <li><a class="dropdown-item" href="{{ url_for('sair') }}">Sair</a></li>
+                        <li><a class="dropdown-item" href="{{ url_for('logout') }}">Sair</a></li>
                     </ul>
                 </div>
             </div>
             {% block content %}
             {% if request.endpoint == 'index' %}
-            <div class="container">
-                <h2>Ultimas Movimentações</h2>
+            <div class="container bg-white">
+                >>>>
             </div>
             {% endif %}
             {% endblock %}
