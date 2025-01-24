@@ -81,7 +81,7 @@ class InventoryManager(Mongo_Manager, Files_Handling):
 				value["list_elements"] = self.insert_db_on_form(database, db_key[0], db_el[0])
 			value["em_branco"] = "required" if value["em_branco"] == "False" else ""
 			value["form_editable"] = "readonly" if value["form_editable"] == "False" else ""
-			value["pre_value"] = datetime.strftime(datetime.now(), "%Y-%m-%d") if value["pre_value"] == "datetime_now" else value["pre_value"] 
+			value["pre_value"] = datetime.strftime(datetime.now(), "%Y-%m-%d %H:%M") if value["pre_value"] == "datetime_now" else value["pre_value"]
 		return collection
 	
 class Handle_Operations(InventoryManager):
@@ -268,9 +268,18 @@ class Handle_Operations(InventoryManager):
 		return form_values
 
 	def create_position(self, form_values):
-		if form_values["operacao"] == "Entrada":
-			# form_values[]
+		entries = {}
+		if form_values["operacao"] == "Entrada" or form_values["operacao"] == "Transferencia":
+			entries["atual"] = "de" 
+			entries["anterior"] = "para"
+		else:
+			entries["de"] = 0
+			entries["para"] = 1
+
+		if entries["de"] == 1:
 			pass
+
+			
 	def return_op(self):
 		data = self.read_file("transf_op.json", PATTERN_FOLDER)
 		operations = data["popular"]["operacoes"]

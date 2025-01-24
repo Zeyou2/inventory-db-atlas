@@ -20,7 +20,7 @@
     </div>
     {% if op_type != None %}
     <p class="h2">{{op_type}}</p>
-    <form action="{{ url_for('send', collection_name='transferencia', op_type=op_type) }}" method="POST">
+    <form action="{{ url_for('send', collection_name='operacao', op_type=op_type) }}" method="POST">
         <fieldset">
             <div class="form-group p-2">
                 <label for="codigo" style="font-weight: bold;">Produto</label>

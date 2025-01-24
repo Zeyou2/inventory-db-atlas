@@ -80,6 +80,13 @@ def send(collection_name):
         form_values.update({'operacao': url_args.get("op_type")})
     else:
         redirect_to = "/view/" + collection_name
+        if collection_name == "usuarios":
+            form_values = manage_op.process_user_registration(form_values)
+            if form_values == None:
+                return redirect(url_for('register_user', login_check = True))
+        else:
+            form_values = manage_op.hand_mandatory_data(form_values, collection_name)
+            form_values = manage_op.send_treatment(collection_name, form_values)
 
     if collection_name != "transferencia":
         form_values = manage_op.hand_mandatory_data(database, form_values, collection_name)
@@ -89,12 +96,13 @@ def send(collection_name):
         form_values = manage_op.process_user_registration(database, form_values)
         if form_values == None:
             return redirect(url_for('register_user', login_check = True))
+
     manage_op.save_to_central(form_values, collection_name,'create')
     manage_op.insert_into_db(database, 'create')
     manage_op.delete_central()
     if collection_name == "usuarios":
-        return redirect("/login")
-    if collection_name == "transferencia":
+        redirect_to = "/login"
+    if op_type != None:
         manage_op.create_position(form_values)
     return redirect(redirect_to)
 
