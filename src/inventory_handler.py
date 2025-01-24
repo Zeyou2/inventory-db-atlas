@@ -267,18 +267,15 @@ class Handle_Operations(InventoryManager):
 
 		return form_values
 
-	def create_position(self, form_values):
+	def create_position(self):
+		"""
+		Create a module that makes all operations to update the positions of the products. It have to assert the operations in a way that it appoints if the operations are valid.
+		E.g: 
+		* I can't transfer a product that is not in the stock.
+		* I can't transfer a product from stock 1 to stock 3 if the product is in stock 2.
+
+		"""
 		entries = {}
-		if form_values["operacao"] == "Entrada" or form_values["operacao"] == "Transferencia":
-			entries["atual"] = "de" 
-			entries["anterior"] = "para"
-		else:
-			entries["de"] = 0
-			entries["para"] = 1
-
-		if entries["de"] == 1:
-			pass
-
 			
 	def return_op(self):
 		data = self.read_file("transf_op.json", PATTERN_FOLDER)
@@ -297,5 +294,6 @@ class Handle_Operations(InventoryManager):
 		combined_lists = [" | ".join(items) for items in zip(*list_of_lists)]
 		data = list(filter(lambda x : x["db_id"] != "codigo" and x["db_id"] != "nome_produto", data))
 		return [data, combined_lists]
+	
 	
 
