@@ -27,7 +27,7 @@
 			"form_editable": "True",
 			"pre_value": "",
 			"form_visible": 1,
-			"pergunta": "Nome do usuário",
+			"pergunta": "nome do usuário",
 			"resp_type": "str",
 			"em_branco": "False",
 			"field_name": "Nome do Usuário"
@@ -37,7 +37,7 @@
 			"form_editable": "True",
 			"pre_value": "",
 			"form_visible": 1,
-			"pergunta": "Contato",
+			"pergunta": "contato",
 			"resp_type": "tel",
 			"em_branco": "False",
 			"field_name": "Contato"
