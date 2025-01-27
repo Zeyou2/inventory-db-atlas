@@ -267,7 +267,15 @@ class Handle_Operations(InventoryManager):
 
 		return form_values
 
-	def create_position(self):
+	def save_log(self, collection_name):
+		"""
+		Save the log of the operations in the database
+		"""
+		self.save_to_central({'timestamp': datetime.strftime(datetime.now(),"%Y-%m-%d %H:%M:%S"), "collection": collection_name}, "last_updates", 'update')
+		self.edit_in_db(self.set_db("logs"), {"collection": collection_name}, 'update')
+		self.delete_central()
+
+	def create_position(self, from_begin=False):
 		"""
 		Create a module that makes all operations to update the positions of the products. It have to assert the operations in a way that it appoints if the operations are valid.
 		E.g: 
@@ -275,6 +283,7 @@ class Handle_Operations(InventoryManager):
 		* I can't transfer a product from stock 1 to stock 3 if the product is in stock 2.
 
 		"""
+
 		entries = {}
 			
 	def return_op(self):
