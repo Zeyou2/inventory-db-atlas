@@ -45,10 +45,12 @@ def logout():
     return response
 
 @app.route('/', methods=["GET", "POST"])
-@jwt_required()
+@jwt_required(optional=True)
 def index():
     current_user = get_jwt_identity()
     print('user is ', current_user)
+    if current_user == None:
+        return redirect('/login')
     colec = database.list_collection_names()
     sample = manage_op.get_db_by_collection(database, 'usuarios')
     if request.method == "POST":
