@@ -9,7 +9,8 @@ from itertools import zip_longest
 
 
 manage_op = Handle_Operations("central.json")
-database = manage_op.set_db('inventory')
+inventory_db = manage_op.set_db('inventory')
+logs_db = manage_op.set_db("logs")
 app = Flask(__name__)
 app.config["JWT_SECRET_KEY"] = SECRET_KEY
 app.config['JWT_COOKIE_CSRF_PROTECT'] = False
@@ -27,7 +28,7 @@ def login():
 @app.route("/validate_user", methods=["POST"])
 def validate_user():
     form_values = request.form
-    user = manage_op.process_user_validation(database, form_values)
+    user = manage_op.process_user_validation(inventory_db, form_values)
     if user is None:
        error = "" 
        return render_template('pages/login.html',  error = error)
@@ -38,38 +39,40 @@ def validate_user():
         return resp        
 
 @app.route('/logout', methods=['POST', 'GET'])
-@jwt_required()
 def logout():
     response = make_response(redirect('/login'))
     unset_jwt_cookies(response)
     return response
 
 @app.route('/', methods=["GET", "POST"])
-@jwt_required()
+@jwt_required(optional=True)
 def index():
     current_user = get_jwt_identity()
     print('user is ', current_user)
-    colec = database.list_collection_names()
-    sample = manage_op.get_db_by_collection(database, 'usuarios')
+    if current_user == None:
+        return redirect('/login')
+    colec = inventory_db.list_collection_names()
+    sample = manage_op.get_db_by_collection(inventory_db, 'usuarios')
+    
     if request.method == "POST":
         ("Requisiçao recebida")
-    return render_template('index.html', item_list = colec, sample = sample, user_name = sample[0]["nome do usuário"])
+    return render_template('index.html', item_list = colec, sample = sample, user_name = sample[0]["nome"])
 
 @app.route('/cadastro/<collection_name>', methods=['POST',  'GET'])
-@jwt_required(locations=["cookies"])
+# @jwt_required(locations=["cookies"])
 def cadastro(collection_name):
-    field = manage_op.make_datapack(database, collection_name, 1) 
+    field = manage_op.make_datapack(inventory_db, collection_name, 1) 
     return render_template('pages/form.html', titulo = "Inicio" , title = collection_name, collection_name = collection_name, field = field)
 
 @app.route('/register', methods=['POST', 'GET'])
 def register_user(collection_name = "usuarios"):
     login_check = request.args.get('login_check', default=None, type=bool)
-    field = manage_op.make_datapack(database, collection_name, 1)
+    field = manage_op.make_datapack(inventory_db, collection_name, 1)
     now = datetime.strftime(datetime.now(), "%Y-%m-%d")
     return render_template('pages/register_user.html', field = field, now = now, login_check = login_check)
 
 @app.route('/send_data/<collection_name>', methods= ['POST'])
-@jwt_required()
+# @jwt_required()
 def send(collection_name):
     form_values = {key: value for key, value in request.form.items()}
     print(form_values)
@@ -78,38 +81,29 @@ def send(collection_name):
     if op_type != None:
         redirect_to = "/operation"
         form_values.update({'operacao': url_args.get("op_type")})
+
     else:
         redirect_to = "/view/" + collection_name
         if collection_name == "usuarios":
-            form_values = manage_op.process_user_registration(form_values)
+            form_values = manage_op.process_user_registration(inventory_db, form_values)
             if form_values == None:
                 return redirect(url_for('register_user', login_check = True))
-        else:
-            form_values = manage_op.hand_mandatory_data(form_values, collection_name)
-            form_values = manage_op.send_treatment(collection_name, form_values)
-
-    if collection_name != "transferencia":
-        form_values = manage_op.hand_mandatory_data(database, form_values, collection_name)
-        form_values = manage_op.send_treatment(database, collection_name, form_values)
-
-    if collection_name == "usuarios":
-        form_values = manage_op.process_user_registration(database, form_values)
-        if form_values == None:
-            return redirect(url_for('register_user', login_check = True))
-
+    
+    form_values = manage_op.hand_mandatory_data(inventory_db, form_values, collection_name)
+    form_values = manage_op.send_treatment(inventory_db, collection_name, form_values)
     manage_op.save_to_central(form_values, collection_name,'create')
-    manage_op.insert_into_db(database, 'create')
+    manage_op.insert_into_db(inventory_db, 'create')
     manage_op.delete_central()
-    if collection_name == "usuarios":
-        redirect_to = "/login"
+    manage_op.save_log(collection_name)
     if op_type != None:
         manage_op.create_position(form_values)
     return redirect(redirect_to)
 
 @app.route('/view/<collection_name>', methods=['POST', 'GET'])
-@jwt_required()
+# @jwt_required()
 def view(collection_name):
-    sample = manage_op.make_view_by_att(database, collection_name, {"status": "enabled"})
+    sample = manage_op.make_view_by_att(inventory_db, collection_name, {"status": "enabled"})
+    print("sample is", sample)
     base_dir = os.path.abspath(os.path.dirname(__file__))
     path = os.path.join(base_dir, 'static/images_'  + collection_name)
     file = os.listdir(path)
@@ -130,14 +124,14 @@ def view(collection_name):
         zipped = zip_longest(sample, category_filter, fillvalue=None)
         return render_template('pages/view.html', titulo = "Inicio", collection_name = collection_name, zipped = zipped)
     zipped = zip_longest(sample, file, fillvalue= file[0])
-    return render_template('pages/view.html', titulo = "Inicio", collection_name = collection_name, zipped = zipped, user_name = sample[0]['nome do usuário'])
+    return render_template('pages/view.html', titulo = "Inicio", collection_name = collection_name, zipped = zipped)
 
 @app.route('/operation', methods=['POST',  'GET'])
 @jwt_required(locations=["cookies"])
 def operation():
     options = manage_op.return_op()
     op_type = request.args.get("op_type")
-    field = manage_op.render_op_form(database, op_type)
+    field = manage_op.render_op_form(inventory_db, op_type)
     final_field, combined_lists = list(), list()
     if op_type != None:
         combined_lists = field[1]
@@ -147,8 +141,8 @@ def operation():
 @app.route('/edit_card/<collection_name>/<codigo>', methods=['POST', 'GET'])
 @jwt_required(locations=["cookies"])
 def edit_card(collection_name, codigo):
-    field = manage_op.make_datapack(database, collection_name, 1)
-    field = manage_op.edit_preview(database, codigo, field, collection_name)
+    field = manage_op.make_datapack(inventory_db, collection_name, 1)
+    field = manage_op.edit_preview(inventory_db, codigo, field, collection_name)
     return render_template('pages/edit_form.html', codigo = codigo, title = collection_name, collection_name = collection_name, field = field)
 
 
@@ -156,15 +150,15 @@ def edit_card(collection_name, codigo):
 @jwt_required(locations=["cookies"])
 def edit(collection_name, codigo):
     form_values = {key: value for key, value in request.form.items()}
-    form_values = manage_op.hand_mandatory_data(database, form_values, collection_name)
-    form_values = manage_op.send_treatment(database, collection_name, form_values)
-    database[collection_name].update_one({'codigo' : codigo}, {'$set': form_values})
+    form_values = manage_op.hand_mandatory_data(inventory_db, form_values, collection_name)
+    form_values = manage_op.send_treatment(inventory_db, collection_name, form_values)
+    inventory_db[collection_name].update_one({'codigo' : codigo}, {'$set': form_values})
     return redirect('/view/' + collection_name)
 
 @app.route('/disable_card/<collection_name>/<codigo>', methods=['POST', 'GET'])
 @jwt_required(locations=["cookies"])
 def disable_card(collection_name, codigo):
-    resultado = database[collection_name].update_one({"codigo":codigo} ,  {'$set': {"status" : 'disabled'}})
+    resultado = inventory_db[collection_name].update_one({"codigo":codigo} ,  {'$set': {"status" : 'disabled'}})
     print(f"Documentos modificados: {resultado.modified_count}")
     return redirect('/view/'+ collection_name)
 
