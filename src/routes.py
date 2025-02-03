@@ -39,6 +39,7 @@ def validate_user():
         return resp        
 
 @app.route('/logout', methods=['POST', 'GET'])
+# @jwt_required()
 def logout():
     response = make_response(redirect('/login'))
     unset_jwt_cookies(response)
@@ -127,7 +128,7 @@ def view(collection_name):
     return render_template('pages/view.html', titulo = "Inicio", collection_name = collection_name, zipped = zipped)
 
 @app.route('/operation', methods=['POST',  'GET'])
-@jwt_required(locations=["cookies"])
+# @jwt_required(locations=["cookies"])
 def operation():
     options = manage_op.return_op()
     op_type = request.args.get("op_type")
@@ -139,7 +140,7 @@ def operation():
     return render_template('pages/populate.html', options=options, op_type=op_type, field=final_field, combined_lists = combined_lists)
 
 @app.route('/edit_card/<collection_name>/<codigo>', methods=['POST', 'GET'])
-@jwt_required(locations=["cookies"])
+# @jwt_required(locations=["cookies"])
 def edit_card(collection_name, codigo):
     field = manage_op.make_datapack(inventory_db, collection_name, 1)
     field = manage_op.edit_preview(inventory_db, codigo, field, collection_name)
@@ -147,7 +148,7 @@ def edit_card(collection_name, codigo):
 
 
 @app.route('/send/edit/<collection_name>/<codigo>', methods = ["POST", "GET"])
-@jwt_required(locations=["cookies"])
+# @jwt_required(locations=["cookies"])
 def edit(collection_name, codigo):
     form_values = {key: value for key, value in request.form.items()}
     form_values = manage_op.hand_mandatory_data(inventory_db, form_values, collection_name)
@@ -156,7 +157,7 @@ def edit(collection_name, codigo):
     return redirect('/view/' + collection_name)
 
 @app.route('/disable_card/<collection_name>/<codigo>', methods=['POST', 'GET'])
-@jwt_required(locations=["cookies"])
+# @jwt_required(locations=["cookies"])
 def disable_card(collection_name, codigo):
     resultado = inventory_db[collection_name].update_one({"codigo":codigo} ,  {'$set': {"status" : 'disabled'}})
     print(f"Documentos modificados: {resultado.modified_count}")
