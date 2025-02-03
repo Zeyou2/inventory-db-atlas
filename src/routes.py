@@ -85,8 +85,8 @@ def send(collection_name):
             if form_values == None:
                 return redirect(url_for('register_user', login_check = True))
         else:
-            form_values = manage_op.hand_mandatory_data(form_values, collection_name)
-            form_values = manage_op.send_treatment(collection_name, form_values)
+            form_values = manage_op.hand_mandatory_data(database, form_values, collection_name)
+            form_values = manage_op.send_treatment(database, collection_name, form_values)
 
     if collection_name != "transferencia":
         form_values = manage_op.hand_mandatory_data(database, form_values, collection_name)
