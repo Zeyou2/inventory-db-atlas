@@ -2,8 +2,8 @@
 {% block content %}
 
 <div class="container-fluid rounded">
-    <div class="page-header bm-1 rounded m-2 shadow-lg" style="background-color: #766a6a; ">
-        <h1 class="text-center m-4" style="color: rgb(0, 0, 0);" > {{collection_name.capitalize()}}</h1>
+    <div class="page-header bm-1 rounded m-2">
+        <h1 class="text-center m-4 p-2" style="color: rgb(0, 0, 0);" > {{collection_name.capitalize()}}</h1>
         <div class="row mb-3 justify-content-center align-items-center">
             <div class="col-10">
                 <input type="text" id="searchInput" class="form-control" placeholder="🔍 Pesquisar em {{ collection_name }}" onkeyup="searchCards()" style="border-radius: 20px;">
@@ -12,12 +12,12 @@
         </div>
     </div>
             {% if zipped %}
-                <div id="main-content" class="flex-grow-1 p-1 m-5 rounded shadow " style="background-color:#696969">
-                    <div class="container table-overflow p-4">
-                        <div class="row " id="card-container" style="background-color: #ffffff">
+                <div id="main-content" class="flex-grow-1 p-4 m-5 rounded shadow " style="background-color:#e6e6e6">
+                    <div class="container table-overflow p-5">
+                        <div class="row " id="card-container" style="background-color: #e6e6e6">
                             {% for base, category in zipped %}
                                 {% if base and category %}
-                                    <div class="col-12 mb-4 card-item " style="background-color: #ffffff;">
+                                    <div class="col-12 mb-4 card-item " style="background-color: #e6e6e6;">
                                         <div class="card shadow-sm p-4 rounded card-hover text-black" onclick="window.location.href='/cadastro/produtos';"
                                             style="background-color: #C0C0C0; display: flex; flex-direction: row; align-items: center; height: 140px;">
                                                 <div class="card-img-left" style="flex-shrink: 0; width: 100px; height: 100px; border-radius: 50px; overflow: hidden; display: flex; justify-content: center; align-items: center;">

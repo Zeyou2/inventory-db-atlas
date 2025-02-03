@@ -2,13 +2,13 @@
 <html lang="pt-br">
     <style>
         body {
-            overflow: hidden;
+            overflow: auto;
             
         }
         .table-overflow {
           overflow-x: hidden;
           overflow-y:auto;
-          height: 80vb;
+          height: 80vh;
           display: flex;
           flex-direction: column;
           gap: 10px;
@@ -34,9 +34,8 @@
 </head>
 
 <body>
-    <div>
-        <div class="d-flex rounded">
-            <div id="sidebar-wrapper">  
+        <div class="d-flex rounded w-100" style="background-color: #c6c3c3" style="border: solid; border-color: blueviolet;">
+            <div id="sidebar-wrapper" style="background-color: #ffffff">  
                 <div class="sidebar-heading p-5 text-center">
                     <a href="{{ url_for('index') }}" style="text-decoration: none; ">
                         <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="img-fluid rounded-3 shadow-lg p-2" 
@@ -85,7 +84,7 @@
                     </div>
                 </div>
             </div>
-            <div class="dropdown position-absolute bottom-0">
+            <!-- <div class="dropdown position-absolute bottom-2">
                 <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
                     id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
                     <img src="{{ url_for('static', filename='images_users/icone-user.jpg') }}" alt="hugenerd"
@@ -99,7 +98,7 @@
                     </li>
                     <li><a class="dropdown-item" href="{{ url_for('logout') }}">Sair</a></li>
                 </ul>
-            </div>
+            </div> -->
             {% block content %}
             {% if request.endpoint == 'index' %}
             <div class="container bg-white">
