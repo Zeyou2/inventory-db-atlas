@@ -17,6 +17,7 @@ class Mongo_Manager(Files_Handling):
         database[collection_name].insert_many(data)
         print(f"Documentos inseridos no DB '{database}', coleção '{collection_name}'!")
 
+
     def insert_into_db(self, database: object, operation_type : str):
         """
         Inserts data into the database from a JSON file.
@@ -38,7 +39,7 @@ class Mongo_Manager(Files_Handling):
                 print(f'O item foi adicionado!')
         print(f'\nNumero de elementos inseridos no Banco de dados: [{len(docs.inserted_ids)}].')
 
-    def edit_in_db(self, database, filter_db : dict, operation_type : str):
+    def edit_in_db(self, database, filter_db : dict, operation_type : str, no_exist="insert"):
         """
     Updates documents in the database based on the provided filter.
 
@@ -60,8 +61,11 @@ class Mongo_Manager(Files_Handling):
         data = self.read_file("central.json", PATTERN_FOLDER)
 
         for key, value in data.items():
-            result = database[key].update_many(filter_db, {"$set": value.get(operation_type)[0]})
-            print(f'O elemento foi atualizado!')
+            if no_exist == "insert":
+                result = database[key].update_many(filter_db, {"$set": value.get(operation_type)[0]}, upsert=True)
+            else:
+                result = database[key].update_many(filter_db, {"$set": value.get(operation_type)[0]})
+            print(f'{result.modified_count} elementos foram atualizados!')
         return result
     #verificar função
     def search_in_db(self, database, collection_name):
