@@ -46,18 +46,18 @@ def logout():
     return response
 
 @app.route('/', methods=["GET", "POST"])
-@jwt_required(optional=True)
+# @jwt_required(optional=True)
 def index():
-    current_user = get_jwt_identity()
-    print('user is ', current_user)
-    if current_user == None:
-        return redirect('/login')
+    # current_user = get_jwt_identity()
+    # print('user is ', current_user)
+    # if current_user == None:
+        # return redirect('/login')
     colec = inventory_db.list_collection_names()
     sample = manage_op.get_db_by_collection(inventory_db, 'usuarios')
     
     if request.method == "POST":
         ("Requisiçao recebida")
-    return render_template('index.html', item_list = colec, sample = sample, user_name = sample[0]["nome"])
+    return render_template('index.html', item_list = colec, sample = sample)
 
 @app.route('/cadastro/<collection_name>', methods=['POST',  'GET'])
 # @jwt_required(locations=["cookies"])
