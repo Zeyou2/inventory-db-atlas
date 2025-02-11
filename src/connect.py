@@ -18,7 +18,13 @@ class Mongo_Manager(Files_Handling):
         print(f"Documentos inseridos no DB '{database}', coleção '{collection_name}'!")
 
 
-    def insert_into_db(self, database: object, operation_type : str):
+    def insert_into_db(self, database: object, collection : str, data:dict|list):
+        if type(data) == dict:
+            data = [data]
+        docs = database[collection].insert_many(data)
+        print(f'\nNumero de elementos inseridos no Banco de dados: [{len(docs.inserted_ids)}].')
+
+    def central_add_db(self, database: object, operation_type : str):
         """
         Inserts data into the database from a JSON file.
 
@@ -39,7 +45,13 @@ class Mongo_Manager(Files_Handling):
                 print(f'O item foi adicionado!')
         print(f'\nNumero de elementos inseridos no Banco de dados: [{len(docs.inserted_ids)}].')
 
-    def edit_in_db(self, database, filter_db : dict, operation_type : str, no_exist="insert"):
+    def edit_db(self, database, collection, filter_db : dict, data, no_exist="insert"):
+        upsert = True if no_exist == "insert" else False
+        data = [data] if type(data) != list else data
+        result = [database[collection].update_many(filter_db, {"$set": ind_data}, upsert=upsert) for ind_data in data]
+        print(f'{[i.modified_count for i in result]} elementos foram atualizados!')
+
+    def central_edit_db(self, database, filter_db : dict, operation_type : str, no_exist="insert"):
         """
     Updates documents in the database based on the provided filter.
 
@@ -79,7 +91,7 @@ class Mongo_Manager(Files_Handling):
     def get_db_by_collection(self, database, collection_name, filter_by={}, remove_el={'_id': 0}):
         all_docs = []
         print(f"colection name is:", collection_name)
-        collection = database[collection_name]
+        collection = database.get_collection(collection_name)
         docs = collection.find(filter_by, remove_el)
         for doc in docs:
             all_docs.append(doc)
@@ -101,39 +113,19 @@ class Mongo_Manager(Files_Handling):
             print(f"Erro na conexão: {e}")
 
 
-    def reset_inv(self, database, collection):
+    def reset_data(self, database, collection):
         database.get_collection(collection).delete_many({})
         resp = {}
         if (collection == "categoria"):
             resp[collection] = {"categoria" : "lorem ipsum"}
         for key, value in resp.items():
                 docs = database[key].insert_many([value])
-                print(value)
-                print(f'O item foi adicionado!')
+                print(f'O seguinte item foi adicionado!\n', docs.inserted_ids)
     
     def print_db(self, collection):
         db_sample = self.inventory[collection]
         object_db = db_sample.find_one({'Email': 'Alex@mov'}, {"Email" : 1})
         print(object_db)
-        # data = []
-        # for names in object_db:
-        #     data.append(names.get('Email'))
-        # print(data)
-
-
-    # def edit_db(self, collection_name):
-
-    #     collection = self.inventory[collection_name]
-
-    #     for x in collection:
-
-
-    #     collection_data
-        
-    #     # for key, value in data.items():
-    #     #     result = self.inventory[key].update_many(filter_db, {"$set": value.get(operation_type)[0]})
-    #     #     print(f'O elemento foi atualizado!')
-    #     return result
 
     
 

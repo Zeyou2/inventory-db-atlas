@@ -67,18 +67,17 @@ class InventoryManager(Mongo_Manager, Files_Handling):
 		filter_by = {}
 		print("collection on db is: ", collection)
 		if collection != "categoria":
-			print("entrei !")
 			filter_by["status"] = "enabled"
 		db = self.get_db_by_collection(database, collection, filter_by, remove_el={'_id': 0, key: 1})
 		return [x[key] for x in db]
 	
-	def	field_treatment(self, database, collection: dict):
+	def	field_treatment(self,  collection: dict):
 		for key, value in collection.items():
 			value["db_id"] = key
 			if value["resp_type"] == "db_list":
 				value["resp_type"] = "list"
 				[*db_key], [*db_el] = zip(*value["db_origin"].items())
-				value["list_elements"] = self.insert_db_on_form(database, db_key[0], db_el[0])
+				value["list_elements"] = self.insert_db_on_form(self.set_db(db_el[0]), db_key[1], db_el[1])
 			value["em_branco"] = "required" if value["em_branco"] == "False" else ""
 			value["form_editable"] = "readonly" if value["form_editable"] == "False" else ""
 			value["pre_value"] = datetime.strftime(datetime.now(), "%Y-%m-%d %H:%M") if value["pre_value"] == "datetime_now" else value["pre_value"]
@@ -89,15 +88,17 @@ class Handle_Operations(InventoryManager):
 		super().__init__(central)
 		self.dt_struct = self.read_file("estruturas_de_dados.json", PATTERN_FOLDER)
 		
-	def get_last_code(self, database, collection_name):
+	def get_last_code(self, database, collection_name, prefix):
 		def parse_code(code: str):
 			num_code = code.split("_")[-1]
 			try: return (int(num_code))
 			except: return None
 		num = 0
-		db = self.get_db_by_collection(database,collection_name)
+		print("collection name in get_last_code: ", collection_name)
+		db = self.get_db_by_collection(database, collection_name)
+
 		for elem in db:
-			if (elem.get("codigo") != None):
+			if (elem.get("codigo") != None and prefix in elem["codigo"]):
 				num_check = parse_code(elem["codigo"])
 				if num_check == None:
 					print("ATTENTION - Need to check data obj >> ", elem)
@@ -122,12 +123,13 @@ class Handle_Operations(InventoryManager):
 	"""
 
 		data = self.read_file("estruturas_de_dados.json", PATTERN_FOLDER)
-		dados = self.field_treatment(database, data[collection_name])
+		dados = self.field_treatment(data[collection_name])
 		field = list(filter(lambda value: value['form_visible'] == form_visible, dados.values()))
 		return field
 	
-	def filter_data_struct(self, collection_name:str, options:dict):
-		t_data = self.read_file("estruturas_de_dados.json", PATTERN_FOLDER)[collection_name]
+	def filter_data_struct(self, collection_name:str, options:dict, filename, op=None):
+		file_el = self.read_file(filename, PATTERN_FOLDER) if filename == "estruturas_de_dados.json" else self.read_file(filename, PATTERN_FOLDER)["popular"]
+		t_data = file_el[op] if collection_name == "operacao" else file_el[collection_name]
 		res_dict = {}
     
 		def filter_att(filter_db:tuple, options: dict):
@@ -153,6 +155,7 @@ class Handle_Operations(InventoryManager):
 		for key, value in options.items():
 			data = list(filter(lambda x: x[key] == value, data))
 		return data
+
 	
 	def rm_dbfield(self, data: list[dict], remove_list: list):
 		for i in remove_list:
@@ -177,18 +180,20 @@ class Handle_Operations(InventoryManager):
 		sample = self.filter_db_list(sample, filter_els)
 		sample = self.rm_dbfield(sample, remove_field)
 		sample = self.filter_db_by_dtstruct(sample, collection_name, {"table_visible": 1})
-		def get_field_name(sample: list[dict], collection:dict):
-			# print("collection is: ", collection)
+		def make_modifications(sample: list[dict], collection:dict):
+			"""Gets the field name whose is the title and converts the datetime to a string """
 			final = []
 			for el in range(0, len(sample)):
 				final.append({})
 				for key, value in sample[el].items():
+					if type(value) == datetime:
+						value = value.strftime("%d-%m-%Y %H:%M")
 					if collection[key].get("title") != None:
 						key_updt = collection[key]["field_name"] + "_title"
 					else : key_updt = collection[key]["field_name"]
 					final[el].update({key_updt: value})
 			return final
-		result = get_field_name(sample, t_data)
+		result = make_modifications(sample, t_data)
 		return result
 
 	def process_user_registration(self, database, form_values):
@@ -202,15 +207,24 @@ class Handle_Operations(InventoryManager):
 		form_values["senha"] = base64.b64encode(hash_password).decode('utf-8')
 		return form_values
 		
-	def hand_mandatory_data(self, database, form_value, collection_name):
-		hidden = self.filter_data_struct(collection_name, {"form_editable": 'False'})
-		form_filtered = self.field_treatment(database, hidden)
+	def hand_mandatory_data(self, database, form_value, collection_name, op=None, is_new=True):
+		
+		filename = "transf_op.json" if form_value.get("operacao") != None else "estruturas_de_dados.json"
+		file_el = self.read_file(filename, PATTERN_FOLDER) if filename == "estruturas_de_dados.json" else self.read_file(filename, PATTERN_FOLDER)["popular"]
+		t_data = file_el[op] if collection_name == "operacao" else file_el[collection_name]
+		form_filtered = self.field_treatment(t_data)
+		print("FORM FILTERED IS ", form_filtered)
 		for elem in form_filtered.values():
-			for key, value in elem.items():
-				if key == "db_id" and value == "codigo":
-					form_value[value] = elem["prefixo"] + str(self.get_last_code(database, collection_name))
-				elif key == "db_id" and value == "data_de_registro":
-					form_value[value] = datetime.strftime(datetime.now(), "%Y-%m-%d %H:%M:%S")
+			if elem["resp_type"] == "datetime-local" and elem["form_editable"] == "readonly":
+				print("ENTREI AQUi")
+				form_value[elem["db_id"]] = datetime.now()
+			if elem["resp_type"] == "datetime-local" and elem["form_editable"] == "":
+				form_value[elem["db_id"]] = datetime.strptime(form_value[elem["db_id"]], "%Y-%m-%dT%H:%M")
+			if elem["db_id"] == "codigo" and is_new:
+				form_value[elem["db_id"]] = elem["prefixo"] + str(self.get_last_code(database, collection_name, elem["prefixo"]))
+			if elem["resp_type"] == "number":
+				form_value[elem["db_id"]] = int(form_value[elem["db_id"]])
+
 		form_value["status"] = "enabled"
 		return form_value
 
@@ -245,10 +259,11 @@ class Handle_Operations(InventoryManager):
 		else:
 			return None
 
-	def make_op_pack(self, database, data:dict, form_visible=0|1):
-		dados = self.field_treatment(database, data)
+	def make_op_pack(self,  data:dict, form_visible=0|1|2):
+		dados = self.field_treatment(data)
+		if form_visible == 2:
+			return list(map(lambda x: x, dados.values()))
 		field = list(filter(lambda value: value['form_visible'] == form_visible, dados.values()))
-
 		return field
 
 	def send_treatment(self, database, collection_name, form_values):
@@ -260,7 +275,7 @@ class Handle_Operations(InventoryManager):
 			if form_values.get("categoria") == "nova_categoria":
 				form_values["categoria"] = form_values["nova_categoria"]
 				self.save_to_central({'categoria' : form_values["categoria"]}, "categoria",'create')
-				self.insert_into_db(database, 'create')
+				self.central_add_db(database, 'create')
 				self.delete_central()
 			if form_values.get('nova_categoria') != None:
 				del form_values["nova_categoria"]
@@ -271,9 +286,7 @@ class Handle_Operations(InventoryManager):
 		"""
 		Save the log of the operations in the database
 		"""
-		self.save_to_central({'timestamp': datetime.strftime(datetime.now(),"%Y-%m-%d %H:%M:%S"), "collection": collection_name}, "last_updates", 'update')
-		self.edit_in_db(self.set_db("logs"), {"collection": collection_name}, 'update')
-		self.delete_central()
+		self.edit_db(self.set_db("logs"), "last_updates", {"collection":collection_name},{"collection": collection_name, "timestamp": datetime.now()})
 
 	def create_position(self, from_begin=False):
 		"""
@@ -283,26 +296,54 @@ class Handle_Operations(InventoryManager):
 		* I can't transfer a product from stock 1 to stock 3 if the product is in stock 2.
 
 		"""
+		log = self.set_db("logs")
+		updates = self.get_db_by_collection(log, "last_updates")
+		operations = self.set_db("operation")
+		if "position" not in list(map(lambda x: x["collection"], updates)):
+			data = self.get_db_by_collection(operations, "operacao")
+		#That else will be important to know what needs to be used as data.
+		#  else :
+			# data = self.get_db_by_collection(operations, "operacao", {"data_movimentacao": {"$gt": updates[0]["timestamp"]}})
+		def validate_product(elem):
+			if elem["id_produto"] == "":
+				return True
+			return len(self.get_db_by_collection(operations,"operacao",
+				{"codigo_prod": elem["codigo_prod"], "id_produto": elem["id_produto"], "operacao": "entrada"})) <= 1
 
-		entries = {}
-			
+		def resolve_entries(new_op):
+			entries = list(filter(lambda x: x["operacao"].lower() == "entrada", new_op))
+			print("entradas é ", entries)
+			for i in entries:
+				print(validate_product(i))
+				if validate_product(i) == False:
+					return False
+			send_data = list(map(lambda x: {"ultima_movimentacao": x["data_movimentacao"],"id_produto": x["id_produto"], "codigo_prod": x["codigo_prod"], "posicao":x["ponto_de_destino"], "quantidade": x["quantidade"]}, entries))
+			print(send_data)
+			self.insert_into_db(operations, "position", send_data)
+			# [self.save_to_central(i, "position", "create") for i in send_data]
+			# self.central_add_db(operations, "create")
+			# self.delete_central()
+		resolve_entries(data)
+		# self.save_log("position")
+		return "SUCESS"
+
 	def return_op(self):
 		data = self.read_file("transf_op.json", PATTERN_FOLDER)
 		operations = data["popular"]["operacoes"]
 		return operations
 	
-	def render_op_form(self, database, operation:str | None):
+	def render_op_form(self, operation:str | None):
 		if operation == None:
 			return None
 		data = self.read_file("transf_op.json", PATTERN_FOLDER)["popular"]
-		data = self.make_op_pack(database,data[operation.lower()], 1)
-		print("Data before is: ", data)
+		print("DATA OPERATION IS:", data[operation.lower()])
+		data_clist = self.make_op_pack(data[operation.lower()], 2)
+		data_send = self.make_op_pack(data[operation.lower()], 1)
 		list_of_lists = [
-			item['list_elements'] for item in data if 'list_elements' in item and not ('db_origin' in item and 'pontos' in item['db_origin'])]
-		print ("list of lists : ", list_of_lists)
+			item['list_elements'] for item in data_clist if 'list_elements' in item and not ('db_origin' in item and 'pontos' in item['db_origin'])]
 		combined_lists = [" | ".join(items) for items in zip(*list_of_lists)]
-		data = list(filter(lambda x : x["db_id"] != "codigo" and x["db_id"] != "nome_produto", data))
-		return [data, combined_lists]
+		data_send = list(filter(lambda x : x["db_id"] != "codigo" and x["db_id"] != "nome_produto", data_send))
+		return [data_send, combined_lists]
 	
 	
 

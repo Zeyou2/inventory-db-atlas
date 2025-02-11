@@ -14,4 +14,4 @@ if __name__ == '__main__':
      # db_teste = mongo.set_db("teste_db")
      # print(type(db_teste))
      # # mongo.teste(db_teste, "teste_collection", [{"teste": "teste222"}])
-     # #  Mongo_Manager().insert_into_db("teste_db", "create")
+     # #  Mongo_Manager().central_add_db("teste_db", "create")
