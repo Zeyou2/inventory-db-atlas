@@ -1,5 +1,5 @@
 from src.components.Files_Handler.module.file_handler import Files_Handling
-from datetime import datetime
+from datetime import datetime, timedelta
 from utils.env_p import PATTERN_FOLDER, URI
 from src.connect import Mongo_Manager
 import bcrypt
@@ -65,10 +65,9 @@ class InventoryManager(Mongo_Manager, Files_Handling):
 			
 	def insert_db_on_form(self, database, collection, key=""):
 		filter_by = {}
-		print("collection on db is: ", collection)
 		if collection != "categoria":
 			filter_by["status"] = "enabled"
-		db = self.get_db_by_collection(database, collection, filter_by, remove_el={'_id': 0, key: 1})
+		db = self.get_db_collection(database, collection, filter_by, remove_el={'_id': 0, key: 1})
 		return [x[key] for x in db]
 	
 	def	field_treatment(self,  collection: dict):
@@ -95,7 +94,7 @@ class Handle_Operations(InventoryManager):
 			except: return None
 		num = 0
 		print("collection name in get_last_code: ", collection_name)
-		db = self.get_db_by_collection(database, collection_name)
+		db = self.get_db_collection(database, collection_name)
 
 		for elem in db:
 			if (elem.get("codigo") != None and prefix in elem["codigo"]):
@@ -146,7 +145,7 @@ class Handle_Operations(InventoryManager):
 		return res_dict
 
 	def edit_preview(self, database, code,  field, collection_name):
-		data = self.get_db_by_collection(database, collection_name, {"codigo": code})[0]
+		data = self.get_db_collection(database, collection_name, {"codigo": code})[0]
 		for el in field:
 			el["pre_value"] = data[el["db_id"]]
 		return (field)
@@ -176,7 +175,7 @@ class Handle_Operations(InventoryManager):
 	def make_view_by_att(self, database, collection_name: str, filter_els:dict, remove_field = []):
 		t_data = self.dt_struct[collection_name]
 		remove_status = {'_id': 0}
-		sample = (self.get_db_by_collection(database, collection_name, remove_el=remove_status))
+		sample = (self.get_db_collection(database, collection_name, remove_el=remove_status))
 		sample = self.filter_db_list(sample, filter_els)
 		sample = self.rm_dbfield(sample, remove_field)
 		sample = self.filter_db_by_dtstruct(sample, collection_name, {"table_visible": 1})
@@ -197,7 +196,7 @@ class Handle_Operations(InventoryManager):
 		return result
 
 	def process_user_registration(self, database, form_values):
-		sample = self.get_db_by_collection(database, "usuarios")
+		sample = self.get_db_collection(database, "usuarios")
 		for x in sample:
 			if form_values['email'] == x["email"] or form_values['nome'] == x["nome"]:
 				return None  
@@ -213,10 +212,8 @@ class Handle_Operations(InventoryManager):
 		file_el = self.read_file(filename, PATTERN_FOLDER) if filename == "estruturas_de_dados.json" else self.read_file(filename, PATTERN_FOLDER)["popular"]
 		t_data = file_el[op] if collection_name == "operacao" else file_el[collection_name]
 		form_filtered = self.field_treatment(t_data)
-		print("FORM FILTERED IS ", form_filtered)
 		for elem in form_filtered.values():
 			if elem["resp_type"] == "datetime-local" and elem["form_editable"] == "readonly":
-				print("ENTREI AQUi")
 				form_value[elem["db_id"]] = datetime.now()
 			if elem["resp_type"] == "datetime-local" and elem["form_editable"] == "":
 				form_value[elem["db_id"]] = datetime.strptime(form_value[elem["db_id"]], "%Y-%m-%dT%H:%M")
@@ -282,13 +279,13 @@ class Handle_Operations(InventoryManager):
 
 		return form_values
 
-	def save_log(self, collection_name):
+	def save_log(self, collection_name, register_date=datetime.now()):
 		"""
 		Save the log of the operations in the database
 		"""
-		self.edit_db(self.set_db("logs"), "last_updates", {"collection":collection_name},{"collection": collection_name, "timestamp": datetime.now()})
+		self.edit_db(self.set_db("logs"), "last_updates", {"collection":collection_name},{"collection": collection_name, "timestamp": register_date})
 
-	def create_position(self, from_begin=False):
+	def create_position(self, form_values, from_begin=False):
 		"""
 		Create a module that makes all operations to update the positions of the products. It have to assert the operations in a way that it appoints if the operations are valid.
 		E.g: 
@@ -296,35 +293,69 @@ class Handle_Operations(InventoryManager):
 		* I can't transfer a product from stock 1 to stock 3 if the product is in stock 2.
 
 		"""
-		log = self.set_db("logs")
-		updates = self.get_db_by_collection(log, "last_updates")
+		log_db = self.set_db("logs")
+		updt_operation =  list(filter(lambda x: x["collection"] == "operacao", self.get_db_collection(log_db, "last_updates", {})))
+		updt_operation = updt_operation.pop() if len(updt_operation) > 0 else updt_operation
+		updates = self.get_db_collection(log_db, "last_updates")
 		operations = self.set_db("operation")
+
 		if "position" not in list(map(lambda x: x["collection"], updates)):
-			data = self.get_db_by_collection(operations, "operacao")
-		#That else will be important to know what needs to be used as data.
-		#  else :
-			# data = self.get_db_by_collection(operations, "operacao", {"data_movimentacao": {"$gt": updates[0]["timestamp"]}})
+			data = self.get_db_collection(operations, "operacao")
+		else :
+			data = self.get_db_collection(operations, "operacao", {"data_movimentacao": {"$gte": updt_operation["timestamp"] + timedelta(seconds=1), "$lte":datetime.now()}})
+		print("data is?", data)
+		self.save_log("operacao", form_values ["data_de_registro"])
 		def validate_product(elem):
 			if elem["id_produto"] == "":
 				return True
-			return len(self.get_db_by_collection(operations,"operacao",
+			return len(self.get_db_collection(operations,"operacao",
 				{"codigo_prod": elem["codigo_prod"], "id_produto": elem["id_produto"], "operacao": "entrada"})) <= 1
 
-		def resolve_entries(new_op):
-			entries = list(filter(lambda x: x["operacao"].lower() == "entrada", new_op))
-			print("entradas é ", entries)
-			for i in entries:
-				print(validate_product(i))
-				if validate_product(i) == False:
-					return False
-			send_data = list(map(lambda x: {"ultima_movimentacao": x["data_movimentacao"],"id_produto": x["id_produto"], "codigo_prod": x["codigo_prod"], "posicao":x["ponto_de_destino"], "quantidade": x["quantidade"]}, entries))
-			print(send_data)
-			self.insert_into_db(operations, "position", send_data)
-			# [self.save_to_central(i, "position", "create") for i in send_data]
-			# self.central_add_db(operations, "create")
-			# self.delete_central()
-		resolve_entries(data)
-		# self.save_log("position")
+
+		def operation_calcule(change:dict, op_type:str):
+			"""
+			Args:
+				op_type:  It will be "in" or "out"
+			"""
+			if op_type == "out":
+				change["quantidade"] = -change["quantidade"]
+			
+			validate_product(change)
+			if validate_product(change) == False:
+				return False
+			update_data = {"$inc":{"quantidade": change.pop("quantidade")}, "$set": {"ultima_movimentacao": change.pop("ultima_movimentacao", None), "posicao": change.pop("posicao", None)}}
+			print("Update Sentence is;", update_data)
+			
+			changes = operations.get_collection("position").update_many(change, update=update_data, upsert=True)
+				
+		def resolve_op(change:dict, op_type:str):
+			"""
+			Will resolve each type of operation by doing the operation calcules
+			Args:
+				op_type(str): It could be "Entrada", "Saida" or "Transferencia"
+			
+			Keyword arguments:
+			argument -- description
+			Return: return_description
+			"""
+			
+			change.pop("operacao", None)
+			change.pop("codigo", None)
+			change.pop("status", None)
+			change.pop("data_movimentacao", None)
+			change["ultima_movimentacao"] = change.pop("data_de_registro", None)
+			if op_type == "Transferencia":
+				pass
+			else:
+				change.pop("ponto_de_origem", None)
+				change.pop("motivo_saida", None)
+				change["posicao"] = change.pop("ponto_de_destino", None)
+				operation_calcule(change, "in")
+		for change in data:
+			# print("CHANGE IS>", change)
+			self.save_log("position", change["data_de_registro"])
+			resolve_op(change, change["operacao"])
+			
 		return "SUCESS"
 
 	def return_op(self):

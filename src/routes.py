@@ -55,7 +55,7 @@ def index():
     if current_user == None:
         return redirect('/login')
     colec = primary_data_db.list_collection_names()
-    sample = manage_op.get_db_by_collection(primary_data_db, 'usuarios')
+    sample = manage_op.get_db_collection(primary_data_db, 'usuarios')
     
     if request.method == "POST":
         ("Requisiçao recebida")
@@ -81,7 +81,6 @@ def send(collection_name):
     print("Values to be send are: ", form_values)
     url_args = request.args.to_dict()
     op_type = url_args.get('op_type')
-    print("COLLECTION IN SEND IS: ", collection_name)
     if op_type != None:
         redirect_to = "/operation"
         form_values.update({'operacao': url_args.get("op_type")})
@@ -95,9 +94,9 @@ def send(collection_name):
             if form_values == None:
                 return redirect(url_for('register_user', login_check = True))
         form_values = manage_op.hand_mandatory_data(required_db, form_values, collection_name)
-        form_values = manage_op.send_treatment(required_db, collection_name, form_values)    
+        form_values = manage_op.send_treatment(required_db, collection_name, form_values)
+        manage_op.save_log(collection_name, form_values["data_de_registro"])    
     manage_op.insert_into_db(required_db, collection_name, form_values)
-    manage_op.save_log(collection_name)
     if op_type != None:
         manage_op.create_position(form_values)
     return redirect(redirect_to)
