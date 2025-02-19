@@ -48,7 +48,7 @@ def logout():
     return response
 
 @app.route('/', methods=["GET", "POST"])
-@jwt_required(optional=True)
+# @jwt_required(optional=True)
 def index():
     current_user = get_jwt_identity()
     print('user is ', current_user)
@@ -59,7 +59,7 @@ def index():
     
     if request.method == "POST":
         ("Requisiçao recebida")
-    return render_template('index.html', item_list = colec, sample = sample, user_name = sample[0]["nome"])
+    return render_template('index.html', item_list = colec, sample = sample)
 
 @app.route('/cadastro/<collection_name>', methods=['POST',  'GET'])
 # @jwt_required(locations=["cookies"])
