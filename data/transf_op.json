@@ -190,7 +190,7 @@
 				"em_branco": "False",
 				"field_name": "Qnt."
 			},
-			"de": {
+			"ponto_de_origem": {
 				"table_visible": 1,
 				"form_editable": "True",
 				"form_visible": 1,
@@ -204,7 +204,7 @@
 				"em_branco": "False",
 				"field_name": "Local de Origem"
 			},
-			"para": {
+			"ponto_de_destino": {
 				"table_visible": 1,
 				"form_editable": "True",
 				"form_visible": 1,
@@ -299,7 +299,7 @@
 				"em_branco": "False",
 				"field_name": "Qnt."
 			},
-			"de": {
+			"ponto_de_origem": {
 				"table_visible": 1,
 				"form_editable": "True",
 				"form_visible": 1,
@@ -313,7 +313,7 @@
 				"em_branco": "False",
 				"field_name": "Local de Origem"
 			},
-			"para": {
+			"ponto_de_destino": {
 				"table_visible": 1,
 				"form_editable": "False",
 				"form_visible": 1,

@@ -88,14 +88,13 @@ class Mongo_Manager(Files_Handling):
             all_docs.append(doc)
         return all_docs
         
-    def get_db_by_collection(self, database, collection_name, filter_by={}, remove_el={'_id': 0}):
+    def get_db_collection(self, database, collection_name, filter_by={}, remove_el={'_id': 0}):
         all_docs = []
         print(f"colection name is:", collection_name)
         collection = database.get_collection(collection_name)
         docs = collection.find(filter_by, remove_el)
         for doc in docs:
             all_docs.append(doc)
-        print(all_docs)
         return all_docs
     
     def close_connection(self):
