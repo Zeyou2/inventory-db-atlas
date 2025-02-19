@@ -114,6 +114,7 @@
 			"pergunta": "Categoria do Produto",
 			"resp_type": "db_list",
 			"db_origin": {
+				"database": "primary_data",
 				"categoria": "categoria"
 			},
 			"em_branco": "True",

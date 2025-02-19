@@ -24,7 +24,7 @@
         <fieldset">
             <div class="form-group p-2">
                 <label for="codigo" style="font-weight: bold;">Produto</label>
-                <select id="codigo" name="codigo" class="form-control">
+                <select id="codigo_prod" name="codigo_prod" class="form-control">
                     <option value=""></option>
                     {% for el in combined_lists %}
                     <option value="{{ el.split('|')[0].strip()}}">{{ el }}</option>
@@ -55,7 +55,7 @@
 </div>
 <script>
     $(document).ready(function () {
-        $('#codigo').select2({
+        $('#codigo_prod').select2({
             placeholder: "Clique para localizar o produto",
             allowClear: true
         });

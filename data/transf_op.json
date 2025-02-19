@@ -16,6 +16,17 @@
 				"em_branco": "False",
 				"field_name": "Data do Registro"
 			},
+			"codigo": {
+				"table_visible": 1,
+				"form_editable": "False",
+				"form_visible": 0,
+				"pre_value": "",
+				"pergunta": "",
+				"resp_type": "str",
+				"em_branco": "False",
+				"prefixo": "OP_",
+				"field_name": "Código"
+			},
 			"data_movimentacao": {
 				"table_visible": 1,
 				"form_editable": "True",
@@ -26,14 +37,15 @@
 				"em_branco": "False",
 				"field_name": "Data da Movimentação"
 			},
-			"codigo": {
+			"codigo_prod": {
 				"table_visible": 1,
 				"form_editable": "True",
-				"form_visible": 1,
+				"form_visible": 0,
 				"pre_value": "",
 				"pergunta": "Digite o Código do Produto Especificado ",
 				"resp_type": "db_list",
 				"db_origin": {
+					"database": "primary_data",
 					"produtos": "codigo"
 				},
 				"em_branco": "False",
@@ -47,6 +59,7 @@
 				"pergunta": "Nome do produto: ",
 				"resp_type": "db_list",
 				"db_origin": {
+					"database": "primary_data",
 					"produtos": "nome"
 				},
 				"em_branco": "False",
@@ -90,6 +103,7 @@
 				"pergunta": "Para: ",
 				"resp_type": "db_list",
 				"db_origin": {
+					"database": "primary_data",
 					"pontos": "nome_local"
 				},
 				"em_branco": "False",
@@ -107,6 +121,17 @@
 				"em_branco": "False",
 				"field_name": "Data do Registro"
 			},
+			"codigo": {
+				"table_visible": 1,
+				"form_editable": "False",
+				"form_visible": 0,
+				"pre_value": "",
+				"pergunta": "",
+				"resp_type": "str",
+				"em_branco": "False",
+				"prefixo": "OP_",
+				"field_name": "Código"
+			},
 			"data_movimentacao": {
 				"table_visible": 1,
 				"form_editable": "True",
@@ -117,14 +142,15 @@
 				"em_branco": "False",
 				"field_name": "Data da Movimentação"
 			},
-			"codigo": {
+			"codigo_prod": {
 				"table_visible": 1,
 				"form_editable": "True",
-				"form_visible": 1,
+				"form_visible": 0,
 				"pre_value": "",
 				"pergunta": "Digite o Código do Produto Especificado ",
 				"resp_type": "db_list",
 				"db_origin": {
+					"database": "primary_data",
 					"produtos": "codigo"
 				},
 				"em_branco": "False",
@@ -138,6 +164,7 @@
 				"pergunta": "Nome do produto: ",
 				"resp_type": "db_list",
 				"db_origin": {
+					"database": "primary_data",
 					"produtos": "nome"
 				},
 				"em_branco": "False",
@@ -163,7 +190,7 @@
 				"em_branco": "False",
 				"field_name": "Qnt."
 			},
-			"de": {
+			"ponto_de_origem": {
 				"table_visible": 1,
 				"form_editable": "True",
 				"form_visible": 1,
@@ -171,12 +198,13 @@
 				"pergunta": "De: ",
 				"resp_type": "db_list",
 				"db_origin": {
+					"database": "primary_data",
 					"pontos": "nome_local"
 				},
 				"em_branco": "False",
 				"field_name": "Local de Origem"
 			},
-			"para": {
+			"ponto_de_destino": {
 				"table_visible": 1,
 				"form_editable": "True",
 				"form_visible": 1,
@@ -184,6 +212,7 @@
 				"pergunta": "Para: ",
 				"resp_type": "db_list",
 				"db_origin": {
+					"database": "primary_data",
 					"pontos": "nome_local"
 				},
 				"em_branco": "False",
@@ -201,6 +230,17 @@
 				"em_branco": "False",
 				"field_name": "Data do Registro"
 			},
+			"codigo": {
+				"table_visible": 1,
+				"form_editable": "False",
+				"form_visible": 0,
+				"pre_value": "",
+				"pergunta": "",
+				"resp_type": "str",
+				"em_branco": "False",
+				"prefixo": "OP_",
+				"field_name": "Código"
+			},
 			"data_movimentacao": {
 				"table_visible": 1,
 				"form_editable": "True",
@@ -211,18 +251,19 @@
 				"em_branco": "False",
 				"field_name": "Data da Movimentação"
 			},
-			"codigo": {
+			"codigo_prod": {
 				"table_visible": 1,
-				"form_editable": "True",
-				"form_visible": 1,
+				"form_editable": "False",
+				"form_visible": 0,
 				"pre_value": "",
-				"pergunta": "Digite o Código do Produto Especificado ",
+				"pergunta": "",
 				"resp_type": "db_list",
 				"db_origin": {
+					"database": "primary_data",
 					"produtos": "codigo"
 				},
 				"em_branco": "False",
-				"field_name": "Código"
+				"field_name": "Código Produto"
 			},
 			"nome_produto": {
 				"table_visible": 1,
@@ -232,6 +273,7 @@
 				"pergunta": "Nome do produto: ",
 				"resp_type": "db_list",
 				"db_origin": {
+					"database": "primary_data",
 					"produtos": "nome"
 				},
 				"em_branco": "False",
@@ -251,13 +293,13 @@
 				"table_visible": 1,
 				"form_editable": "True",
 				"form_visible": 1,
-				"pre_value": "",
+				"pre_value": 0,
 				"pergunta": "Quantidade: ",
 				"resp_type": "number",
 				"em_branco": "False",
 				"field_name": "Qnt."
 			},
-			"de": {
+			"ponto_de_origem": {
 				"table_visible": 1,
 				"form_editable": "True",
 				"form_visible": 1,
@@ -265,12 +307,13 @@
 				"pergunta": "De: ",
 				"resp_type": "db_list",
 				"db_origin": {
+					"database": "primary_data",
 					"pontos": "nome_local"
 				},
 				"em_branco": "False",
 				"field_name": "Local de Origem"
 			},
-			"para": {
+			"ponto_de_destino": {
 				"table_visible": 1,
 				"form_editable": "False",
 				"form_visible": 1,
