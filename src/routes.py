@@ -142,12 +142,18 @@ def operation():
     options = manage_op.return_op()
     op_type = request.args.get("op_type")
     position = request.args.get("from")
+    from_places = manage_op.get_db_collection(primary_data_db, "pontos")
+    
     field = manage_op.render_op_form(op_type)
     final_field, combined_lists = list(), list()
+    
+
     if op_type != None:
         combined_lists = field[1]
+        # from_places = list(filter(lambda x: x["db_id"] == "ponto_de_origem", field[0]))
         final_field = field[0]
-    return render_template('pages/populate.html', options=options, op_type=op_type, field=final_field, combined_lists = combined_lists)
+        
+    return render_template('pages/populate.html', options=options, op_type=op_type, from_p = from_places, position=position, field=final_field, combined_lists = combined_lists)
 
 @app.route('/edit_card/<collection_name>/<codigo>', methods=['POST', 'GET'])
 # @jwt_required(locations=["cookies"])

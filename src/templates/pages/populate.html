@@ -6,20 +6,31 @@
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <div class="container-fluid mt-4">
     <h1 class="text-center m-4"> Movimentação de Produtos</h1>
-    <div class="btn-group">
-        <button class="btn btn-secundary btn-lg dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Selecione a Categoria
-        </button>
-        <ul class="dropdown-menu" role="menu">
+    <div class="input-group mb-3 w-25 vh-25">
+        <label class="input-group-text" for="InputOperation01"> Operação </label>
+        <select class="form-select " id="InputOperation01" aria-label="Selecione uma operação!">
+            <option value="" selected>Selecione uma operação...</option>
             {% for opt in options %}
-            <li>
-                <a class="dropdown-item" href="{{  url_for('operation', op_type=opt)  }}">{{opt}}</a>
-            </li>
+                <option value="{{opt}}">{{opt}}</option>
             {% endfor %}
-        </ul>
+            
+        </select>
+        
+        <button class="btn btn-outline-secondary btn-lg" type="button" onclick="set_location()">
+            Confirme
+        </button>
     </div>
-    
-    <div class=""></div>
+
+    <div id="from-btn" class="input-group mb-3 w-25 vh-25" >
+        <label class="input-group-text" for="InputOperation02"> Ponto de Origem </label>
+        <select class="form-select " id="InputOperation02" aria-label="Selecione Ponto de Origem!" onchange="displayForms()">
+            <option value="" selected>O ponto de origem do produto é</option>
+            {% for points in from_p %}
+                <option value="{{points['codigo']}}">{{points['nome_local']}}</option>
+            {% endfor %}
+        </select>
+    </div>
+
     {% if op_type != None %}
     <p class="h2">{{op_type}}</p>
     <form action="{{ url_for('send', collection_name='operacao', op_type=op_type) }}" method="POST">
@@ -62,5 +73,30 @@
             allowClear: true
         });
     });
+
+    function set_location() {
+        const field_track = document.getElementById("InputOperation01").value;
+        const element_hidden = document.getElementById("from-btn");
+        if (field_track !== "") {
+            element_hidden.removeAttribute("hidden");
+        }
+        else {
+            element_hidden.setAttribute("hidden", "hidden");
+        }
+    }
+
+    function displayForms() {
+        let opType = document.getElementById("InputOperation01").value;
+        let fromPoint = document.getElementById("InputOperation02").value;
+        if (!opType) {
+            return;
+        }
+        let url = `?op_type=${encodeURIComponent(opType)}&from=${encodeURIComponent(fromPoint)}`
+        
+        // Redirect or use the URL as needed
+        window.location.href = url;
+        
+    }
+
 </script>
 {% endblock %}
