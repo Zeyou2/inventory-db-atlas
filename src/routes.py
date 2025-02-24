@@ -62,8 +62,8 @@ def index():
     filter_op = []
     for key in operation_dict:
         name = products.find_one({'codigo' : key["codigo_prod"]})
-        filter_op.append({'Nome' : name['nome'], 'Data da movimentação' : key["data_movimentacao"], "ID produto" : key["id_produto"], 
-                          "Quantidade": key["quantidade"], "Origem": key["ponto_de_origem"], "Destino": key["ponto_de_destino"], "Operação": key["operacao"]})
+        filter_op.append({'Produto' : name['nome'], 'Data da movimentação' : key["data_movimentacao"], "ID produto" : key["id_produto"], 
+                          "Quantidade": key["quantidade"], "Operação": key["operacao"], "Origem": key["ponto_de_origem"], "Destino": key["ponto_de_destino"]})
         # key.pop("codigo_prod", None)
     # print("opopopop", operation_dict)
 
