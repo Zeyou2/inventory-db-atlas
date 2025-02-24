@@ -41,14 +41,14 @@ def validate_user():
         return resp        
 
 @app.route('/logout', methods=['POST', 'GET'])
-# @jwt_required()
+@jwt_required()
 def logout():
     response = make_response(redirect('/login'))
     unset_jwt_cookies(response)
     return response
 
 @app.route('/', methods=["GET", "POST"])
-# @jwt_required(optional=True)
+@jwt_required(optional=True)
 def index():
     current_user = get_jwt_identity()
     print('user is ', current_user)

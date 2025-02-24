@@ -298,11 +298,12 @@ class Handle_Operations(InventoryManager):
 		updt_operation = updt_operation.pop() if len(updt_operation) > 0 else updt_operation
 		updates = self.get_db_collection(log_db, "last_updates")
 		operations = self.set_db("operation")
-
 		if "position" not in list(map(lambda x: x["collection"], updates)):
 			data = self.get_db_collection(operations, "operacao")
 		else :
-			data = self.get_db_collection(operations, "operacao", {"data_movimentacao": {"$gte": updt_operation["timestamp"] + timedelta(seconds=1), "$lte":datetime.now()}})
+			time_compare = updt_operation.get("timestamp") + timedelta(seconds=1) if type(updt_operation) == dict else updt_operation[0].get("timestamp")  + timedelta(seconds=1)
+			data = self.get_db_collection(operations, "operacao", {"data_de_registro": {"$gte": time_compare, "$lte":datetime.now()}})
+			print("Time to be compared is: ", time_compare)
 		print("data is?", data)
 		self.save_log("operacao", form_values ["data_de_registro"])
 		def validate_product(elem):
@@ -317,17 +318,18 @@ class Handle_Operations(InventoryManager):
 			Args:
 				op_type:  It will be "in" or "out"
 			"""
-			if op_type == "out":
-				change["quantidade"] = -change["quantidade"]
-			
+			change["quantidade"] = -change["quantidade"] if op_type == "out" else change["quantidade"]
 			validate_product(change)
 			if validate_product(change) == False:
 				return False
-			update_data = {"$inc":{"quantidade": change.pop("quantidade")}, "$set": {"ultima_movimentacao": change.pop("ultima_movimentacao", None), "posicao": change.pop("posicao", None)}}
+			update_data = {"$inc":{"quantidade": change.pop("quantidade")}, "$set": {"ultima_movimentacao": change.pop("ultima_movimentacao", None), "posicao": change.get("posicao")}}
 			print("Update Sentence is;", update_data)
-			
 			changes = operations.get_collection("position").update_many(change, update=update_data, upsert=True)
-				
+			change.update(update_data["$inc"])
+			change.update(update_data["$set"])
+			change["quantidade"] = -change["quantidade"] if change["quantidade"] < 0 else change["quantidade"]
+			print("CHANGE ON OPERATION CALCULE IS: ", change)
+
 		def resolve_op(change:dict, op_type:str):
 			"""
 			Will resolve each type of operation by doing the operation calcules
@@ -345,7 +347,11 @@ class Handle_Operations(InventoryManager):
 			change.pop("data_movimentacao", None)
 			change["ultima_movimentacao"] = change.pop("data_de_registro", None)
 			if op_type == "Transferencia":
-				pass
+				change["posicao"] = change.pop("ponto_de_origem", None)
+				destiny = change.pop("ponto_de_destino", None)
+				operation_calcule(change, "out")
+				change["posicao"] = destiny
+				operation_calcule(change, "in")
 			else:
 				change.pop("ponto_de_origem", None)
 				change.pop("motivo_saida", None)
@@ -375,6 +381,3 @@ class Handle_Operations(InventoryManager):
 		combined_lists = [" | ".join(items) for items in zip(*list_of_lists)]
 		data_send = list(filter(lambda x : x["db_id"] != "codigo" and x["db_id"] != "nome_produto", data_send))
 		return [data_send, combined_lists]
-	
-	
-
