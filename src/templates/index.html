@@ -33,7 +33,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
 
-<body class="d-flex" style="background-color: aqua;">
+<body class="d-flex">
         <div class="d-flex rounded w-100" style="background-color: #c6c3c3" style="border: solid; border-color: blueviolet;">
             <div id="sidebar-wrapper" style="background-color: #ffffff">  
                 <div class="sidebar-heading p-5 text-center">
@@ -57,8 +57,8 @@
                                 <a href="{{ url_for('view', collection_name='produtos') }}" class="list-group-item list-group-item-action list-group-item-light p-3" style="font-size: 1.1rem; font-weight: bold;">
                                     <i class="bi bi-eye"></i> Visualizar
                                 </a>
-                                <a href="{{ url_for('view', collection_name='pontos') }}" class="list-group-item list-group-item-action list-group-item-light p-3" style="font-size: 1.1rem; font-weight: bold;">
-                                    <i class="bi bi-clock-history"></i> Histórico
+                                <a href="{{ url_for('operation', collection_name='produtos') }}" class="list-group-item list-group-item-action list-group-item-light p-3" style="font-size: 1.1rem; font-weight: bold;">
+                                    <i class="bi bi-clock-history"></i> Mover
                                 </a>
                             </div>
                         </div>
@@ -101,9 +101,56 @@
             </div> -->
             {% block content %}
             {% if request.endpoint == 'index' %}
-            <div class="container bg-white">
-                <h1 class="text-center"> Em Construção</h1>
+
+            
+            <div class="container bg-white text-black">
+                    <h1 class="text-center p-3"> Ultimas Movimentações </h1>
+                        <table class="table table-borderless text-center">
+                            <thead>
+                                <tr class="border align-middle text-center">
+                                    {% for key in filter_op[0] %}
+                                        
+                                        {% if key == "Origem"%}
+                                            <th class="align-middle" style="font-weight: bold; background-color: #F8F8FF;">  {{ key }} </th>
+                                            <th class="align-middle" style="font-weight: bold; background-color: #F8F8FF;"></th>
+                                        {% elif key == "Operação" %}
+                                            <th class="text-start" style="font-weight: bold; background-color: #F8F8FF;">  {{ key }} </th>
+                                        {% else %}
+                                            <th class="align-middle" style="font-weight: bold; background-color: #F8F8FF;">{{ key }}</th>
+                                        {% endif %}
+                                           
+                                    {% endfor %}
+                                  
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for base in filter_op %}
+                                    <tr class="border align-middle text-center">
+                                        {% for value in base %}
+                                            {% if value == "Origem"%}
+                                                <td class="align-middle" style="color: rgb(196, 20, 20); font-weight: bold">  {{ base.get('Origem') }}</td>
+                                                <td class="align-middle"> ➡️ </td>
+
+                                            {% elif value == "Destino" %}
+                                                <td class="align-middle" style="color: rgb(0, 151, 20); font-weight: bold">  {{ base.get('Destino') }}</td>
+                                            {% elif value == "Operação" %}
+                                                {% if base.get('Operação') == "Entrada" %}
+                                                    <td class="text-start"" style="font-weight: bold">&nbsp;🟠 {{ base.get('Operação') }}</td>
+                                                {% elif base.get('Operação') == "Transferencia" %}
+                                                    <td class="text-start"" style="font-weight: bold">&nbsp;🔴 {{ base.get('Operação') }}</td>
+                                                {% else %}
+                                                    <td class="text-start" style="font-weight: bold">&nbsp;🟢 {{ base.get('Operação') }}</td>
+                                                {% endif %}
+                                            {% else %}
+                                                <td class="align-middle">{{ base.get(value) }}</td>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
             </div>
+                   
             {% endif %}
             {% endblock %}
         </div>
