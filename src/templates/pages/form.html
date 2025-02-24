@@ -1,11 +1,11 @@
 {% extends "index.html" %}
 {% block content %}
-<div class="container" style="border: solid; border-color: blueviolet;">
-    <div class="page-header mb-4" style="border: solid; border-color: rgb(162, 22, 22);">
+<div class="container" style="border: solid; border-color: rgb(163, 120, 204);">
+    <div class="page-header mb-4" style="border: solid; border-color: rgb(194, 187, 187);">
 
         <h1 class="display-4 text-center" style="color: rgb(0, 0, 0); font-weight: bold;">Cadastro de {{ title.capitalize() }}</h1>
     </div>
-    <div class="d-flex justify-content-center" style="background-color: brown;">
+    <div class="d-flex justify-content-center" style="background-color: rgb(201, 198, 198);">
         <form action="{{ url_for('send', collection_name=title) }}" method="POST" style="border: solid; border-color: rgb(17, 195, 150);">
             <fieldset>
                 {% for x in field %}

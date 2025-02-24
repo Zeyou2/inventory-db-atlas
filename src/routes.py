@@ -50,16 +50,27 @@ def logout():
 @app.route('/', methods=["GET", "POST"])
 @jwt_required(optional=True)
 def index():
-    current_user = get_jwt_identity()
-    print('user is ', current_user)
-    if current_user == None:
-        return redirect('/login')
+    # current_user = get_jwt_identity()
+    # print('user is ', current_user)
+    # if current_user == None:
+        # return redirect('/login')
     colec = primary_data_db.list_collection_names()
-    sample = manage_op.get_db_collection(primary_data_db, 'usuarios')
+    sample = manage_op.get_db_collection(primary_data_db, 'produtos')
+    products = primary_data_db.get_collection('produtos')
+    operation_dict = manage_op.get_db_collection(operation_db, 'operacao')[::-1]
+    print("sample is", operation_dict)
+    filter_op = []
+    for key in operation_dict:
+        name = products.find_one({'codigo' : key["codigo_prod"]})
+        filter_op.append({'Produto' : name['nome'], 'Data da movimentação' : key["data_movimentacao"], "ID produto" : key["id_produto"], 
+                          "Quantidade": key["quantidade"], "Operação": key["operacao"], "Origem": key["ponto_de_origem"], "Destino": key["ponto_de_destino"]})
+        # key.pop("codigo_prod", None)
+    # print("opopopop", operation_dict)
+
     
-    if request.method == "POST":
-        ("Requisiçao recebida")
-    return render_template('index.html', item_list = colec, sample = sample)
+    # if request.method == "POST":
+    #     ("Requisiçao recebida")
+    return render_template('index.html', item_list = colec, sample = sample, filter_op = filter_op)
 
 @app.route('/cadastro/<collection_name>', methods=['POST',  'GET'])
 # @jwt_required(locations=["cookies"])
