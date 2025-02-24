@@ -130,6 +130,7 @@ def view(collection_name):
 def operation():
     options = manage_op.return_op()
     op_type = request.args.get("op_type")
+    position = request.args.get("from")
     field = manage_op.render_op_form(op_type)
     final_field, combined_lists = list(), list()
     if op_type != None:
