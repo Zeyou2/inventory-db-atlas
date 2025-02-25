@@ -83,73 +83,103 @@
                         </div>
                     </div>
                 </div>
+                <div class="accordion accordion-flush text-center" id="accordion-users">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#users-collapse" aria-expanded="false" aria-controls="users-collapse" style="font-size: 1.5rem; font-weight: bold;">
+                                <i class="bi bi-people me-2"></i> Usuários
+                            </button>
+                        </h2>
+                        <div id="users-collapse" class="accordion-collapse collapse" data-bs-parent="#accordion-users">
+                            <div class="accordion-body">
+                                <a href="{{ url_for('view', collection_name='pontos') }}" class="list-group-item list-group-item-action list-group-item-light p-3" style="font-size: 1.1rem; font-weight: bold;">
+                                    <i class="bi bi-eye"></i> Visualizar
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion accordion-flush text-center" id="accordion-mov">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#mov-collapse" aria-expanded="false" aria-controls="mov-collapse" style="font-size: 1.5rem; font-weight: bold;">
+                                <i class="bi bi-arrow-left-right me-2"></i>  Transferências
+                        </h2>
+                        <div id="mov-collapse" class="accordion-collapse collapse" data-bs-parent="#accordion-mov">
+                            <div class="accordion-body">
+                                <a href="{{ url_for('view', collection_name='pontos') }}" class="list-group-item list-group-item-action list-group-item-light p-3" style="font-size: 1.1rem; font-weight: bold;">
+                                    <i class="bi bi-eye me-2"></i>Realizadas
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-black border border-white">
+                        <img src="{{ url_for('static', filename='images_usuarios/icone-user.jpg') }}" alt="hugenerd" width="50" height="50" class="rounded">
+                        <span class="d-none d-sm-inline mx-1">loser</span>
+                        <button class="align-middle">
+                            Sign out
+                        </button>
+                </div>
+                
             </div>
-            <!-- <div class="dropdown position-absolute bottom-2">
-                <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
-                    id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="{{ url_for('static', filename='images_users/icone-user.jpg') }}" alt="hugenerd"
-                        width="50" height="50" class="rounded-circle">
-                    <span class="d-none d-sm-inline mx-1" style="color: #cb1414; font-weight: bold;">{{ Zeyou }}</span>
-                </a>
-                <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
-                    <li><a class="dropdown-item" href="#">Registrar Movimentação</a></li>
-                    <li>
-                        <hr class="dropdown-divider">
-                    </li>
-                    <li><a class="dropdown-item" href="{{ url_for('logout') }}">Sair</a></li>
-                </ul>
-            </div> -->
+
+
             {% block content %}
             {% if request.endpoint == 'index' %}
 
             
-            <div class="container bg-white text-black">
+            <div class="container bg-white text-black py-5">
                     <h1 class="text-center p-3"> Ultimas Movimentações </h1>
                         <table class="table table-borderless text-center">
                             <thead>
-                                <tr class="border align-middle text-center">
+                                <tr class="border align-middle text-center border-dark">
                                     {% for key in filter_op[0] %}
-                                        
                                         {% if key == "Origem"%}
-                                            <th class="align-middle" style="font-weight: bold; background-color: #F8F8FF;">  {{ key }} </th>
-                                            <th class="align-middle" style="font-weight: bold; background-color: #F8F8FF;"></th>
+                                            <th class="align-middle" style="font-weight: bold;  background: #4682B4;">  {{ key }} </th>
+                                            <th class="align-middle" style="font-weight: bold; background-color: #4682B4;"></th>
                                         {% elif key == "Operação" %}
-                                            <th class="text-start" style="font-weight: bold; background-color: #F8F8FF;">  {{ key }} </th>
+                                            <th class="text-start" style="font-weight: bold; background-color: #4682B4;">  {{ key }} </th>
                                         {% else %}
-                                            <th class="align-middle" style="font-weight: bold; background-color: #F8F8FF;">{{ key }}</th>
+                                            <th class="align-middle" style="font-weight: bold; background-color: #4682B4;">{{ key }}</th>
                                         {% endif %}
-                                           
                                     {% endfor %}
-                                  
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for base in filter_op %}
-                                    <tr class="border align-middle text-center">
+                                    <tr class="border align-middle text-center border-dark">
                                         {% for value in base %}
                                             {% if value == "Origem"%}
-                                                <td class="align-middle" style="color: rgb(196, 20, 20); font-weight: bold">  {{ base.get('Origem') }}</td>
-                                                <td class="align-middle"> ➡️ </td>
+                                                <td class="align-middle" style="color: rgb(196, 20, 20); font-weight: bold; background-color: #ADD8E6;;">  {{ base.get('Origem') }}</td>
+                                                <td class="align-middle" style="background-color: #ADD8E6;"> ➡️ </td>
 
                                             {% elif value == "Destino" %}
-                                                <td class="align-middle" style="color: rgb(0, 151, 20); font-weight: bold">  {{ base.get('Destino') }}</td>
+                                                <td class="align-middle " style="color: rgb(0, 151, 20); font-weight: bold; ; background-color: #ADD8E6; ">  {{ base.get('Destino')[:20] }}</td>
                                             {% elif value == "Operação" %}
                                                 {% if base.get('Operação') == "Entrada" %}
-                                                    <td class="text-start"" style="font-weight: bold">&nbsp;🟠 {{ base.get('Operação') }}</td>
+                                                    <td class="text-start" style="font-weight: bold ; background-color: #ADD8E6;">🟢{{ base.get('Operação') }}</td>
                                                 {% elif base.get('Operação') == "Transferencia" %}
-                                                    <td class="text-start"" style="font-weight: bold">&nbsp;🔴 {{ base.get('Operação') }}</td>
+                                                    <td class="text-start" style="font-weight: bold ; background-color: #ADD8E6;">🟠{{ base.get('Operação') }}</td>
                                                 {% else %}
-                                                    <td class="text-start" style="font-weight: bold">&nbsp;🟢 {{ base.get('Operação') }}</td>
+                                                    <td class="text-start" style="font-weight: bold; background-color: #ADD8E6; ">🔴{{ base.get('Operação') }}</td>
                                                 {% endif %}
+                                            {% elif value == "Data da movimentação" %}
+                                                <td class="align-middle " style="background-color: #ADD8E6; ">{{ base.get("Data da movimentação")[:10] }}
+                                                    {{ base.get('Data da movimentação')[11:] }}
+
+
+                                                </td>
                                             {% else %}
-                                                <td class="align-middle">{{ base.get(value) }}</td>
+                                                <td class="align-middle" style="background-color: #ADD8E6; ">{{ base.get(value)[:20] }}</td>
                                             {% endif %}
                                         {% endfor %}
                                     </tr>
                                 {% endfor %}
                             </tbody>
                         </table>
-            </div>
+                        
+
                    
             {% endif %}
             {% endblock %}
