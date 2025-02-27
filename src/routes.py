@@ -172,6 +172,23 @@ def disable_card(collection_name, codigo):
     print(f"Documentos modificados: {resultado.modified_count}")
     return redirect('/view/'+ collection_name)
 
+@app.route('/transfer', methods=['POST', 'GET'])
+def transfer():
+    colec = primary_data_db.list_collection_names()
+    sample = manage_op.get_db_collection(primary_data_db, 'produtos')
+    products = primary_data_db.get_collection('produtos')
+    operation_dict = manage_op.get_db_collection(operation_db, 'operacao')[::-1]
+    print("sample is", operation_dict)
+    filter_op = []
+    filter_op2 = []
+    for key in operation_dict:
+        name = products.find_one({'codigo' : key["codigo_prod"]})
+        filter_op.append({'Data da movimentação' : str(key["data_movimentacao"]), 'Produto' : name['nome'], "ID produto" : key["id_produto"], 
+                          "Quantidade": str(key["quantidade"]), "Origem": key["ponto_de_origem"], "Destino": key["ponto_de_destino"], "Responsável": "Name"})
+    return render_template('pages/transfer.html', item_list = colec, sample = sample, filter_op = filter_op)
+
+
+
 
 """Testing Cookies and something
 @app.route('/staging/<operation_type>', methods=['POST', 'GET'])

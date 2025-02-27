@@ -1,0 +1,92 @@
+{% extends "index.html" %}
+{% block content %}
+
+<div class="container-fluid rounded">
+    <div class="page-header bm-1 rounded m-2">
+        <h1 class="text-center m-4 p-2" style="color: rgb(0, 0, 0);" > Histórico de Tranferências
+        </h1>
+        <div class="row mb-3 justify-content-center align-items-center">
+            <div class="col-10">
+                <input type="text" id="searchInput" class="form-control" placeholder="🔍 Pesquisar em Transfêrencias" onkeyup="searchCards()" style="border-radius: 20px;">
+                <h4 id="resultsCount" class="mt-2 text-muted" style=" color: rgb(0, 0, 0); font-weight: bold; font-size: 0.9rem;"></h4>
+            </div>
+        </div>
+    </div>
+    <div class="row align-items-center" id="card-container" style="background-color: #88addf">
+        {% for base in filter_op %}
+                <div class="col-md-6 col-lg-6 mb-3 card-item p-1"> 
+                    <div class="card shadow-sm p-4 rounded text-black " 
+    
+                         style="background-color: #138a84; display: flex; flex-direction: row; align-items: center; height: 90px; width: 40%;">
+                        <div class="card-body d-flex flex-column p-1 position-relative" style="flex-grow: 1; overflow: hidden; max-height: 50px; text-overflow: ellipsis; background-color: brown;">
+                                 
+                         
+                            <table class="table table-borderless text-center">
+                                <thead>
+                                    <tr class="border align-middle text-center">
+                                        {% for key, value in base.items() %}
+                                      
+                                                <th class="align-middle" style="font-weight: bold; background-color: #4848b8;">{{ key }}</th>
+                                           
+                                        {% endfor %}
+                                    </tr>
+                                </thead>
+                                <tbody class="border align-middle text-center">
+                                    <tr>
+                                        <td> </td>
+                                    </tr>
+
+                                </tbody>
+                               
+                            </table>
+                        </div>
+                    </div>
+                </div>
+        {% endfor %}
+    </div>
+<style>
+    .card-hover {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card-hover:hover {
+        transform: scale(1.05);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+</style>
+<script>
+    function searchCards() {
+        var input, filter, cards, cardItems, cardTitle, i, txtValue;
+        input = document.getElementById("searchInput");
+        filter = input.value.toLowerCase();
+        cards = document.getElementById("card-container");
+        cardItems = cards.getElementsByClassName("card-item");
+        visibleCount = 0;
+    
+        for (i = 0; i < cardItems.length; i++) {
+            cardTitle = cardItems[i].getElementsByClassName("card-title")[0];
+            if (cardTitle) {
+                const txtValue = cardTitle.textContent || cardTitle.innerText;
+                if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                    cardItems[i].style.display = "";
+                    visibleCount++; 
+                } else {
+                    cardItems[i].style.display = "none"; 
+                }
+            }
+        }
+        document.getElementById("resultsCount").textContent = `Resultados exibidos: ${visibleCount}`;
+    }
+    window.onload = function() {
+        searchCards();
+    };
+    function confirmarExclusao(event) {
+        const confirmacao = confirm("Tem certeza que deseja excluir este item?");
+        if (!confirmacao) {
+            event.preventDefault();
+            return false;
+        }
+        return true;
+    }
+</script>
+{% endblock %}
