@@ -35,11 +35,11 @@
 
 <body class="bg-light">
     <div class="d-flex">
-        <div id="sidebar-wrapper bg-light">  
+        <div id="sidebar-wrapper bg-light border border-black">  
             <div class="sidebar-heading p-5 text-center">
                 <a href="{{ url_for('index') }}" style="text-decoration: none; ">
-                    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="img-fluid rounded-3 shadow-sm p-2" 
-                    style="width: 200px; height: auto">
+                    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="rounded-3 shadow-sm p-1" 
+                    style="width: 170px; height: 150px; object-fit: contain;">
                 </a>
             </div>
             <div class="accordion accordion-flush text-center" id="accordion-products" >
@@ -58,7 +58,7 @@
                                 <i class="bi bi-eye m-2"></i> Visualizar
                             </a>
                             <a href="{{ url_for('operation', collection_name='produtos') }}" class="list-group-item list-group-item-action list-group-item-light p-3">
-                                <i class="bi bi-clock-history m-2"></i> Mover
+                                <i class="bi bi-arrow-right-circle m-2"></i> Movimentar
                             </a>
                         </div>
                     </div>
@@ -91,14 +91,17 @@
                     </h2>
                     <div id="mov-collapse" class="accordion-collapse collapse" data-bs-parent="#accordion-mov">
                         <div class="accordion-body fs-5 fw-bold">
-                            <a href="{{ url_for('transfer', collection_name='Movimentações') }}" class="list-group-item list-group-item-action list-group-item-light p-3">
-                                <i class="bi bi-eye me-2"></i>Realizadas
+                            <a href="{{ url_for('moviments') }}" class="list-group-item list-group-item-action list-group-item-light p-3">
+                                <i class="bi bi-clock-history me-2"></i>Histórico
+                            </a>
+                            <a href="{{ url_for('position') }}" class="list-group-item list-group-item-action list-group-item-light p-3">
+                                <i class="bi bi-compass me-2"></i>Posição
                             </a>
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- <div class="bg-black border border-white">
+            <!-- <div class="bg-black border border-white shadow-sm">
                     <img src="{{ url_for('static', filename='images_usuarios/icone-user.jpg') }}" alt="hugenerd" width="50" height="50" class="rounded">
                     <span class="d-none d-sm-inline mx-1">loser</span>
                     <button class="align-middle">

@@ -172,22 +172,31 @@ def disable_card(collection_name, codigo):
     print(f"Documentos modificados: {resultado.modified_count}")
     return redirect('/view/'+ collection_name)
 
-@app.route('/transfer', methods=['POST', 'GET'])
-def transfer():
+@app.route('/moviments', methods=['POST', 'GET'])
+def moviments():
     colec = primary_data_db.list_collection_names()
     sample = manage_op.get_db_collection(primary_data_db, 'produtos')
     products = primary_data_db.get_collection('produtos')
     operation_dict = manage_op.get_db_collection(operation_db, 'operacao')[::-1]
-    print("sample is", operation_dict)
+    position_db = manage_op.get_db_collection(operation_db, 'position')
+    print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", position_db)
     filter_op = []
-    filter_op2 = []
     for key in operation_dict:
         name = products.find_one({'codigo' : key["codigo_prod"]})
         filter_op.append({'Data da movimentação' : str(key["data_movimentacao"]), 'Produto' : name['nome'], "ID produto" : key["id_produto"], 
                           "Quantidade": str(key["quantidade"]), "Origem": key["ponto_de_origem"], "Destino": key["ponto_de_destino"], "Responsável": "Name"})
-    return render_template('pages/transfer.html', item_list = colec, sample = sample, filter_op = filter_op)
+    return render_template('pages/moviments.html', item_list = colec, sample = sample, filter_op = filter_op)
 
-
+@app.route('/position', methods=['POST', 'GET'])
+def position():
+    products = primary_data_db.get_collection('produtos')
+    position_db = manage_op.get_db_collection(operation_db, 'position')
+    print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", position_db)
+    filter_position = []
+    for key in position_db: 
+        name = products.find_one({'codigo' : key["codigo_prod"]})
+        filter_position.append({'Nome' : name['nome'], 'Codigo' : key["codigo_prod"], 'Local': key['posicao'], 'Quantidade' : str(key['quantidade']), 'Ultima Movimentação' : str(key['ultima_movimentacao'])})
+    return render_template('pages/position.html', filter_position = filter_position)
 
 
 """Testing Cookies and something

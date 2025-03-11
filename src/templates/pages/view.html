@@ -3,11 +3,11 @@
 
 <div class="container-fluid rounded">
     <div class="page-header bm-1 rounded m-2">
-        <h1 class="text-center m-4 p-2" style="color: rgb(0, 0, 0);" > {{collection_name.capitalize()}}</h1>
+        <h1 class="text-center m-4 p-2 text-dark"> {{collection_name.capitalize()}}</h1>
         <div class="row mb-3 justify-content-center align-items-center">
             <div class="col-10">
-                <input type="text" id="searchInput" class="form-control" placeholder="🔍 Pesquisar em {{ collection_name }}" onkeyup="searchCards()" style="border-radius: 20px;">
-                <h4 id="resultsCount" class="mt-2 text-muted" style=" color: rgb(0, 0, 0); font-weight: bold; font-size: 0.9rem;"></h4>
+                <input type="text" id="searchInput" class="form-control" placeholder="🔍 Pesquisar em {{ collection_name }}" onkeyup="searchCards()">
+                <h4 id="resultsCount" class="mt-2 text-muted" style="font-weight: bold; font-size: 0.9rem;"></h4>
             </div>
         </div>
     </div>
@@ -30,8 +30,8 @@
                                             <div class="card-body d-flex flex-column p-1 position-relative" style="flex-grow: 1; overflow: hidden; max-height: 130px; text-overflow: ellipsis">                                                                                                                       
                                                 {% for key, value in base.items() %}
                                                     <div class="card-links position-absolute" style="top: 1px; right: 1px;">
-                                                        <a href="/edit_card/{{ collection_name }}/{{ base['Código'] }}" class="btn btn-sm btn-dark me-2 text-center">✏️ Editar</a>
-                                                        <a href="/disable_card/{{ collection_name }}/{{ base['Código'] }}" class="btn btn-sm btn-dark text-center" onclick="return confirmarExclusao(event)">🗑️ Excluir</a>
+                                                        <a href="/edit_card/{{ collection_name }}/{{ base['Código'] }}" class="btn btn-sm btn-primary me-2 text-center">✏️ Editar</a>
+                                                        <a href="/disable_card/{{ collection_name }}/{{ base['Código'] }}" class="btn btn-sm btn-danger text-center" onclick="return confirmarExclusao(event)">🗑️ Excluir</a>
                                                     </div>
                                                     {% if "_title" in key %}
                                                         <h5 class="card-title" style="font-weight: bold; color: #010101;">

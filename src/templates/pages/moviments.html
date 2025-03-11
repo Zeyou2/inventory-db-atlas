@@ -2,13 +2,13 @@
 {% block content %}
 
 <div class="container-fluid rounded">
-    <div class="page-header bm-1 rounded m-2">
-        <h1 class="text-center m-4 p-2" style="color: #000;">Histórico de Transferências</h1>
+    <div class="page-header bm-1  rounded m-2">
+        <h1 class="text-center m-4 p-2 text-black">Histórico de Transferências</h1>
     </div>
     <div class="row justify-content-center align-items-center" id="card-container">
         {% for base in filter_op %}
             <div class="col-10 card-item p-1 ">   
-                <div class="card rounded" style="display: flex; width: 100%; border: 1px solid #00a2ec;">
+                <div class="card rounded" style="display: flex; width: 100%; border: 1px solid #000000;">
                     <div class="card-body position-relative rounded" style="flex-grow: 1; overflow: hidden; ">
                         <table class="table table-borderless text-center">
                             <thead>
@@ -32,13 +32,13 @@
         {% endfor %}
     </div>
     <div class="pagination-container text-center mt-3">
-        <button class="btn btn-primary" onclick="changePage(-1)">Anterior</button>
+        <button class="btn btn-dark" onclick="changePage(-1)">Anterior</button>
         <span id="pageInfo" class="mx-2">Página 1</span>
-        <button class="btn btn-primary" onclick="changePage(1)">Próxima</button>
+        <button class="btn btn-dark" onclick="changePage(1)">Próxima</button>
     </div>
 <script>
     let currentPage = 1;
-    const cardsPerPage = 3;
+    const cardsPerPage = 5;
 
     function displayCards() {
         const cards = Array.from(document.getElementsByClassName("card-item"));
