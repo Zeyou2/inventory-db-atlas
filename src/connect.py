@@ -90,7 +90,6 @@ class Mongo_Manager(Files_Handling):
         
     def get_db_collection(self, database, collection_name, filter_by={}, remove_el={'_id': 0}):
         all_docs = []
-        print(f"colection name is:", collection_name)
         collection = database.get_collection(collection_name)
         docs = collection.find(filter_by, remove_el)
         for doc in docs:
@@ -117,6 +116,8 @@ class Mongo_Manager(Files_Handling):
         resp = {}
         if (collection == "categoria"):
             resp[collection] = {"categoria" : "lorem ipsum"}
+        elif (collection == "pontos"):
+            resp[collection] = {"data_de_registro":{"$date":{"$numberLong":"1739290476506"}},"nome_local":"Externo","tipo":"Externo","codigo":"LOC_0","status":"enabled"}
         for key, value in resp.items():
                 docs = database[key].insert_many([value])
                 print(f'O seguinte item foi adicionado!\n', docs.inserted_ids)

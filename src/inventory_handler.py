@@ -369,15 +369,24 @@ class Handle_Operations(InventoryManager):
 		operations = data["popular"]["operacoes"]
 		return operations
 	
-	def render_op_form(self, operation:str | None):
+	def render_op_form(self, operation:str | None, position: str | None):
 		if operation == None:
 			return None
+		exclude = []
 		data = self.read_file("transf_op.json", PATTERN_FOLDER)["popular"]
-		print("DATA OPERATION IS:", data[operation.lower()])
+		print(f"DATA OPERATION IS:{data[operation.lower()]}\n\n-----------------------------------------\n", )
 		data_clist = self.make_op_pack(data[operation.lower()], 2)
 		data_send = self.make_op_pack(data[operation.lower()], 1)
 		list_of_lists = [
 			item['list_elements'] for item in data_clist if 'list_elements' in item and not ('db_origin' in item and 'pontos' in item['db_origin'])]
-		combined_lists = [" | ".join(items) for items in zip(*list_of_lists)]
+		print(f"LIST OF LISTS: {list_of_lists}\n\n")
+		if operation == "Transferencia" or operation == "Saida": 
+			available_items = self.get_db_collection(self.set_db("operation"), "position", {"posicao": position, "quantidade": {"$gt": 0}})
+			print("available items aree", available_items)
+			list_available = list(map(lambda x: x["codigo_prod"] if x["codigo_prod"] in list_of_lists[0] else None , available_items))
+			exclude = list(filter(lambda x: x != None, [i if i not in list_available else None for i in list_of_lists[0]]))
+			print("Exclude is? ", exclude, end="\n\n")
+		combined_lists = list(filter(lambda x: x != None, [" | ".join(items) if items[0] not in exclude else None for items in zip(*list_of_lists)]))
 		data_send = list(filter(lambda x : x["db_id"] != "codigo" and x["db_id"] != "nome_produto", data_send))
+		print(f"data send is: {data_send}\n\nand combined lists is: {combined_lists}")
 		return [data_send, combined_lists]

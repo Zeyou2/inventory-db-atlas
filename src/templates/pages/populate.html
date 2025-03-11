@@ -4,67 +4,38 @@
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-<div class="container-fluid mt-4">
+<div class="container-fluid m-4">
     <h1 class="text-center m-4"> Movimentação de Produtos</h1>
-    <div class="input-group mb-3 w-25 vh-25">
-        <label class="input-group-text" for="InputOperation01"> Operação </label>
-        <select class="form-select " id="InputOperation01" aria-label="Selecione uma operação!">
-            <option value="" selected>Selecione uma operação...</option>
-            {% for opt in options %}
-                <option value="{{opt}}">{{opt}}</option>
-            {% endfor %}
-            
-        </select>
-        
-        <button class="btn btn-outline-secondary btn-lg" type="button" onclick="set_location()">
-            Confirme
-        </button>
-    </div>
-
-    <div id="from-btn" class="input-group mb-3 w-25 vh-25" >
-        <label class="input-group-text" for="InputOperation02"> Ponto de Origem </label>
-        <select class="form-select " id="InputOperation02" aria-label="Selecione Ponto de Origem!" onchange="displayForms()">
-            <option value="" selected>O ponto de origem do produto é</option>
-            {% for points in from_p %}
-                <option value="{{points['codigo']}}">{{points['nome_local']}}</option>
-            {% endfor %}
-        </select>
-    </div>
-
-    {% if op_type != None %}
-    <p class="h2">{{op_type}}</p>
-    <form action="{{ url_for('send', collection_name='operacao', op_type=op_type) }}" method="POST">
-        <fieldset">
-            <div class="form-group p-2">
-                <label for="codigo" style="font-weight: bold;">Produto</label>
-                <select id="codigo_prod" name="codigo_prod" class="form-control">
-                    <option value=""></option>
-                    {% for el in combined_lists %}
-                    <option value="{{ el.split('|')[0].strip()}}">{{ el }}</option>
+    <div class="row justify-content-left">
+        <div class="col-4">
+            <div class="input-group mb-3">
+                <label class="input-group-text" for="InputOperation01"> Operação </label>
+                <select class="form-select " id="InputOperation01" aria-label="Selecione uma operação!" onchange="displayForms()">
+                    <option value="" {{ 'selected'  if op_type == None else '' }}>Selecione uma operação...</option>
+                    {% for opt in options %}
+                        <option value="{{opt}}" {{'selected'  if op_type == opt else ''}}>{{opt}}</option>
                     {% endfor %}
                 </select>
             </div>
-            {% for x in field %}
-            <div class="form-group p-2" style="font-weight: bold;">
-                {% if x['resp_type'] == "list" %}
-                <label for="{{ x['db_id'] }}">{{ x['pergunta'] }}</label>
-                <select id="{{ x['db_id'] }}" name="{{ x['db_id'] }}" value="{{ x['pre_value'] }}" class="form-control"
-                    {{ x["em_branco"] }} {{ x['form_editable'] }}>
-                    {% for el in x['list_elements'] %}
-                    <option value="{{el}}">{{el}}</option>
+        </div>
+        <div class="col-4">
+            <div id="from-btn" class="input-group mb-3">
+                <label class="input-group-text" for="InputOperation02"> Ponto de Origem </label>
+                <select class="form-select " id="InputOperation02" aria-label="Selecione Ponto de Origem!" onchange="displayForms()">
+                    <option value="" {{ 'selected' if position == None else '' }} >O ponto de origem do produto é...</option>
+                    {% for points in from_p %}
+                        <option value="{{points['codigo']}}" {{'selected' if position == points['codigo'] else ''}}>{{points['nome_local']}}</option>
                     {% endfor %}
                 </select>
-                {% else %}
-                <label for="{{ x['db_id'] }}">{{ x["pergunta"] }}</label>
-                <input type="{{ x['resp_type'] }}" id="{{ x['db_id'] }}" name="{{ x['db_id'] }}"
-                    value="{{ x['pre_value'] }}" class="form-control" {{ x['em_branco'] }} {{ x['form_editable'] }}>
-                {% endif %}
             </div>
-            {% endfor %}
-            <button type="submit" class="btn btn-primary">Salvar</button>
-        </fieldset>
-    </form>
+        </div>
+    </div>
+    {% if op_type  == 'Entrada' %}
+    {% include "pages/operations/entry.html" %}
+    {% elif op_type  == 'Transferencia' %}
+    {% include "pages/operations/transf.html" %}
     {% endif %}
+
 </div>
 <script>
     $(document).ready(function () {
@@ -74,29 +45,29 @@
         });
     });
 
-    function set_location() {
-        const field_track = document.getElementById("InputOperation01").value;
-        const element_hidden = document.getElementById("from-btn");
-        if (field_track !== "") {
-            element_hidden.removeAttribute("hidden");
-        }
-        else {
-            element_hidden.setAttribute("hidden", "hidden");
-        }
-    }
-
     function displayForms() {
         let opType = document.getElementById("InputOperation01").value;
         let fromPoint = document.getElementById("InputOperation02").value;
         if (!opType) {
             return;
         }
-        let url = `?op_type=${encodeURIComponent(opType)}&from=${encodeURIComponent(fromPoint)}`
+        let url_from = opType != "Entrada" ? `&from=${encodeURIComponent(fromPoint)}` : `&from=LOC_0`;
+        let url = `?op_type=${encodeURIComponent(opType)}${url_from}`;
         
         // Redirect or use the URL as needed
         window.location.href = url;
-        
     }
+
+    const urlString = window.location.search;
+    const urlParams = new URLSearchParams(urlString);
+    let opType = urlParams.get('op_type');
+    let from = urlParams.get('from');
+    if (opType == "Entrada")
+    {
+        document.getElementById("InputOperation02").value = "LOC_0";
+        document.getElementById("InputOperation02").setAttribute("disabled", true);
+    }
+
 
 </script>
 {% endblock %}
