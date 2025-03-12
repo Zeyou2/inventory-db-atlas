@@ -1,0 +1,89 @@
+<form id="formEntradas" action="{{ url_for('send', collection_name='operacao', op_type=op_type) }}" method="POST">
+    <fieldset">
+        <div class="form-group p-2">
+                <label for="codigo" style="font-weight: bold;">Produto</label>
+                <select id="codigo_prod" name="codigo_prod" class="form-control">
+                <option value=""></option>
+                {% for el in combined_lists %}
+                <option value="{{ el.split('|')[0].strip()}}">{{ el }}</option>
+                {% endfor %}
+                </select>
+        </div>
+        <div class="form-group p-2">
+        <label for="{{ field[0]['db_id'] }}">{{ field[0]["pergunta"] }}</label>
+        <input type="{{ field[0]['resp_type'] }}" id="{{ field[0]['db_id'] }}" name="{{ field[0]['db_id'] }}"
+                value="{{ field[0]['pre_value'] }}" class="form-control" {{ field[0]['em_branco'] }} {{ field[0]['form_editable'] }}>
+        </div>
+        {% for x in field[1:] %}
+        <div class="form-group p-2" style="font-weight: bold;">
+            {% if x['resp_type'] == "list" %}
+            <label for="{{ x['db_id'] }}">{{ x['pergunta'] }}</label>
+            <select id="{{ x['db_id'] }}" name="{{ x['db_id'] }}" value="{{ x['pre_value'] }}" class="form-control"
+                {{ x["em_branco"] }} {{ x['form_editable'] }}>
+                {% for el in x['list_elements'] %}
+                <option value="{{el}}">{{el}}</option>
+                {% endfor %}
+            </select>
+            {% else %}
+            <label for="{{ x['db_id'] }}">{{ x["pergunta"] }}</label>
+            <input type="{{ x['resp_type'] }}" id="{{ x['db_id'] }}" name="{{ x['db_id'] }}"
+                value="{{ x['pre_value'] }}" class="form-control" {{ x['em_branco'] }} {{ x['form_editable'] }}>
+            {% endif %}
+        </div>
+        {% endfor %}
+        
+        <button type="button" onclick="addProduct()" class="btn btn-secondary m-2">adicionar produto</button>
+    </fieldset>
+    <div id="tableContainer" style="display: none;">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Data</th>
+                    <th scope="col">Produto</th>
+                    <th scope="col">Número Série/Patrimônio</th>
+                    <th scope="col">Qnt.</th>
+                    <th scope="col">Origem</th>
+                    <th scope="col">Destino</th>
+                    <th scope="col" style="display:none;">position</th>
+                    <th scope="col" style="display:none;">cod_prod</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+            </tbody>
+        </table>
+    </div>
+</form>
+
+<script>
+    const list_elements = 0;
+    let positions = {{from_p | tojson}};
+    console.log(positions)
+
+    if (list_elements > 0)
+    {
+        let html = "<button type='submit' class='btn btn-primary m-2'>Confirmar Envio</button>";
+        document.getElementById("formEntradas").insertAdjacentHTML('beforeend', html);
+    }
+    $(document).ready(function () {
+        $('#codigo_prod').select2({
+            placeholder: "Clique para localizar o produto",
+            allowClear: true
+        });
+    });
+
+    function addProduct() {
+        let codigo = document.getElementById("codigo_prod").value;
+        let data = document.getElementById("data_movimentacao").value;
+        let qnt = document.getElementById("quantidade").value;
+        let origem = positions.find(pos=>pos["codigo"] == "{{position}}")["nome_local"];
+        let destino = document.getElementById("ponto_de_destino").value;
+        let serie = document.getElementById("id_produto").value;
+        let prod_brute = document.getElementById("codigo_prod").value;
+        let produto = document.getElementById("codigo_prod").options[document.getElementById("codigo_prod").selectedIndex].text;
+        let html = "<tr><td>" + data + "</td><td>" + produto + "</td><td>" + serie + "</td><td>" + qnt + "</td><td>" + origem + "</td><td>" + destino + "</td>";
+        html += "<td style='display:none;'>" + "{{position}}" + "</td><td style='display:none;'>" + prod_brute + "</td></tr>"    
+        document.getElementById("tableBody").insertAdjacentHTML('beforeend', html);
+        document.getElementById("tableContainer").style.display = "block";
+    }
+
+</script>
