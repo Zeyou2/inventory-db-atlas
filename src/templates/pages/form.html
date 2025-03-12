@@ -1,56 +1,61 @@
 {% extends "index.html" %}
 {% block content %}
-<div class="container" style="border: solid; border-color: rgb(163, 120, 204);">
-    <div class="page-header mb-4" style="border: solid; border-color: rgb(194, 187, 187);">
-
-        <h1 class="display-4 text-center" style="color: rgb(0, 0, 0); font-weight: bold;">Cadastro de {{ title.capitalize() }}</h1>
+<div class=" container-fluid rounded">
+    <div class="page-header mb-4">
+        <h1 class="text-center center m-4 p-2 text-black">Cadastro de {{ title.capitalize() }}</h1>
     </div>
-    <div class="d-flex justify-content-center" style="background-color: rgb(201, 198, 198);">
-        <form action="{{ url_for('send', collection_name=title) }}" method="POST" style="border: solid; border-color: rgb(17, 195, 150);">
+    <div class="d-flex justify-content-center bg-light p-2 rounded">
+        <form action="{{ url_for('send', collection_name=title) }}" method="POST" class="border p-4 rounded w-100">
             <fieldset>
-                {% for x in field %}
-                <div class="form-group" style="font-weight: bold;">
-                    {% if x['pergunta'] == "Categoria do Produto" %}
-                    <label for="{{ x['db_id'] }}">{{ x['pergunta'] }}</label>
-                    <select id="{{ x['db_id'] }}" name="{{ x['db_id'] }}" class="form-control"
-                        onchange="toggleNewCategory(this)">
-                        {% for el in x['list_elements'] %}
-                        <option value="{{ el }}">{{ el }}</option>
-                        {% endfor %}
-                        <option value="nova_categoria">Nova Categoria</option>
-                    </select>
-                    {% if categoria == nova_categoria %}
-                    <input type="text" id="nova_categoria_input" name="nova_categoria" class="form-control mt-2"
-                        placeholder="Digite nova categoria" style="display: none;">
-                    {% endif %}
-                    {% elif x['resp_type'] == "list" %}
-                    <label for="{{ x['db_id'] }}">{{ x['pergunta'] }}</label>
-                    <select id="{{ x['db_id'] }}" name="{{ x['db_id'] }}" value="{{ x['pre_value'] }}" class="form-control"
-                        {{ x["em_branco"] }} {{ x['form_editable'] }}>
-                        {% for el in x['list_elements'] %}
-                        <option value="{{el}}">{{el}}</option>
-                        {% endfor %}
-                    </select>
-                    {% else %}
-                    <label for="{{ x['db_id'] }}">{{ x["pergunta"] }}</label>
-                    <input type="{{ x['resp_type'] }}" id="{{ x['db_id'] }}" name="{{ x['db_id'] }}"
-                        value="{{ x['pre_value'] }}" class="form-control" {{ x["em_branco"] }} {{ x['form_editable'] }}>
-                    {% endif %}
+                <div class="row">
+                    {% for x in field %}
+                    <div class="col-md-6 mb-3">
+                        <div class="form-group fw-bold">
+                            {% if x['pergunta'] == "Categoria do Produto" %}
+                            <label for="{{ x['db_id'] }}">{{ x['pergunta'] }}:</label>
+                            <select id="categoria_select" name="{{ x['db_id'] }}" class="form-control" onchange="toggleNewCategory(this)">
+                                {% for el in x['list_elements'] %}
+                                <option value="{{ el }}" {% if el == x['pre_value'] %}selected{% endif %}>{{ el }}</option>
+                                {% endfor %}
+                                <option value="nova_categoria" {% if x['pre_value'] == 'nova_categoria' %}selected{% endif %}>Nova Categoria</option>
+                            </select>
+                            <input type="text" id="nova_categoria_input" name="nova_categoria" class="form-control mt-2"
+                                placeholder="Digite nova categoria" style="display: none;">
+                            {% elif x['resp_type'] == "list" %}
+                            <label for="{{ x['db_id'] }}">{{ x['pergunta'] }}:</label>
+                            <select id="{{ x['db_id'] }}" name="{{ x['db_id'] }}" class="form-control" {{ x["em_branco"] }} {{ x['form_editable'] }}>
+                                {% for el in x['list_elements'] %}
+                                <option value="{{ el }}" {% if el == x['pre_value'] %}selected{% endif %}>{{ el }}</option>
+                                {% endfor %}
+                            </select>
+                            {% else %}
+                            <label for="{{ x['db_id'] }}">{{ x['pergunta'] }}:</label>
+                            <input type="{{ x['resp_type'] }}" id="{{ x['db_id'] }}" name="{{ x['db_id'] }}"
+                                value="{{ x['pre_value'] }}" class="form-control" {{ x["em_branco"] }} {{ x['form_editable'] }}>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
                 </div>
-                {% endfor %}
-                <button type="submit" class="btn btn-primary">Salvar</button>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary mt-3">Salvar</button>
+                </div>
             </fieldset>
-            <script>
-                function toggleNewCategory(select) {
-                    const newCategoryInput = document.getElementById('nova_categoria_input');
-                    if (select.value === "nova_categoria") {
-                        newCategoryInput.style.display = "block";
-                    } else {
-                        newCategoryInput.style.display = "none";
-                    }
-                }
-            </script>
         </form>
     </div>
 </div>
+
+<script>
+    function toggleNewCategory(select) {
+        const newCategoryInput = document.getElementById('nova_categoria_input');
+        newCategoryInput.style.display = (select.value === "nova_categoria") ? "block" : "none";
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const categoriaSelect = document.getElementById("categoria_select");
+        if (categoriaSelect && categoriaSelect.value === "nova_categoria") {
+            toggleNewCategory(categoriaSelect);
+        }
+    });
+</script>
 {% endblock %}

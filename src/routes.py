@@ -62,15 +62,15 @@ def index():
     filter_op = []
     for key in operation_dict:
         name = products.find_one({'codigo' : key["codigo_prod"]})
-        filter_op.append({'Produto' : name['nome'], 'Data da movimentação' : key["data_movimentacao"], "ID produto" : key["id_produto"], 
-                          "Quantidade": key["quantidade"], "Operação": key["operacao"], "Origem": key["ponto_de_origem"], "Destino": key["ponto_de_destino"]})
+        filter_op.append({'Data da movimentação' : str(key["data_movimentacao"]), 'Produto' : name['nome'], "ID produto" : key["id_produto"], 
+                          "Quantidade": str(key["quantidade"]), "Operação": key["operacao"], "Origem": key["ponto_de_origem"], "Destino": key["ponto_de_destino"]})
         # key.pop("codigo_prod", None)
     # print("opopopop", operation_dict)
 
     
     # if request.method == "POST":
     #     ("Requisiçao recebida")
-    return render_template('index.html', item_list = colec, sample = sample, filter_op = filter_op)
+    return render_template('index.html', item_list = colec, sample = sample, filter_op = filter_op[:10])
 
 @app.route('/cadastro/<collection_name>', methods=['POST',  'GET'])
 # @jwt_required(locations=["cookies"])
@@ -171,6 +171,32 @@ def disable_card(collection_name, codigo):
     resultado = primary_data_db[collection_name].update_one({"codigo":codigo} ,  {'$set': {"status" : 'disabled'}})
     print(f"Documentos modificados: {resultado.modified_count}")
     return redirect('/view/'+ collection_name)
+
+@app.route('/moviments', methods=['POST', 'GET'])
+def moviments():
+    colec = primary_data_db.list_collection_names()
+    sample = manage_op.get_db_collection(primary_data_db, 'produtos')
+    products = primary_data_db.get_collection('produtos')
+    operation_dict = manage_op.get_db_collection(operation_db, 'operacao')[::-1]
+    position_db = manage_op.get_db_collection(operation_db, 'position')
+    print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", position_db)
+    filter_op = []
+    for key in operation_dict:
+        name = products.find_one({'codigo' : key["codigo_prod"]})
+        filter_op.append({'Data da movimentação' : str(key["data_movimentacao"]), 'Produto' : name['nome'], "ID produto" : key["id_produto"], 
+                          "Quantidade": str(key["quantidade"]), "Origem": key["ponto_de_origem"], "Destino": key["ponto_de_destino"], "Responsável": "Name"})
+    return render_template('pages/moviments.html', item_list = colec, sample = sample, filter_op = filter_op)
+
+@app.route('/position', methods=['POST', 'GET'])
+def position():
+    products = primary_data_db.get_collection('produtos')
+    position_db = manage_op.get_db_collection(operation_db, 'position')
+    print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", position_db)
+    filter_position = []
+    for key in position_db: 
+        name = products.find_one({'codigo' : key["codigo_prod"]})
+        filter_position.append({'Nome' : name['nome'], 'Codigo' : key["codigo_prod"], 'Local': key['posicao'], 'Quantidade' : str(key['quantidade']), 'Ultima Movimentação' : str(key['ultima_movimentacao'])})
+    return render_template('pages/position.html', filter_position = filter_position)
 
 
 """Testing Cookies and something

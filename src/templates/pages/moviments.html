@@ -1,0 +1,70 @@
+{% extends "index.html" %}
+{% block content %}
+
+<div class="container-fluid rounded">
+    <div class="page-header bm-1  rounded m-2">
+        <h1 class="text-center m-4 p-2 text-black">Histórico de Transferências</h1>
+    </div>
+    <div class="row justify-content-center align-items-center" id="card-container">
+        {% for base in filter_op %}
+            <div class="col-10 card-item p-1 ">   
+                <div class="card rounded" style="display: flex; width: 100%; border: 1px solid #000000;">
+                    <div class="card-body position-relative rounded" style="flex-grow: 1; overflow: hidden; ">
+                        <table class="table table-borderless text-center">
+                            <thead>
+                                <tr class="border align-middle text-center">
+                                    {% for key, value in base.items() %}
+                                        <th class="align-middle">{{ key }}</th>
+                                    {% endfor %}
+                                </tr>
+                            </thead>
+                            <tbody class="border align-middle text-center">
+                                <tr>
+                                    {% for key, value in base.items() %}
+                                        <td>{{ value[:10] }}</td>
+                                    {% endfor %}
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="pagination-container text-center mt-3">
+        <button class="btn btn-dark" onclick="changePage(-1)">Anterior</button>
+        <span id="pageInfo" class="mx-2">Página 1</span>
+        <button class="btn btn-dark" onclick="changePage(1)">Próxima</button>
+    </div>
+<script>
+    let currentPage = 1;
+    const cardsPerPage = 5;
+
+    function displayCards() {
+        const cards = Array.from(document.getElementsByClassName("card-item"));
+        cards.forEach((card, index) => {
+            card.style.display = (index >= (currentPage - 1) * cardsPerPage && index < currentPage * cardsPerPage) ? "" : "none";
+        });
+        updatePageInfo(cards.length);
+    }
+
+    function changePage(direction) {
+        const cards = Array.from(document.getElementsByClassName("card-item"));
+        const totalPages = Math.ceil(cards.length / cardsPerPage);
+
+        if ((direction === -1 && currentPage > 1) || (direction === 1 && currentPage < totalPages)) {
+            currentPage += direction;
+            displayCards();
+        }
+    }
+
+    function updatePageInfo(totalCards) {
+        const totalPages = Math.ceil(totalCards / cardsPerPage);
+        document.getElementById("pageInfo").textContent = `Página ${currentPage} de ${totalPages}`;
+    }
+
+    window.onload = function () {
+        displayCards();
+    };
+</script>
+{% endblock %}

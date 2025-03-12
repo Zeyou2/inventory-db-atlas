@@ -2,7 +2,7 @@
 {% block content %}
 <div class="container mt-4" style="background-color: #ffffff">
     <div class="page-header mb-4">
-        <h1 class="text-center m-4" style="color: rgb(0, 0, 0); text-shadow: -1px -1px 0 rgb(255, 255, 255)">Edição de {{ title.capitalize() }}</h1>
+        <h1 class="text-center m-4 p-2 text-black">Edição de {{ title.capitalize() }}</h1>
     </div>
     <form action="{{ url_for('edit', collection_name=title, codigo = codigo) }}" method="POST">
         <fieldset>
