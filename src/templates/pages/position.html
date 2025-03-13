@@ -5,7 +5,7 @@
     <div class="page-header bm-1  rounded m-2">
         <h1 class="text-center m-4 p-2 text-black">Posição</h1>
     </div>
-    <div class="row justify-content-center align-items-center" id="card-container">
+    <div class="row justify-content-center align-items-center p-2" id="card-container">
         {% for base in filter_position %}
             <div class="col-6 card-item p-1 ">   
                 <div class="card rounded" style="display: flex; width: 100%; border: 1px solid #000000;">
@@ -38,7 +38,7 @@
     </div>
 <script>
     let currentPage = 1;
-    const cardsPerPage = 5;
+    const cardsPerPage = 6;
 
     function displayCards() {
         const cards = Array.from(document.getElementsByClassName("card-item"));
