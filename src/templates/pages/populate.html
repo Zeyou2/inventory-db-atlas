@@ -48,7 +48,7 @@
     function displayForms() {
         let opType = document.getElementById("InputOperation01").value;
         let fromPoint = document.getElementById("InputOperation02").value;
-        if (!opType) {
+        if (!opType || !fromPoint) {
             return;
         }
         let url_from = opType != "Entrada" ? `&from=${encodeURIComponent(fromPoint)}` : `&from=LOC_0`;
@@ -68,6 +68,35 @@
         document.getElementById("InputOperation02").setAttribute("disabled", true);
     }
 
+    function sendTableData(){
+        let table = document.getElementById("info_table");
+      
+        let rows = table.getElementsByTagName("tr");
+        let tableData = [];
 
+        for (let i = 1; i < rows.length; i++) { // Skip header row
+            let cells = rows[i].getElementsByTagName("td");
+            let rowData = {
+                data: cells[0].innerText,
+                produto: cells[1].innerText,
+                id: cells[2].innerText,
+                quantidade: cells[3].innerText,
+                origem: cells[4].innerText,
+                destino: cells[5].innerText,
+
+            };
+            tableData.push(rowData);
+        }
+        
+        fetch("/send_operation", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ table: tableData })
+        })
+        .then(data => console.log("Response from server:", data))
+        .catch(error => console.error("Error:", error));
+    }
+    
+    
 </script>
 {% endblock %}
