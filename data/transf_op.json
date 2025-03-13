@@ -175,8 +175,8 @@
 				"form_editable": "True",
 				"form_visible": 1,
 				"pre_value": "",
-				"pergunta": "(fazer ser uma lista)Numero de Série ou Patrimônio: ",
-				"resp_type": "str",
+				"pergunta": "Numero de Série ou Patrimônio: ",
+				"resp_type": "list",
 				"em_branco": "False",
 				"field_name": "Id do produto"
 			},
