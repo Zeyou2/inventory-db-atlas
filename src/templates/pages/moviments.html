@@ -7,21 +7,21 @@
     </div>
     <div class="row justify-content-center align-items-center" id="card-container">
         {% for base in filter_op %}
-            <div class="col-10 card-item p-1 ">   
+            <div class="col-8 card-item p-1 ">   
                 <div class="card rounded" style="display: flex; width: 100%; border: 1px solid #000000;">
                     <div class="card-body position-relative rounded" style="flex-grow: 1; overflow: hidden; ">
-                        <table class="table table-borderless text-center">
+                        <table class="table table-borderless text-center align-middle" style="table-layout: fixed;">
                             <thead>
-                                <tr class="border align-middle text-center">
-                                    {% for key, value in base.items() %}
-                                        <th class="align-middle">{{ key }}</th>
+                                <tr>
+                                    {% for key in base %}
+                                        <th class="p-1 m-5">{{ key }}</th>
                                     {% endfor %}
                                 </tr>
                             </thead>
-                            <tbody class="border align-middle text-center">
+                            <tbody>
                                 <tr>
                                     {% for key, value in base.items() %}
-                                        <td>{{ value[:10] }}</td>
+                                        <td class="p-1 m-5">{{ value[:10] }}</td>
                                     {% endfor %}
                                 </tr>
                             </tbody>
