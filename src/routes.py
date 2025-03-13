@@ -188,7 +188,7 @@ def moviments():
     filter_op = []
     for key in operation_dict:
         name = products.find_one({'codigo' : key["codigo_prod"]})
-        filter_op.append({'Data da movimentação' : str(key["data_movimentacao"]), 'Produto' : name['nome'], "ID produto" : key["id_produto"], 
+        filter_op.append({'Atualizado' : str(key["data_movimentacao"]), 'Produto' : name['nome'], "ID produto" : key["id_produto"], 
                           "Quantidade": str(key["quantidade"]), "Origem": key["ponto_de_origem"], "Destino": key["ponto_de_destino"], "Responsável": "Name"})
     return render_template('pages/moviments.html', item_list = colec, sample = sample, filter_op = filter_op)
 
@@ -200,7 +200,7 @@ def position():
     filter_position = []
     for key in position_db: 
         name = products.find_one({'codigo' : key["codigo_prod"]})
-        filter_position.append({'Nome' : name['nome'], 'Codigo' : key["codigo_prod"], 'Local': key['posicao'], 'Quantidade' : str(key['quantidade']), 'Ultima Movimentação' : str(key['ultima_movimentacao'])})
+        filter_position.append({'Nome' : name['nome'], 'Codigo' : key["codigo_prod"], 'Local': key['posicao'], 'Quantidade' : str(key['quantidade']), 'Atualização' : str(key['ultima_movimentacao'])})
     return render_template('pages/position.html', filter_position = filter_position)
 
 
