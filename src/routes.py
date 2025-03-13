@@ -91,26 +91,37 @@ def send(collection_name):
     form_values = {key: value for key, value in request.form.items()}
     print("Values to be send are: ", form_values)
     url_args = request.args.to_dict()
-    op_type = url_args.get('op_type')
-    if op_type != None:
-        redirect_to = "/operation"
-        form_values.update({'operacao': url_args.get("op_type")})
-        required_db = operation_db
-        form_values = manage_op.hand_mandatory_data(required_db, form_values, "operacao", url_args.get("op_type").lower())
-    else:
-        required_db = primary_data_db
-        redirect_to = "/view/" + collection_name
-        if collection_name == "usuarios":
-            form_values = manage_op.process_user_registration(required_db, form_values)
-            if form_values == None:
-                return redirect(url_for('register_user', login_check = True))
-        form_values = manage_op.hand_mandatory_data(required_db, form_values, collection_name)
-        form_values = manage_op.send_treatment(required_db, collection_name, form_values)
-        manage_op.save_log(collection_name, form_values["data_de_registro"])    
+    required_db = primary_data_db
+    redirect_to = "/view/" + collection_name
+    if collection_name == "usuarios":
+        form_values = manage_op.process_user_registration(required_db, form_values)
+        if form_values == None:
+            return redirect(url_for('register_user', login_check = True))
+    form_values = manage_op.hand_mandatory_data(required_db, form_values, collection_name)
+    form_values = manage_op.send_treatment(required_db, collection_name, form_values)
+    manage_op.save_log(collection_name, form_values["data_de_registro"])    
     manage_op.insert_into_db(required_db, collection_name, form_values)
-    if op_type != None:
-        manage_op.create_position(form_values)
     return redirect(redirect_to)
+
+@app.route('/send_operation/', methods= ['POST'])
+def operation_process():
+    collection_name = "operation"
+    
+    form_values = request.get_json()
+    print("FORM VALUES ARE", form_values)
+
+    # print(form_values)
+    url_args = request.args.to_dict()
+    op_type = url_args.get('op_type')
+    redirect_to = "/operation?op_type="
+    # form_values.update({'operacao': url_args.get("op_type")})
+    # required_db = operation_db
+    # form_values = manage_op.hand_mandatory_data(required_db, form_values, "operacao", url_args.get("op_type").lower())
+    # manage_op.insert_into_db(required_db, collection_name, form_values)
+    # if op_type != None:
+    #     manage_op.create_position(form_values)
+    return redirect(redirect_to)
+
 
 @app.route('/view/<collection_name>', methods=['POST', 'GET'])
 # @jwt_required()
@@ -144,13 +155,13 @@ def operation():
     position = request.args.get("from")
     from_places = manage_op.get_db_collection(primary_data_db, "pontos")
     final_field, combined_lists = list(), list()
-    if op_type != None:    
+    if op_type != None and position != None:    
         field = manage_op.render_op_form(op_type, 
-                                         manage_op.get_db_collection(primary_data_db, "pontos",{"codigo": position})[0]["nome_local"])
+                                        manage_op.get_db_collection(primary_data_db, "pontos",{"codigo": position})[0]["nome_local"])
         combined_lists = field[1]
         # from_places = list(filter(lambda x: x["db_id"] == "ponto_de_origem", field[0]))
         final_field = field[0]
-        
+    
     return render_template('pages/populate.html', options=options, op_type=op_type, from_p = from_places , position=position, field=final_field, combined_lists = combined_lists)
 
 @app.route('/edit_card/<collection_name>/<codigo>', methods=['POST', 'GET'])
