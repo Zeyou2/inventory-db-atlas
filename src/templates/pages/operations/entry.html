@@ -34,9 +34,6 @@
         {% endfor %}
 
         <button type="button" onclick="addProduct()" class="btn btn-secondary m-2">adicionar produto</button>
-        
-        <button type="button" onclick="sendTableData()" class="btn btn-secondary m-2">AlternativoBUG</button>
-        
         <button type="submit" onclick="sendTableData()" class="btn btn-secondary m-2">Confirmar Mudanças</button>
     </fieldset>
     <fieldset>
@@ -51,6 +48,7 @@
                         <th scope="col">Origem</th>
                         <th scope="col">Destino</th>
                         <th scope="col" style="display:none;">position</th>
+                        <th scope="col" style="display:none;">destiny</th>
                         <th scope="col" style="display:none;">cod_prod</th>
                         <th scope="col" class="close" style="display:none;"></th>
                     </tr>
@@ -77,25 +75,5 @@
             allowClear: true
         });
     });
-
-    function addProduct() {
-        let codigo = document.getElementById("codigo_prod").value;
-        let data = document.getElementById("data_movimentacao").value;
-        let qnt = document.getElementById("quantidade").value;
-        let origem = positions.find(pos => pos["codigo"] == "{{position}}")["nome_local"];
-        let destino = document.getElementById("ponto_de_destino").value;
-        let serie = document.getElementById("id_produto").value;
-        let prod_brute = document.getElementById("codigo_prod").value;
-        let produto = document.getElementById("codigo_prod").options[document.getElementById("codigo_prod").selectedIndex].text;
-        if (!codigo || !data || !qnt || !origem || !destino) {
-            alert("Por favor, preencha todos os campos!");
-            return;
-        }
-        let html = "<tr><td>" + data + "</td><td>" + produto + "</td><td>" + serie + "</td><td>" + qnt + "</td><td>" + origem + "</td><td>" + destino + "</td>";
-        html += "<td style='display:none;'>" + "{{position}}" + "</td><td style='display:none;'>" + prod_brute + "</td>"
-        html += "<td <button type='button' onclick='removeThis(this)' class='close' aria-label='Close'><span aria-hidden='true'>&times;</span></button></td></tr>"
-        document.getElementById("tableBody").insertAdjacentHTML('beforeend', html);
-        document.getElementById("tableContainer").style.display = "block";
-    }
 
 </script>

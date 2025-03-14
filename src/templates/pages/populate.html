@@ -68,6 +68,32 @@
         document.getElementById("InputOperation02").setAttribute("disabled", true);
     }
 
+    function addProduct() {
+        let codigo = document.getElementById("codigo_prod").value;
+        let data = document.getElementById("data_movimentacao").value;
+        let qnt = document.getElementById("quantidade").value;
+        let origem = positions.find(pos => pos["codigo"] == "{{position}}")["nome_local"];
+        let destino = document.getElementById("ponto_de_destino").value;
+        let destino_cod = positions.find(pos => pos["nome_local"] == destino)["codigo"];
+        let serie = document.getElementById("id_produto").value;
+        let prod_brute = document.getElementById("codigo_prod").value;
+        let produto = document.getElementById("codigo_prod").options[document.getElementById("codigo_prod").selectedIndex].text;
+        if (!codigo || !data || !qnt || !origem || !destino) {
+            alert("Por favor, preencha todos os campos!");
+            return;
+        }
+        let html = "<tr><td>" + data + "</td><td>" + produto + "</td><td>" + serie + "</td><td>" + qnt + "</td><td>" + origem + "</td><td>" + destino + "</td>";
+        html += "<td style='display:none;'>" + "{{position}}"  + "</td><td style='display:none;'>" + destino_cod + "</td>" + "</td><td style='display:none;'>" + prod_brute;
+        html += "<td <button type='button' onclick='removeThis(this)' class='close' aria-label='Close'><span aria-hidden='true'>&times;</span></button></td></tr>"
+        document.getElementById("tableBody").insertAdjacentHTML('beforeend', html);
+        document.getElementById("tableContainer").style.display = "block";
+    }
+
+    
+    function removeThis(element) {
+        element.parentElement.remove();
+    }
+
     function sendTableData(){
         let table = document.getElementById("info_table");
       
@@ -77,12 +103,14 @@
         for (let i = 1; i < rows.length; i++) { // Skip header row
             let cells = rows[i].getElementsByTagName("td");
             let rowData = {
-                data: cells[0].innerText,
-                produto: cells[1].innerText,
-                id: cells[2].innerText,
+                data_movimentacao: cells[0].innerText,
+                codigo_prod: cells[8].innerText,
+                nome_produto: cells[1].innerText.split(" | ")[1].trim(),
+                id_produto: cells[2].innerText,
                 quantidade: cells[3].innerText,
-                origem: cells[4].innerText,
-                destino: cells[5].innerText,
+                ponto_de_origem: cells[6].innerText,
+                ponto_de_destino: cells[7].innerText,
+                operacao: opType
 
             };
             tableData.push(rowData);

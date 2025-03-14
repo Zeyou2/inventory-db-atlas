@@ -95,7 +95,6 @@ class Handle_Operations(InventoryManager):
 		num = 0
 		print("collection name in get_last_code: ", collection_name)
 		db = self.get_db_collection(database, collection_name)
-
 		for elem in db:
 			if (elem.get("codigo") != None and prefix in elem["codigo"]):
 				num_check = parse_code(elem["codigo"])
@@ -207,7 +206,6 @@ class Handle_Operations(InventoryManager):
 		return form_values
 		
 	def hand_mandatory_data(self, database, form_value, collection_name, op=None, is_new=True):
-		
 		filename = "transf_op.json" if form_value.get("operacao") != None else "estruturas_de_dados.json"
 		file_el = self.read_file(filename, PATTERN_FOLDER) if filename == "estruturas_de_dados.json" else self.read_file(filename, PATTERN_FOLDER)["popular"]
 		t_data = file_el[op] if collection_name == "operacao" else file_el[collection_name]
@@ -224,6 +222,20 @@ class Handle_Operations(InventoryManager):
 
 		form_value["status"] = "enabled"
 		return form_value
+	
+	def iterate_code(self, form_values):
+		num_it = int(form_values[0]["codigo"].split("_")[1])
+		for elem in form_values:
+			elem["codigo"] = "_".join([elem["codigo"].split("_")[0], str(num_it)])
+			num_it += 1
+		return form_values
+
+	def operation_handle_data(self, database, form_values, collection_name, op=None, is_new=True ):
+		list_result = []
+		for i in form_values:
+			list_result.append(self.hand_mandatory_data(database, i, collection_name, op, is_new))
+		list_result = self.iterate_code(list_result)	
+		return list_result
 
 	def process_user_validation(self, database, form_values):
 		"""
@@ -305,7 +317,7 @@ class Handle_Operations(InventoryManager):
 			data = self.get_db_collection(operations, "operacao", {"data_de_registro": {"$gte": time_compare, "$lte":datetime.now()}})
 			print("Time to be compared is: ", time_compare)
 		print("data is?", data)
-		self.save_log("operacao", form_values ["data_de_registro"])
+		self.save_log("operacao", form_values[0]["data_de_registro"])
 		def validate_product(elem):
 			if elem["id_produto"] == "":
 				return True
