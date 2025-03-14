@@ -62,8 +62,9 @@ def index():
     filter_op = []
     for key in operation_dict:
         name = products.find_one({'codigo' : key["codigo_prod"]})
-        filter_op.append({'Data da movimentação' : str(key["data_movimentacao"]), 'Produto' : name['nome'], "ID produto" : key["id_produto"], 
-                          "Quantidade": str(key["quantidade"]), "Operação": key["operacao"], "Origem": key["ponto_de_origem"], "Destino": key["ponto_de_destino"]})
+        filter_op.append({'Data da movimentação' : str(key["data_movimentacao"]),
+                        'Produto' : name['nome'], "ID produto" : key["id_produto"], 
+                        "Quantidade": str(key["quantidade"]), "Operação": key["operacao"], "Origem": key["ponto_de_origem"], "Destino": key["ponto_de_destino"]})
         # key.pop("codigo_prod", None)
     # print("opopopop", operation_dict)
 
@@ -103,23 +104,20 @@ def send(collection_name):
     manage_op.insert_into_db(required_db, collection_name, form_values)
     return redirect(redirect_to)
 
-@app.route('/send_operation/', methods= ['POST'])
+@app.route('/send_operation', methods= ['POST'])
 def operation_process():
-    collection_name = "operation"
+    collection_name = "operacao"
     
-    form_values = request.get_json()
-    print("FORM VALUES ARE", form_values)
-
-    # print(form_values)
+    table_data = request.get_json()["table"]
+    op_type = table_data[0]["operacao"]
     url_args = request.args.to_dict()
-    op_type = url_args.get('op_type')
     redirect_to = "/operation?op_type="
-    # form_values.update({'operacao': url_args.get("op_type")})
-    # required_db = operation_db
-    # form_values = manage_op.hand_mandatory_data(required_db, form_values, "operacao", url_args.get("op_type").lower())
-    # manage_op.insert_into_db(required_db, collection_name, form_values)
-    # if op_type != None:
-    #     manage_op.create_position(form_values)
+    print(table_data)
+    form_values = manage_op.operation_handle_data(operation_db, table_data, "operacao", op_type.lower())
+    print("form_values are", form_values)
+    manage_op.insert_into_db(operation_db, collection_name, form_values)
+    if op_type != None:
+        manage_op.create_position(form_values)
     return redirect(redirect_to)
 
 
@@ -157,7 +155,7 @@ def operation():
     final_field, combined_lists = list(), list()
     if op_type != None and position != None:    
         field = manage_op.render_op_form(op_type, 
-                                        manage_op.get_db_collection(primary_data_db, "pontos",{"codigo": position})[0]["nome_local"])
+                                        manage_op.get_db_collection(primary_data_db, "pontos",{"codigo": position})[0]["codigo"])
         combined_lists = field[1]
         # from_places = list(filter(lambda x: x["db_id"] == "ponto_de_origem", field[0]))
         final_field = field[0]

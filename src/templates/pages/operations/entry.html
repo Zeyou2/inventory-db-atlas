@@ -39,9 +39,7 @@
                 <button type="button" onclick="sendTableData()" class="btn btn-secondary m-1">AlternativoBUG</button>
                 <button type="submit" onclick="sendTableData()" class="btn btn-secondary m-1">Confirmar Mudanças</button>
             </fieldset>
-        </form>
     </div>
-
     <div class="col-8">
         <fieldset>
             <div id="tableContainer" style="display: none;">
@@ -67,6 +65,7 @@
         </fieldset>
     </div>
 </div>
+</form>
 <script>
     const list_elements = 0;
     let positions = {{ from_p | tojson}};
@@ -82,25 +81,4 @@
             allowClear: true
         });
     });
-
-    function addProduct() {
-        let codigo = document.getElementById("codigo_prod").value;
-        let data = document.getElementById("data_movimentacao").value;
-        let qnt = document.getElementById("quantidade").value;
-        let origem = positions.find(pos => pos["codigo"] == "{{position}}")["nome_local"];
-        let destino = document.getElementById("ponto_de_destino").value;
-        let serie = document.getElementById("id_produto").value;
-        let prod_brute = document.getElementById("codigo_prod").value;
-        let produto = document.getElementById("codigo_prod").options[document.getElementById("codigo_prod").selectedIndex].text;
-        if (!codigo || !data || !qnt || !origem || !destino) {
-            alert("Por favor, preencha todos os campos!");
-            return;
-        }
-        let html = "<tr><td>" + data + "</td><td>" + produto + "</td><td>" + serie + "</td><td>" + qnt + "</td><td>" + origem + "</td><td>" + destino + "</td>";
-        html += "<td style='display:none;'>" + "{{position}}" + "</td><td style='display:none;'>" + prod_brute + "</td>"
-        html += "<td <button type='button' onclick='removeThis(this)' class='close' aria-label='Close'><span aria-hidden='true'>🗑️</span></button></td></tr>"
-        document.getElementById("tableBody").insertAdjacentHTML('beforeend', html);
-        document.getElementById("tableContainer").style.display = "block";
-    }
-
 </script>
