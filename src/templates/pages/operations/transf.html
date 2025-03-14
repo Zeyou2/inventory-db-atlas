@@ -113,7 +113,8 @@
     }
     window.onchange = function () {
         const id = document.getElementById("id_produto");
-
+        if (id.value.length == 0)
+            return;
         id.onchange = get_qt(id);
     }
 
