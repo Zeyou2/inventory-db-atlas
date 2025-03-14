@@ -183,7 +183,7 @@ def edit(collection_name, codigo):
 # @jwt_required(locations=["cookies"])
 def disable_card(collection_name, codigo):
     resultado = primary_data_db[collection_name].update_one({"codigo":codigo} ,  {'$set': {"status" : 'disabled'}})
-    print(f"Documentos modificados: {resultado.modified_count}")
+    # print(f"Documentos modificados: {resultado.modified_count}")
     return redirect('/view/'+ collection_name)
 
 @app.route('/moviments', methods=['POST', 'GET'])
@@ -192,8 +192,6 @@ def moviments():
     sample = manage_op.get_db_collection(primary_data_db, 'produtos')
     products = primary_data_db.get_collection('produtos')
     operation_dict = manage_op.get_db_collection(operation_db, 'operacao')[::-1]
-    position_db = manage_op.get_db_collection(operation_db, 'position')
-    print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", position_db)
     filter_op = []
     for key in operation_dict:
         name = products.find_one({'codigo' : key["codigo_prod"]})
@@ -205,11 +203,11 @@ def moviments():
 def position():
     products = primary_data_db.get_collection('produtos')
     position_db = manage_op.get_db_collection(operation_db, 'position')
-    print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", position_db)
     filter_position = []
-    for key in position_db: 
-        name = products.find_one({'codigo' : key["codigo_prod"]})
-        filter_position.append({'Nome' : name['nome'], 'Codigo' : key["codigo_prod"], 'Local': key['posicao'], 'Quantidade' : str(key['quantidade']), 'Atualização' : str(key['ultima_movimentacao'])})
+    for key in position_db:
+        if key['quantidade'] != 0:
+            name = products.find_one({'codigo' : key["codigo_prod"]})
+            filter_position.append({'Nome' : name['nome'], 'Codigo' : key["codigo_prod"], 'Local': key['posicao'], 'Quantidade' : str(key['quantidade']), 'Atualização' : str(key['ultima_movimentacao'])})
     return render_template('pages/position.html', filter_position = filter_position)
 
 
