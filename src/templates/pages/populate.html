@@ -9,7 +9,7 @@
     <div class="row justify-content-left">
         <div class="col-4">
             <div class="input-group mb-3">
-                <label class="input-group-text" for="InputOperation01"> Operação </label>
+                <label class="input-group-text" for="InputOperation01" > Operação </label>
                 <select class="form-select " id="InputOperation01" aria-label="Selecione uma operação!" onchange="displayForms()">
                     <option value="" {{ 'selected'  if op_type == None else '' }}>Selecione uma operação...</option>
                     {% for opt in options %}
@@ -48,7 +48,7 @@
     function displayForms() {
         let opType = document.getElementById("InputOperation01").value;
         let fromPoint = document.getElementById("InputOperation02").value;
-        if (!opType || !fromPoint) {
+        if (!opType) {
             return;
         }
         let url_from = opType != "Entrada" ? `&from=${encodeURIComponent(fromPoint)}` : `&from=LOC_0`;
@@ -68,35 +68,6 @@
         document.getElementById("InputOperation02").setAttribute("disabled", true);
     }
 
-    function sendTableData(){
-        let table = document.getElementById("info_table");
-      
-        let rows = table.getElementsByTagName("tr");
-        let tableData = [];
 
-        for (let i = 1; i < rows.length; i++) { // Skip header row
-            let cells = rows[i].getElementsByTagName("td");
-            let rowData = {
-                data: cells[0].innerText,
-                produto: cells[1].innerText,
-                id: cells[2].innerText,
-                quantidade: cells[3].innerText,
-                origem: cells[4].innerText,
-                destino: cells[5].innerText,
-
-            };
-            tableData.push(rowData);
-        }
-        
-        fetch("/send_operation", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ table: tableData })
-        })
-        .then(data => console.log("Response from server:", data))
-        .catch(error => console.error("Error:", error));
-    }
-    
-    
 </script>
 {% endblock %}
