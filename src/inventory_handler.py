@@ -358,7 +358,7 @@ class Handle_Operations(InventoryManager):
 			change.pop("status", None)
 			change.pop("data_movimentacao", None)
 			change["ultima_movimentacao"] = change.pop("data_de_registro", None)
-			if op_type == "Transferencia":
+			if op_type == "Transferencia" or op_type == "Saida":
 				change["posicao"] = change.pop("ponto_de_origem", None)
 				destiny = change.pop("ponto_de_destino", None)
 				operation_calcule(change, "out")
