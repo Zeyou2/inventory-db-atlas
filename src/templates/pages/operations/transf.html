@@ -22,7 +22,9 @@
             <select id="{{ x['db_id'] }}" name="{{ x['db_id'] }}" value="{{ x['pre_value'] }}" class="form-control" {{
                 x["em_branco"] }} {{ x['form_editable'] }}>
                 {% for el in x['list_elements'] %}
-                <option value="{{el}}">{{el}}</option>
+                {% if el != 'Externo' %}
+                    <option value="{{el}}">{{el}}</option>
+                {% endif %}
                 {% endfor %}
             </select>
             {% else %}
