@@ -285,7 +285,7 @@
 				"form_visible": 1,
 				"pre_value": "",
 				"pergunta": "Numero de Série ou Patrimônio: ",
-				"resp_type": "str",
+				"resp_type": "list",
 				"em_branco": "False",
 				"field_name": "Id do produto"
 			},

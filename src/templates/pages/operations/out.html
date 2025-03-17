@@ -4,7 +4,7 @@
                 <fieldset>
                     <div class="form-group p-2">
                         <label for="codigo" style="font-weight: bold;">Produto:</label>
-                        <select id="codigo_prod" name="codigo_prod" class="form-control" required>
+                        <select id="codigo_prod" name="codigo_prod" class="form-control" onchange="get_index(this)" required>
                             <option value=""></option>
                             {% for el in combined_lists %}
                             <option value="{{ el.split('|')[0].strip()}}">{{ el }}</option>
@@ -69,7 +69,51 @@
     <script>
         const list_elements = 0;
         let positions = {{ from_p | tojson}};
+        let lists_combined = {{ combined_lists | tojson}};
+
+        function get_index(product) {
+            console.log("Trigger to get index");
+            const series_element = document.getElementById("id_produto");
+            series_element.innerHTML = "";
+            for (const available in lists_combined[product[product.selectedIndex].text]) {
+                const index_to_add = lists_combined[product[product.selectedIndex].text][available]
+                series_element.innerHTML += `<option value=${index_to_add["id_produto"]}>${index_to_add["id_produto"]}</option>`;
+            }
+        }
+
+        function get_qt(id_product) {
+            text_id = id_product[id_product.selectedIndex].text
+            console.log("Trigger to get_qt, this is: ", text_id);
+            const qt_element = document.getElementById("quantidade");
+            const product = document.getElementById("codigo_prod");
+            qt_element.min = 1;
+            const info_value = document.getElementById("info-value");
+            let html = "<p id='info-value' class='text-start'>Você não pode adicionar mais que "
+            if (text_id == "") {
+                qt_element.max = lists_combined[product[product.selectedIndex].text][0]["quantidade"];
+    
+            }
+            else {
+                qt_element.max = 1;
+                qt_element.value = 1;
+            }
+            html += qt_element.max + " unidade(s) deste produto.</p>";
+            if (info_value) {
+                info_value.innerHTML = html;
+            }
+            else {
+                qt_element.insertAdjacentHTML('afterend', html);
+            }
+    
+        }
         console.log(positions);
+
+        window.onchange = function () {
+            const id = document.getElementById("id_produto");
+            if (id.value.length == 0)
+                return;
+            id.onchange = get_qt(id);
+        }
 
         if (list_elements > 0) {
             let html = "<button type='submit' class='btn btn-primary m-2'>Confirmar Envio</button>";
