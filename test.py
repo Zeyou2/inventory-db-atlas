@@ -1,6 +1,6 @@
 from src.inventory_handler import Handle_Operations
 from src.connect import Mongo_Manager
-import requests
+# import requests
 from datetime import datetime, timedelta
 op = Handle_Operations("central.json")
 # # print(op.filter_data_struct("usuarios", {'table_visible': 1}))
@@ -19,7 +19,7 @@ operation = op.set_db("operation")
 # data = op.get_db_collection(operation, "operacao", {"data_de_registro": {"$gte": logs["timestamp"] + timedelta(seconds=1), "$lte": datetime.now()}})
 # print(data)
 # op.reset_data(primary_data, "categoria")
-op.reset_data(primary_data, "pontos")
+# op.reset_data(primary_data, "pontos")
 # op.reset_data(primary_data, "produtos")
 # op.reset_data(primary_data, "usuarios")
 # op.reset_data(logs, "last_updates")

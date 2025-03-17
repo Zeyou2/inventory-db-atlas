@@ -35,7 +35,9 @@ def validate_user():
        error = "" 
        return render_template('pages/login.html',  error = error)
     else:
-        token = create_access_token({"id": str(user["_id"]), "email": user["email"], "senha" : user["senha"]})
+        token = create_access_token({"id": str(user["_id"]), 
+                                     "email": user["email"], 
+                                     "senha" : user["senha"]})
         resp = make_response(redirect("/"))
         set_access_cookies(resp, token)
         return resp        
@@ -59,12 +61,18 @@ def index():
     products = primary_data_db.get_collection('produtos')
     operation_dict = manage_op.get_db_collection(operation_db, 'operacao')[::-1]
     print("sample is", operation_dict)
+    points = primary_data_db.get_collection('pontos')
     filter_op = []
     for key in operation_dict:
+        point_origin = points.find_one({'codigo' : key["ponto_de_origem"]})
+        point_destiny = points.find_one({'codigo' : key["ponto_de_destino"]})
         name = products.find_one({'codigo' : key["codigo_prod"]})
         filter_op.append({'Data da movimentação' : str(key["data_movimentacao"]),
                         'Produto' : name['nome'], "ID produto" : key["id_produto"], 
-                        "Quantidade": str(key["quantidade"]), "Operação": key["operacao"], "Origem": key["ponto_de_origem"], "Destino": key["ponto_de_destino"]})
+                        "Quantidade": str(key["quantidade"]), 
+                        "Operação": key["operacao"], 
+                        "Origem": point_origin['nome_local'], 
+                        "Destino": point_destiny['nome_local']})
         # key.pop("codigo_prod", None)
     # print("opopopop", operation_dict)
 
@@ -149,6 +157,7 @@ def view(collection_name):
 # @jwt_required(locations=["cookies"])
 def operation():
     options = manage_op.return_op()
+    print("options are", options)
     op_type = request.args.get("op_type")
     position = request.args.get("from")
     print("POSITION IS:" ,position)
@@ -191,24 +200,41 @@ def disable_card(collection_name, codigo):
 def moviments():
     colec = primary_data_db.list_collection_names()
     sample = manage_op.get_db_collection(primary_data_db, 'produtos')
+    print("sample >>>>>>>", sample)
     products = primary_data_db.get_collection('produtos')
+    print("products >>>>>>>>>>>>>>>>>", products)
+    points = primary_data_db.get_collection('pontos')
     operation_dict = manage_op.get_db_collection(operation_db, 'operacao')[::-1]
+    print("opasdasd is", operation_dict)
     filter_op = []
     for key in operation_dict:
         name = products.find_one({'codigo' : key["codigo_prod"]})
-        filter_op.append({'Atualizado' : str(key["data_movimentacao"]), 'Produto' : name['nome'], "ID produto" : key["id_produto"], 
-                          "Quantidade": str(key["quantidade"]), "Origem": key["ponto_de_origem"], "Destino": key["ponto_de_destino"], "Responsável": "Name"})
+        point_origin = points.find_one({'codigo' : key["ponto_de_origem"]})
+        point_destiny = points.find_one({'codigo' : key["ponto_de_destino"]})
+        filter_op.append({'Atualizado' : str(key["data_movimentacao"]), 
+                          'Produto' : name['nome'], 
+                          "ID produto" : key["id_produto"], 
+                          "Quantidade": str(key["quantidade"]), 
+                          "Origem": point_origin['nome_local'], 
+                          "Destino": point_destiny['nome_local']})
     return render_template('pages/moviments.html', item_list = colec, sample = sample, filter_op = filter_op)
 
 @app.route('/position', methods=['POST', 'GET'])
 def position():
     products = primary_data_db.get_collection('produtos')
     position_db = manage_op.get_db_collection(operation_db, 'position')
+    points = primary_data_db.get_collection('pontos')
+
     filter_position = []
     for key in position_db:
+        point = points.find_one({'codigo' : key["posicao"]})
         if key['quantidade'] != 0:
             name = products.find_one({'codigo' : key["codigo_prod"]})
-            filter_position.append({'Nome' : name['nome'], 'Codigo' : key["codigo_prod"], 'Local': key['posicao'], 'Quantidade' : str(key['quantidade']), 'Atualização' : str(key['ultima_movimentacao'])})
+            filter_position.append({'Nome' : name['nome'], 
+                                    'Codigo' : key["codigo_prod"], 
+                                    'Local': point['nome_local'], 
+                                    'Quantidade' : str(key['quantidade']), 
+                                    'Atualização' : str(key['ultima_movimentacao'])})
     return render_template('pages/position.html', filter_position = filter_position)
 
 
