@@ -285,7 +285,7 @@
 				"form_visible": 1,
 				"pre_value": "",
 				"pergunta": "Numero de Série ou Patrimônio: ",
-				"resp_type": "str",
+				"resp_type": "list",
 				"em_branco": "False",
 				"field_name": "Id do produto"
 			},
@@ -302,7 +302,7 @@
 			"ponto_de_origem": {
 				"table_visible": 1,
 				"form_editable": "True",
-				"form_visible": 1,
+				"form_visible": 0,
 				"pre_value": "",
 				"pergunta": "De: ",
 				"resp_type": "db_list",
@@ -316,7 +316,7 @@
 			"ponto_de_destino": {
 				"table_visible": 1,
 				"form_editable": "False",
-				"form_visible": 0,
+				"form_visible": 1,
 				"pre_value": "Externo",
 				"pergunta": "Para: ",
 				"resp_type": "str",

@@ -34,10 +34,17 @@
     {% include "pages/operations/entry.html" %}
     {% elif op_type  == 'Transferencia' %}
     {% include "pages/operations/transf.html" %}
+    {% elif op_type  == 'Saida' %}
+    {% include "pages/operations/out.html" %}
     {% endif %}
 
 </div>
 <script>
+    const urlString = window.location.search;
+    const urlParams = new URLSearchParams(urlString);
+    let opType = urlParams.get('op_type');
+    let from = urlParams.get('from');
+
     $(document).ready(function () {
         $('#codigo_prod').select2({
             placeholder: "Clique para localizar o produto",
@@ -45,27 +52,86 @@
         });
     });
 
-    function displayForms() {
+    function validate_url()
+    {
+        console.log("Entrando Validate URL")
+        if (opType == "Entrada")
+        {
+           document.getElementById("InputOperation02").value = "LOC_0";
+           document.getElementById("InputOperation02").setAttribute("disabled", true);
+        }
+        else if (opType == "Saida")
+        {
+            document.getElementById("ponto_de_destino").innerText = "Externo";
+            document.getElementById("ponto_de_destino").setAttribute("disabled", true);
+        }
+
+        if ((opType == "Transferencia" || opType == "Saida") && from == "LOC_0")
+        {
+            document.getElementById("InputOperation01").value = opType;
+            window.location.href = `/operation`;
+
+        }
+        else if(opType == "Entrada" && from != "LOC_0")
+        {
+            window.location.href = `/operation`;
+        }
+
+       
+    }
+
+    function validate_fields()
+    {
         let opType = document.getElementById("InputOperation01").value;
         let fromPoint = document.getElementById("InputOperation02").value;
-        if (!opType) {
-            return;
+        console.log("ENTERED IN VALIDATE FIELDS", opType, fromPoint)
+        if (opType == "Transferencia" || opType == "Saida")
+        {
+            let origem = document.getElementById("InputOperation02");
+            console.log("origem Inteiro : ",origem )
+            console.log("origem option 1", origem.options[1].value)
+            for (let i = 0; i < origem.options.length; i++) {
+                console.log("origem : ",origem.options[i].value )
+                if (origem.options[i].value === "LOC_0") {
+                    
+                    origem.remove(i);
+                    break;
+                }
+            }
+        }
+
+        if (opType == "Transferencia" || opType == "Entrada")
+        {
+            let destino =  document.getElementById("ponto_de_destino");
+            console.log("DESTINO is being picked", destino)
+            if (!destino || !destino.options )
+                return ;
+            console.log("É transferência - destino é :", destino);
+            for (let i = 0; i < destino.options.length; i++) {
+                if (destino.options[i].value === "Externo") {
+                    
+                    destino.remove(i);
+                    break;
+                }
+            }
+        }
+
+    }
+    validate_url();
+
+    function displayForms() {
+        validate_url();
+        let opType = document.getElementById("InputOperation01").value;
+        let fromPoint = document.getElementById("InputOperation02").value;
+        validate_fields();
+        if (!opType || (!fromPoint && (opType == "Saida" || opType == "Transferencia"))) {
+            return ;
         }
         let url_from = opType != "Entrada" ? `&from=${encodeURIComponent(fromPoint)}` : `&from=LOC_0`;
         let url = `?op_type=${encodeURIComponent(opType)}${url_from}`;
-        
+        console.log("Entrando no Display Form")
         // Redirect or use the URL as needed
         window.location.href = url;
-    }
-
-    const urlString = window.location.search;
-    const urlParams = new URLSearchParams(urlString);
-    let opType = urlParams.get('op_type');
-    let from = urlParams.get('from');
-    if (opType == "Entrada")
-    {
-        document.getElementById("InputOperation02").value = "LOC_0";
-        document.getElementById("InputOperation02").setAttribute("disabled", true);
         
     }
   
@@ -77,20 +143,20 @@
         let destino = document.getElementById("ponto_de_destino").value;
         let destino_cod = positions.find(pos => pos["nome_local"] == destino)["codigo"];
         let serie = document.getElementById("id_produto").value;
-        let prod_brute = document.getElementById("codigo_prod").value;
         let produto = document.getElementById("codigo_prod").options[document.getElementById("codigo_prod").selectedIndex].text;
         if (!codigo || !data || !qnt || !origem || !destino) {
             alert("Por favor, preencha todos os campos!");
             return;
         }
         let html = "<tr><td>" + data + "</td><td>" + produto + "</td><td>" + serie + "</td><td>" + qnt + "</td><td>" + origem + "</td><td>" + destino + "</td>";
-        html += "<td style='display:none;'>" + "{{position}}"  + "</td><td style='display:none;'>" + destino_cod + "</td>" + "</td><td style='display:none;'>" + prod_brute;
+        html += "<td style='display:none;'>" + "{{position}}"  + "</td><td style='display:none;'>" + destino_cod + "</td>" + "</td><td style='display:none;'>" + codigo;
         html += "<td <button type='button' onclick='removeThis(this)' class='close' aria-label='Close'><span aria-hidden='true'>&times;</span></button></td></tr>"
         document.getElementById("tableBody").insertAdjacentHTML('beforeend', html);
         document.getElementById("tableContainer").style.display = "block";
+        document.getElementById("select2-codigo_prod-container").innerText = "";
+        document.getElementById("id_produto").innerText = "";
     }
 
-    
     function removeThis(element) {
         element.parentElement.remove();
     }
@@ -125,6 +191,8 @@
         .then(data => console.log("Response from server:", data))
         .catch(error => console.error("Error:", error));
     }
-  
+    window.onload = function() {
+        validate_fields();
+    }
 </script>
 {% endblock %}

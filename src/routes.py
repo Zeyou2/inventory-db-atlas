@@ -160,9 +160,10 @@ def operation():
     print("options are", options)
     op_type = request.args.get("op_type")
     position = request.args.get("from")
+    print("POSITION IS:" ,position)
     from_places = manage_op.get_db_collection(primary_data_db, "pontos")
     final_field, combined_lists = list(), list()
-    if op_type != None and position != None:    
+    if op_type != None and position != None: 
         field = manage_op.render_op_form(op_type, 
                                         manage_op.get_db_collection(primary_data_db, "pontos",{"codigo": position})[0]["codigo"])
         combined_lists = field[1]
