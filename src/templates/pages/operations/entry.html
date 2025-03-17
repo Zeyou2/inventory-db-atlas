@@ -1,6 +1,7 @@
 <div class="row">
-    <div class="col-4">
-        <form id="formEntry" method="POST">
+    <form id="formEntry" method="POST"></form>
+        <div class="col-4">
+        
             <fieldset>
                 <div class="form-group p-2">
                     <label for="codigo" style="font-weight: bold;">Produto:</label>
@@ -63,9 +64,9 @@
                 </table>
             </div>
         </fieldset>
-    </div>
+        </div>
+    </form>
 </div>
-</form>
 <script>
     const list_elements = 0;
     let positions = {{ from_p | tojson}};
